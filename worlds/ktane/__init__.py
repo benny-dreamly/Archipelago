@@ -1,0 +1,94 @@
+import typing
+import os, json
+from .Items import item_table, KTANEItem, modules_item_table, other_progression_items, useful_items
+from .Locations import location_table, KTANELocation
+#from .Options import V6Options
+from .Rules import set_rules
+from .Regions import create_regions
+from BaseClasses import Item, ItemClassification, Tutorial
+from ..AutoWorld import World, WebWorld
+
+client_version = 1
+
+
+class KTANEWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Keep Talking and Nobody Explodes for Multiworld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["GreenPower713"]
+    )]
+
+
+class KTANEWorld(World):
+    """ 
+     Keep Talking and Nobody Explodes game description.
+    """
+
+    game: str = "Keep Talking and Nobody Explodes"
+    topology_present = False
+    web = KTANEWeb()
+
+    item_name_to_id = item_table
+    location_name_to_id = location_table
+
+    data_version = 1
+
+    #options_dataclass = V6Options
+
+    def create_regions(self):
+        create_regions(self.multiworld, self.player)
+
+    def set_rules(self):
+        set_rules(self.multiworld, self.options, self.player)
+
+    def create_item(self, name: str) -> Item:
+        classification = ItemClassification.filler
+        if name in modules_item_table.keys():
+            classification = ItemClassification.progression
+        elif name in other_progression_items.keys():
+            classification = ItemClassification.progression_skip_balancing
+        elif name in useful_items.keys():
+            classification = ItemClassification.useful
+        return KTANEItem(name, classification, item_table[name], self.player)
+
+    def create_items(self):
+        for module in modules_item_table:  # 11 modules
+            self.multiworld.itempool += [self.create_item(module)]
+        for i in range(8):
+            self.multiworld.itempool += [self.create_item("Time++")]
+        for i in range(18):
+            self.multiworld.itempool += [self.create_item("Time+")]
+        for i in range(5):
+            self.multiworld.itempool += [self.create_item("Strike+")]
+        for i in range(74):
+            self.multiworld.itempool += [self.create_item("Bomb Fragment")]
+
+    def generate_basic(self):
+        pass
+
+    def fill_slot_data(self):
+        return None
+
+    #def generate_output(self, output_directory: str):
+    #    if self.multiworld.players != 1:
+    #        return
+    #    data = {
+    #        "slot_data": self.fill_slot_data(),
+    #        "location_to_item": {self.location_name_to_id[i.name] : item_table[i.item.name] for i in self.multiworld.get_locations()},
+    #        "data_package": {
+    #            "data": {
+    #                "games": {
+    #                    self.game: {
+    #                        "item_name_to_id": self.item_name_to_id,
+    #                        "location_name_to_id": self.location_name_to_id
+    #                    }
+    #                }
+    #            }
+    #        }
+    #    }
+    #    filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apv6"
+    #    with open(os.path.join(output_directory, filename), 'w') as f:
+    #        json.dump(data, f)
