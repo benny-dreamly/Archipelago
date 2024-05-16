@@ -1,5 +1,9 @@
 # Keep Talking and Nobody Explodes
 
+## Warning
+
+This game currently doesn't work with MacOS and Linux. Only windows is supported as of now.
+
 ## Where is the options page?
 
 The game currently does not have any options.

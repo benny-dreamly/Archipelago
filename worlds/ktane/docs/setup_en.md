@@ -1,5 +1,9 @@
 # Keep Talking and Nobody Explodes MultiWorld Setup Guide
 
+## Warning
+
+This game currently doesn't work with MacOS and Linux. Only windows is supported as of now.
+
 ## Required Software
 
  - Keep Talking and Nobody Explodes from [Steam](https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/)
