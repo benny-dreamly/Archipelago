@@ -1,38 +1,25 @@
-import typing
 from dataclasses import dataclass
 from Options import Option, DeathLink, Range, Toggle, PerGameCommonOptions
+from BaseClasses import MultiWorld
+from typing import Dict, Union, List
 
-#class DoorCost(Range):
-#    """Amount of Trinkets required to enter Areas. Set to 0 to disable artificial locks."""
-#    display_name = "Door Cost"
-#    range_start = 0
-#    range_end = 3
-#    default = 3
 
-#class AreaCostRandomizer(Toggle):
-#    """Randomize which Area requires which set of DoorCost Trinkets"""
-#    display_name = "Area Cost Randomizer"
+class RuleSeed(Range):
+    """Rule randomization for each module. Set to 1 to use vanilla rules."""
+    display_name = "Rule Seed"
+    range_start = 1
+    range_end = 10000
+    default = 1
 
-#class DeathLinkAmnesty(Range):
-#    """Amount of Deaths to take before sending a DeathLink signal, for balancing difficulty"""
-#    display_name = "Death Link Amnesty"
-#    range_start = 0
-#    range_end = 30
-#    default = 15
 
-#class AreaRandomizer(Toggle):
-#    """Randomize Entrances to Areas"""
-#    display_name = "Area Randomizer"
+@dataclass
+class KTANEOptions(PerGameCommonOptions):
+    rule_seed: RuleSeed
 
-#class MusicRandomizer(Toggle):
-#    """Randomize Music"""
-#    display_name = "Music Randomizer"
 
-#@dataclass
-#class V6Options(PerGameCommonOptions):
-#    music_rando: MusicRandomizer
-#    area_rando: AreaRandomizer
-#    door_cost: DoorCost
-#    area_cost: AreaCostRandomizer
-#    death_link: DeathLink
-#    death_link_amnesty: DeathLinkAmnesty
+def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:
+    option = getattr(world, name, None)
+    if option is None:
+        return 0
+
+    return option[player].value

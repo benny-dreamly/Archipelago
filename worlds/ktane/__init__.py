@@ -1,8 +1,8 @@
-import typing
 import os, json
+from typing import Dict
 from .Items import item_table, KTANEItem, modules_item_table, other_progression_items, useful_items
 from .Locations import location_table, KTANELocation
-#from .Options import V6Options
+from .Options import KTANEOptions, get_option_value
 from .Rules import set_rules
 from .Regions import create_regions
 from BaseClasses import Item, ItemClassification, Tutorial
@@ -36,7 +36,7 @@ class KTANEWorld(World):
 
     data_version = 1
 
-    #options_dataclass = V6Options
+    options_dataclass = KTANEOptions
 
     def create_regions(self):
         create_regions(self.multiworld, self.player)
@@ -70,7 +70,11 @@ class KTANEWorld(World):
         pass
 
     def fill_slot_data(self):
-        return None
+        slot_data: Dict[str, object] = {
+            "rule_seed": self.options.rule_seed.value
+        }
+
+        return slot_data
 
     #def generate_output(self, output_directory: str):
     #    if self.multiworld.players != 1:

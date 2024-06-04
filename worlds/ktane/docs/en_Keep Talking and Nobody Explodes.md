@@ -2,11 +2,12 @@
 
 ## Warning
 
-This game currently doesn't work with MacOS and Linux. Only windows is supported as of now.
+This game currently doesn't work with macOS and Linux. Only windows is supported as of now.
 
 ## Where is the options page?
 
-The game currently does not have any options.
+Since this game isn't fully released yet, the only way to set options is through a YAML file. Please refer to the setup 
+guide for more information on how to access it.
 
 ## What does randomization do to this game?
 
@@ -41,7 +42,7 @@ Items are not visible in KTANE.
 If it's a module, the tracker page shows the module as got and the missions that needs this module are now unlocked. (If
 a mission needs multiple modules, the player needs all the items before being able to play that mission.)
 
-If it's a Bomb Fragment, the counter at the top right of every section will increment. It it goes over the required 
+If it's a Bomb Fragment, the counter at the top right of every section will increment. If it goes over the required 
 number of fragments, the next section will be unlocked.
 
 If it's a Time++, a Time+ or a Strike+, missions will now have more time to them when loading them from the tablet.

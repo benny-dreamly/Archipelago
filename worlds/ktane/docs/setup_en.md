@@ -2,7 +2,7 @@
 
 ## Warning
 
-This game currently doesn't work with MacOS and Linux. Only windows is supported as of now.
+This game currently doesn't work with macOS and Linux. Only windows is supported as of now.
 
 ## Required Software
 
@@ -14,9 +14,13 @@ Please note that to download mods, you may need to complete the mission "1.3 - T
  - [Mod Selector](https://steamcommunity.com/sharedfiles/filedetails/?id=801400247) by Bashly
  - [Archipelago](https://steamcommunity.com/sharedfiles/filedetails/?id=3247225189) by GreenPower713
 
+If you want to modify the puzzle solutions, you will need the following mod:
+ - [Rule Seed Modifier](https://steamcommunity.com/sharedfiles/filedetails/?id=2037350348) by samfundev
+
 ## Recommended Mods
 
  - [Camera Zoom](https://steamcommunity.com/sharedfiles/filedetails/?id=838110334) by Hex
+ - [Tweaks](https://steamcommunity.com/sharedfiles/filedetails/?id=1366808675) by samfundev
 
 ## Configuring a YAML File
 
@@ -91,6 +95,10 @@ connect and press the "Connect" button. Connecting may take a bit of time.
 ### Expert
 As of now, the expert(s) can take the base manual at [bombmanual.com](https://www.bombmanual.com/) or get all the modules
 from the [Repository of Manual Pages](https://ktane.timwi.de/). They do not need to be connected to the server.
+
+Please note that modifying the puzzle solutions requires modified manuals that can only be found on the 
+[Repository of Manual Pages](https://ktane.timwi.de/). The Rule Seed option will need to be modified to the same value
+as is set in the YAML file and is shown on the bomb.
 
 ## Playing offline
 
