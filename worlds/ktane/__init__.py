@@ -7,6 +7,7 @@ from .Rules import set_rules
 from .Regions import create_regions
 from BaseClasses import Item, ItemClassification, Tutorial
 from ..AutoWorld import World, WebWorld
+from random import randint
 
 client_version = 1
 
@@ -69,14 +70,19 @@ class KTANEWorld(World):
     def generate_basic(self):
         pass
 
+    def generate_early(self):
+        if self.options.random_rule_seed.value:
+            self.options.rule_seed.value = randint(2, 10000)
+
     def fill_slot_data(self):
         slot_data: Dict[str, object] = {
+            "random_rule_seed": self.options.random_rule_seed.value,
             "rule_seed": self.options.rule_seed.value
         }
 
         return slot_data
 
-    #def generate_output(self, output_directory: str):
+    # def generate_output(self, output_directory: str):
     #    if self.multiworld.players != 1:
     #        return
     #    data = {

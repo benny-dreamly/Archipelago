@@ -7,6 +7,7 @@ This game currently doesn't work with macOS and Linux. Only windows is supported
 ## Required Software
 
  - Keep Talking and Nobody Explodes from [Steam](https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/)
+ - Expert Manuals Clients from [GitHub](https://github.com/GreenPower713/KTaNE-Archipelago-Expert-Manuals/releases/tag/v0.1.2)
 
 ## Required Mods
 
@@ -36,8 +37,8 @@ Software.
 
 1. Install the [latest version of Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Remember where 
 the installation folder is, because it will be needed.
-2. In your Archipelago folder, navigate to the "lib" folder, then the "worlds" folder. In this folder, there is a bunch of
-.apworld files. Add ktane.apworld to the lot.
+2. In your Archipelago folder, navigate to the "custom_worlds" folder and add ktane.apworld. If you have a previous 
+version of ktane.apworld installed in the "lib/worlds" directory, you will need to remove it.
 3. Navigate back to your Archipelago folder and launch ArchipelagoLauncher.exe. A window should appear. In this window,
 on the left, click on "Generate Template Options". It will open a window with a lot of .yaml files.
 4. Locate the one that's named "Keep Talking and Nobody Explodes.yaml". This is your base template. You can create a 
@@ -93,14 +94,16 @@ worry about that.
 connect and press the "Connect" button. Connecting may take a bit of time.
 
 ### Expert
-As of now, the expert(s) can take the base manual at [bombmanual.com](https://www.bombmanual.com/) or get all the modules
-from the [Repository of Manual Pages](https://ktane.timwi.de/). They do not need to be connected to the server.
-
-Please note that modifying the puzzle solutions requires modified manuals that can only be found on the 
-[Repository of Manual Pages](https://ktane.timwi.de/). The Rule Seed option will need to be modified to the same value
-as is set in the YAML file and is shown on the bomb.
+1. Open the Expert Manuals Client. It will open a command line and a webpage. If the webpage doesn't load, you can 
+connect to it at the following address: localhost:21713
+2. The page will show the fields to complete to connect to the Archipelago server. Enter the needed information to 
+connect and press the "Connect" button. Connecting may take a bit of time, as the client also have to load all the 
+correct manuals.
+3. Keep the command line open during the playthrough, as it controls the webserver that is used to unlock the needed 
+manuals.
 
 ## Playing offline
 
-Playing offline is not an option for Keep Talking and Nobody Explodes. If you do not have internet connection, you can
-create a local server and play from there.
+Playing offline is not an option for Keep Talking and Nobody Explodes. If you do not have Internet connection, you can
+create a local server and play from there, but the Expert Manual Client will not be working as it needs Internet 
+connection to access the correct manuals.

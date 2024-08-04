@@ -1,12 +1,18 @@
 from dataclasses import dataclass
-from Options import Option, DeathLink, Range, Toggle, PerGameCommonOptions
+from Options import Option, Range, DefaultOnToggle, PerGameCommonOptions
 from BaseClasses import MultiWorld
 from typing import Dict, Union, List
 
 
+class UseRandomRuleSeed(DefaultOnToggle):
+    """Use random puzzle solutions for the modules."""
+    display_name = "Use Random Rule Seed"
+
+
 class RuleSeed(Range):
-    """Rule randomization for each module. Set to 1 to use vanilla rules."""
-    display_name = "Rule Seed"
+    """If "Use Random Rule Seed" is set to false, define the custom rule seed used to solve the modules.
+    Set to 1 to use vanilla rules."""
+    display_name = "Rule Seed Number"
     range_start = 1
     range_end = 10000
     default = 1
@@ -14,6 +20,7 @@ class RuleSeed(Range):
 
 @dataclass
 class KTANEOptions(PerGameCommonOptions):
+    random_rule_seed: UseRandomRuleSeed
     rule_seed: RuleSeed
 
 

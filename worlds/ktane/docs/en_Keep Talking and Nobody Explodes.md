@@ -2,7 +2,7 @@
 
 ## Warning
 
-This game currently doesn't work with macOS and Linux. Only windows is supported as of now.
+This game currently doesn't work with macOS and Linux. Only windows is fully supported as of now.
 
 ## Where is the options page?
 
