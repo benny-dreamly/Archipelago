@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Option, Range, DefaultOnToggle, PerGameCommonOptions
+from Options import Option, Range, DefaultOnToggle, Toggle, PerGameCommonOptions
 from BaseClasses import MultiWorld
 from typing import Dict, Union, List
 
@@ -17,11 +17,17 @@ class RuleSeed(Range):
     range_end = 10000
     default = 1
 
+class HardlockModules(Toggle):
+    """Bombs that can't be finished will not be accessible. Only when all the modules that can be on a bomb are unlocked
+     that the bomb is unlocked. Would strongly recommend if "Use Random Rule Seed" is disabled."""
+    display_name = "Hardlock Modules"
+
 
 @dataclass
 class KTANEOptions(PerGameCommonOptions):
     random_rule_seed: UseRandomRuleSeed
     rule_seed: RuleSeed
+    hardlock_modules: HardlockModules
 
 
 def get_option_value(world: MultiWorld, player: int, name: str) -> Union[int, Dict, List]:

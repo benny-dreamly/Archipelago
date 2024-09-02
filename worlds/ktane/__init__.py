@@ -1,6 +1,6 @@
 import os, json
 from typing import Dict
-from .Items import item_table, KTANEItem, modules_item_table, other_progression_items, useful_items
+from .Items import item_table, KTANEItem, modules_item_table, modules_item_nohl_table, other_progression_items, useful_items
 from .Locations import location_table, KTANELocation
 from .Options import KTANEOptions, get_option_value
 from .Rules import set_rules
@@ -56,15 +56,20 @@ class KTANEWorld(World):
         return KTANEItem(name, classification, item_table[name], self.player)
 
     def create_items(self):
-        for module in modules_item_table:  # 11 modules
-            self.multiworld.itempool += [self.create_item(module)]
+        hardlock_modules = self.options.hardlock_modules.value
+        if hardlock_modules:
+            for module in modules_item_table:  # 11 modules
+                self.multiworld.itempool += [self.create_item(module)]
+        else:
+            for module in modules_item_nohl_table: # 9 modules
+                self.multiworld.itempool += [self.create_item(module)]
         for i in range(8):
             self.multiworld.itempool += [self.create_item("Time++")]
         for i in range(18):
             self.multiworld.itempool += [self.create_item("Time+")]
         for i in range(5):
             self.multiworld.itempool += [self.create_item("Strike+")]
-        for i in range(74):
+        for i in range(74 + (0 if hardlock_modules else 2)):
             self.multiworld.itempool += [self.create_item("Bomb Fragment")]
 
     def generate_basic(self):
@@ -77,7 +82,8 @@ class KTANEWorld(World):
     def fill_slot_data(self):
         slot_data: Dict[str, object] = {
             "random_rule_seed": self.options.random_rule_seed.value,
-            "rule_seed": self.options.rule_seed.value
+            "rule_seed": self.options.rule_seed.value,
+            "hardlock_modules": self.options.hardlock_modules.value
         }
 
         return slot_data

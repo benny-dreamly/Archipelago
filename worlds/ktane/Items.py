@@ -24,6 +24,18 @@ modules_item_table = {
     "Vent Gas": 71301011
 }
 
+modules_item_nohl_table = {
+    "Complicated Wires": 71301001,
+    "Maze": 71301002,
+    "Memory": 71301003,
+    "Morse Code": 71301004,
+    "Password": 71301005,
+    "Simon Says": 71301006,
+    "Who's on First": 71301007,
+    "Wire Sequence": 71301008,
+    "Knob": 71301010
+}
+
 other_progression_items = {
     "Bomb Fragment": 71301012,
     "Time++": 71301013

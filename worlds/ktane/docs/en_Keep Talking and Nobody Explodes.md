@@ -39,10 +39,11 @@ Items are not visible in KTANE.
 
 ## When the player receives an item, what happens?
 
-If it's a module, the tracker page shows the module as got and the missions that needs this module are now unlocked. (If
-a mission needs multiple modules, the player needs all the items before being able to play that mission.)
+If it's a module, the tracker page shows the module as got and the manual for this module is now unlocked in the Expert 
+Manuals Client.
 
 If it's a Bomb Fragment, the counter at the top right of every section will increment. If it goes over the required 
 number of fragments, the next section will be unlocked.
 
-If it's a Time++, a Time+ or a Strike+, missions will now have more time to them when loading them from the tablet.
+If it's a Time++, a Time+ or a Strike+, missions will now have more time or strikes to them when loading them from the 
+tablet.

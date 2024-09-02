@@ -2,12 +2,12 @@
 
 ## Warning
 
-This game currently doesn't work with macOS and Linux. Only windows is supported as of now.
+This game currently doesn't work with macOS and Linux. Only windows is fully supported as of now.
 
 ## Required Software
 
  - Keep Talking and Nobody Explodes from [Steam](https://store.steampowered.com/app/341800/Keep_Talking_and_Nobody_Explodes/)
- - Expert Manuals Clients from [GitHub](https://github.com/GreenPower713/KTaNE-Archipelago-Expert-Manuals/releases/tag/v0.1.2)
+ - Expert Manuals Clients from [GitHub](https://github.com/GreenPower713/KTaNE-Archipelago-Expert-Manuals/releases)
 
 ## Required Mods
 
