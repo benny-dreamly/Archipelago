@@ -374,11 +374,15 @@ def set_rules(multiworld, options, player):
         add_rule(multiworld.get_location("4.4 Speedster III - 2 Modules Solved", player),
                  lambda state: state.has("Time++", player, 1))
         add_rule(multiworld.get_location("4.4 Speedster III - 3 Modules Solved", player),
-                 lambda state: state.has("Time++", player, 2))
+                 lambda state: getModuleCounts(state, player, [
+                     ["Maze", "Password"],
+                     ["Complicated Wires", "Wire Sequence"]
+                 ]) >= 1 and state.has("Time++", player, 2))
         add_rule(multiworld.get_location("4.4 Speedster III - 4 Modules Solved", player),
                  lambda state: getModuleCounts(state, player, [
-                     ["Simon Says", "Maze", "Morse Code"]
-                 ]) >= 1 and state.has("Time++", player, 2))
+                     ["Maze", "Password"],
+                     ["Complicated Wires", "Wire Sequence"]
+                 ]) >= 2 and state.has("Time++", player, 2))
 
         # Section 5
         add_rule(multiworld.get_location("5.1 Miscommunication - 1 Module Solved", player),
