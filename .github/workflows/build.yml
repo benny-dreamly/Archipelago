@@ -32,12 +32,15 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: |
+          brew update
+          brew install gobject-introspection
           python3 -m ensurepip --upgrade
           python3 -m pip install --upgrade pip setuptools wheel
       - name: Set PYTHON Environment Variable
         run: echo "PYTHON=$(which python3)" >> $GITHUB_ENV
       - name: Download build-time dependencies
         run: |
+          xcode-select --install
           echo "PYTHON=python3.12" >> $GITHUB_ENV
           "${{ env.PYTHON }}" -m pip install PyGObject charset-normalizer
       - name: Download run-time dependencies
