@@ -59,7 +59,7 @@ jobs:
           mkdir -p dist/Archipelago.app/Contents/MacOS
           cp -R build/exe*/* dist/Archipelago.app/Contents/MacOS/
           echo "APPL????" > dist/Archipelago.app/Contents/PkgInfo
-          cat <<EOF > dist/MyApp.app/Contents/Info.plist
+          cat <<EOF > dist/Archipelago.app/Contents/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
