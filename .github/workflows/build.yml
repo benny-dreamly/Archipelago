@@ -58,6 +58,7 @@ jobs:
           source venv/bin/activate
           mkdir -p dist/Archipelago.app/Contents/MacOS
           cp -R build/exe*/* dist/Archipelago.app/Contents/MacOS/
+          chmod +x dist/Archipelago.app/Contents/MacOS/*
           echo "APPL????" > dist/Archipelago.app/Contents/PkgInfo
           cat <<EOF > dist/Archipelago.app/Contents/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
@@ -85,13 +86,13 @@ jobs:
           EOF
       - name: Compress .app bundle
         run: |
-            cd dist 
-            zip -r Archipelago.zip Archipelago.app
-      - name: Store .zip
+            cd dist
+            tar -czvf Archipelago.tar.gz Archipelago.app
+      - name: Store .tar.gz
         uses: actions/upload-artifact@v4
         with:
-          name: Archipelago.zip
-          path: dist/Archipelago.zip
+          name: Archipelago.tar.gz
+          path: dist/Archipelago.tar.gz
           if-no-files-found: error
           retention-days: 7
 
