@@ -93,6 +93,7 @@ jobs:
         with:
           name: Archipelago.tar.gz
           path: dist/Archipelago.tar.gz
+          compression-level: 0  # .gz is incompressible by zip
           if-no-files-found: error
           retention-days: 7
 
