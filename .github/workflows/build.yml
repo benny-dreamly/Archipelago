@@ -29,16 +29,17 @@ jobs:
       - name: Install dependencies
         run: |
           brew update
-          brew install python3  # Install Python
+          brew uninstall python@3.13
+          brew install python@3.12  # Install Python
           python3 -m ensurepip --upgrade
           python3 -m pip install --upgrade pip setuptools wheel
       - name: Install python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Download build-time dependencies
         run: |
-          echo "PYTHON=python3.11" >> $GITHUB_ENV
+          echo "PYTHON=python3.12" >> $GITHUB_ENV
           "${{ env.PYTHON }}" -m pip install PyGObject charset-normalizer
       - name: Download run-time dependencies
         run: |
