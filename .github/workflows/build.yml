@@ -50,49 +50,14 @@ jobs:
         run: |
           "${{ env.PYTHON }}" -m venv venv
           source venv/bin/activate
-          python setup.py build_exe --yes
+          python setup.py bdist_mac --yes
           echo -e "setup.py build output:\n `ls build`"
           echo -e "setup.py dist output:\n `ls dist`"
-      - name: Package as .app # figure out how to change the version dynamically
-        run: |
-          source venv/bin/activate
-          mkdir -p dist/Archipelago.app/Contents/MacOS
-          cp -R build/exe*/* dist/Archipelago.app/Contents/MacOS/
-          chmod +x dist/Archipelago.app/Contents/MacOS/*
-          echo "APPL????" > dist/Archipelago.app/Contents/PkgInfo
-          cat <<EOF > dist/Archipelago.app/Contents/Info.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>CFBundleName</key>
-              <string>Archipelago</string>
-              <key>CFBundleDisplayName</key>
-              <string>Archipelago</string>
-              <key>CFBundleIdentifier</key>
-              <string>com.Archipelago.Archipelago</string>
-              <key>CFBundleVersion</key>
-              <string>0.5.1</string>
-              <key>CFBundleExecutable</key>
-              <string>ArchipelagoLauncher</string>
-              <key>CFBundlePackageType</key>
-              <string>APPL</string>
-              <key>NSPrincipalClass</key>
-              <string>NSApplication</string>
-              <key>CFBundleIconFile</key>
-              <string>iconfile</string>
-          </dict>
-          </plist>
-          EOF
-      - name: Compress .app bundle
-        run: |
-            cd dist
-            tar -czvf Archipelago.tar.gz Archipelago.app
-      - name: Store .tar.gz
+      - name: Store app bundle
         uses: actions/upload-artifact@v4
         with:
-          name: Archipelago.tar.gz
-          path: dist/Archipelago.tar.gz
+          name: Archipelago.app
+          path: dist/Archipelago.app
           compression-level: 0  # .gz is incompressible by zip
           if-no-files-found: error
           retention-days: 7
