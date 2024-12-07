@@ -1,5 +1,5 @@
 from __future__ import annotations
-from Pathlib import Path
+from pathlib import Path
 import os
 import json
 import platform
