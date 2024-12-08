@@ -1,0 +1,53 @@
+# Puzzle Solving
+
+solve_1 = "Solve Puzzle 1"
+solve_2 = "Solve Puzzle 2"
+solve_3 = "Solve Puzzle 3"
+solve_4 = "Solve Puzzle 4"
+
+# Pickups
+
+pickup_pp1 = "Pickup Puzzle Piece 1"
+pickup_h1 = "Pickup Hint 1"
+pickup_c1 = "Pickup Clue 1"
+pickup_c12 = "Pickup Clue 1-2"
+pickup_c2 = "Pickup Clue 2"
+pickup_puzzle = "Pickup Puzzle"
+pickup_scroll = "Pickup Scroll"
+pickup_ha = "Pickup Hint Fragment A"
+pickup_hb = "Pickup Hint Fragment B"
+pickup_hc = "Pickup Hint Fragment C"
+pickup_hd = "Pickup Hint Fragment D"
+pickup_he = "Pickup Hint Fragment E"
+pickup_hf = "Pickup Hint Fragment F"
+pickup_hi = "Pickup Hint Fragment I"
+pickup_hj = "Pickup Hint Fragment J"
+pickup_hk = "Pickup Hint Fragment K"
+pickup_hl = "Pickup Hint Fragment L"
+pickup_hm = "Pickup Hint Fragment M"
+pickup_sh = "Pickup Scroll Hint"
+pickup_fc = "Pickup Fragment Clue"
+pickup_gb = "Pickup Gold Bar"
+pickup_gc = "Pickup Golden Clue"
+pickup_pp2 = "Pickup Puzzle Piece 2"
+pickup_gs = "Pickup Glue Stick"
+pickup_bm = "Pickup Broom"
+pickup_bkt = "Pickup Bucket"
+pickup_ltr = "Pickup Lighter"
+pickup_mg = "Pickup Magnifying Glass"
+pickup_pp3 = "Pickup Puzzle Piece 3"
+pickup_pp4 = "Pickup Puzzle Piece 4"
+
+# Actions
+
+decipher_h1 = "Decipher Hint 1"
+unlock_sfe = "Unlock Safe"
+reassemble_h3 = "Reassemble Hint 3"
+decipher_h3 = "Decipher Hint 3"
+fill_bkt = "Fill Bucket"
+open_tdr = "Open Trapdoor"
+burn_bm = "Burn Broom"
+extinguish_fire = "Extinguish Fire"
+get_key = "Get Key"
+unlock_ed = "Unlock Escape Door"
+
