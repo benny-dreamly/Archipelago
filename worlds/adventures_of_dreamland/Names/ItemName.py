@@ -1,47 +1,47 @@
 # Puzzle Pieces
 
-puzzle_piece_one = "Puzzle Piece 1"
-puzzle_piece_two = "Puzzle Piece 2"
-puzzle_piece_three = "Puzzle Piece 3"
-puzzle_piece_four = "Puzzle Piece 4"
+pp1 = "Puzzle Piece 1"
+pp2 = "Puzzle Piece 2"
+pp3 = "Puzzle Piece 3"
+pp4 = "Puzzle Piece 4"
 
 # Puzzles
 
-empty_puzzle = "Puzzle"
-partially_empty_puzzle = "Puzzle (1/4)"
-half_finished_puzzle = "Puzzle (2/4)"
-almost_finished_puzzle = "Puzzle (3/4)"
+p1 = "Puzzle"
+p2 = "Puzzle (1/4)"
+p3 = "Puzzle (2/4)"
+p4 = "Puzzle (3/4)"
 finished_puzzle = "Puzzle (4/4)"
 
 # Hints
 
-hint_one = "Hint 1"
-scroll_hint = "Scroll Hint"
-gold_bar = "Gold Bar"
-fragment_clue = "Fragment Clue"
-hint_three = "Hint 3"
+h1 = "Hint 1"
+sh = "Scroll Hint"
+gb = "Gold Bar"
+fc = "Fragment Clue"
+h3 = "Hint 3"
 
 # Clues
 
-clue_one = "Clue 1"
-clue_one_part_two = "Clue 1-2"
-clue_two = "Clue 2"
+c1 = "Clue 1"
+c1_2 = "Clue 1-2"
+c3 = "Clue 2"
 
 # Hint Fragments
 
-hint_fragment_a = "Hint Fragment A"
-hint_fragment_b = "Hint Fragment B"
-hint_fragment_c = "Hint Fragment C"
-hint_fragment_d = "Hint Fragment D"
-hint_fragment_e = "Hint Fragment E"
-hint_fragment_f = "Hint Fragment F"
-hint_fragment_g = "Hint Fragment G"
-hint_fragment_h = "Hint Fragment H"
-hint_fragment_i = "Hint Fragment I"
-hint_fragment_j = "Hint Fragment J"
-hint_fragment_k = "Hint Fragment K"
-hint_fragment_l = "Hint Fragment L"
-hint_fragment_m = "Hint Fragment M"
+hf_a = "Hint Fragment A"
+hf_b = "Hint Fragment B"
+hf_c = "Hint Fragment C"
+hf_d = "Hint Fragment D"
+hf_e = "Hint Fragment E"
+hf_f = "Hint Fragment F"
+hf_g = "Hint Fragment G"
+hf_h = "Hint Fragment H"
+hf_i = "Hint Fragment I"
+hf_j = "Hint Fragment J"
+hf_k = "Hint Fragment K"
+hf_l = "Hint Fragment L"
+hf_m = "Hint Fragment M"
 
 # other progression items
 
