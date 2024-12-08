@@ -1,26 +1,27 @@
 from typing import List, TypedDict
-from .Names import LocationName
-from .Constants import AOD_BASE_ID
+from .data import LocationName
+from .Constants import *
 
 class LocationInfo(TypedDict):
     name: str
     id: int
+    region: str
 
 location_table: List[LocationInfo] = [
     # Solves
-    {"name": LocationName.solve_1, "id": AOD_BASE_ID + 1},
-    {"name": LocationName.solve_2, "id": AOD_BASE_ID + 2},
+    {"name": LocationName.solve_1, "id": AOD_BASE_ID + 1, "region": CELL_PUZZLE},
+    {"name": LocationName.solve_2, "id": AOD_BASE_ID + 2, "region": VAULT_PUZZLE},
     {"name": LocationName.solve_3, "id": AOD_BASE_ID + 3},
     {"name": LocationName.solve_4, "id": AOD_BASE_ID + 4},
 
     # Pickups
-    {"name": LocationName.pickup_pp1, "id": AOD_BASE_ID + 5},
-    {"name": LocationName.pickup_h1, "id": AOD_BASE_ID + 6},
-    {"name": LocationName.pickup_c1, "id": AOD_BASE_ID + 7},
-    {"name": LocationName.pickup_c12, "id": AOD_BASE_ID + 8},
-    {"name": LocationName.pickup_c2, "id": AOD_BASE_ID + 9},
-    {"name": LocationName.pickup_puzzle, "id": AOD_BASE_ID + 10},
-    {"name": LocationName.pickup_scroll, "id": AOD_BASE_ID + 11},
+    {"name": LocationName.pickup_pp1, "id": AOD_BASE_ID + 5, "region": CELL},
+    {"name": LocationName.pickup_h1, "id": AOD_BASE_ID + 6, "region": CELL},
+    {"name": LocationName.pickup_c1, "id": AOD_BASE_ID + 7, "region": CELL},
+    {"name": LocationName.pickup_c12, "id": AOD_BASE_ID + 8, "region": CELL},
+    {"name": LocationName.pickup_c2, "id": AOD_BASE_ID + 9, "region": CELL},
+    {"name": LocationName.pickup_puzzle, "id": AOD_BASE_ID + 10, "region": CELL},
+    {"name": LocationName.pickup_scroll, "id": AOD_BASE_ID + 11, "region": CELL},
     {"name": LocationName.pickup_ha, "id": AOD_BASE_ID + 12},
     {"name": LocationName.pickup_hb, "id": AOD_BASE_ID + 13},
     {"name": LocationName.pickup_hc, "id": AOD_BASE_ID + 14},
