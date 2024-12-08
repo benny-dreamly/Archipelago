@@ -59,4 +59,4 @@ other_progression_data_table: Dict[str, AODItemData]{
 
 item_data_table: Dict[str, AODItemData] = {**puzzle_related_item_data_table, **hint_related_data_table, **other_progression_data_table}
 
-item_data = {name: data.code for name, data in item_data_table.items() if data.code is not None}
+item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
