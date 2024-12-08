@@ -1,61 +1,54 @@
-from typing import Dict, NamedTuple, Optional
-from BaseClasses import Item, ItemClassification
+from typing import Dict, NamedTuple, Optional, TypedDict
+from BaseClasses import ItemClassification
 from .Names import ItemName
 from .Constants import AOD_BASE_ID
 
-class AODItem(Item):
-    game: str = "Adventures of Dreamland"
+class ItemDict(TypedDict):
+    name: str
+    id: int
+    classification: ItemClassification
 
-class AODItemData(NamedTuple):
-    code: Optional[int] = None
-    type: ItemClassification = ItemClassification.filler
+item_table = [
+    # Puzzles
+    {"name": ItemName.puzzle_piece_one, "id": AOD_BASE_ID + 1, "classification":ItemClassification.progression},
+    {"name": ItemName.puzzle_piece_two, "id": AOD_BASE_ID + 2, "classification": ItemClassification.progression},
+    {"name": ItemName.puzzle_piece_three, "id": AOD_BASE_ID + 3, "classification": ItemClassification.progression},
+    {"name": ItemName.puzzle_piece_four, "id": AOD_BASE_ID + 4, "classification": ItemClassification.progression},
+    {"name": ItemName.empty_puzzle, "id": AOD_BASE_ID + 5, "classification": ItemClassification.progression},
+    {"name": ItemName.partially_empty_puzzle, "id": AOD_BASE_ID + 6, "classification": ItemClassification.progression},
+    {"name": ItemName.half_finished_puzzle, "id": AOD_BASE_ID + 7, "classification": ItemClassification.progression},
+    {"name": ItemName.almost_finished_puzzle, "id": AOD_BASE_ID + 8, "classification": ItemClassification.progression},
+    {"name": ItemName.finished_puzzle, "id": AOD_BASE_ID + 9, "classification": ItemClassification.progression},
 
-puzzle_related_item_data_table: Dict[str, AODItemData] = {
-    ItemName.puzzle_piece_one: AODItemData(AOD_BASE_ID + 1, ItemClassification.progression),
-    ItemName.puzzle_piece_two: AODItemData(AOD_BASE_ID + 2, ItemClassification.progression),
-    ItemName.puzzle_piece_three: AODItemData(AOD_BASE_ID + 3, ItemClassification.progression),
-    ItemName.puzzle_piece_four: AODItemData(AOD_BASE_ID + 4, ItemClassification.progression),
-    ItemName.empty_puzzle: AODItemData(AOD_BASE_ID + 5, ItemClassification.progression),
-    ItemName.partially_empty_puzzle: AODItemData(AOD_BASE_ID + 6, ItemClassification.progression),
-    ItemName.half_finished_puzzle: AODItemData(AOD_BASE_ID + 7, ItemClassification.progression),
-    ItemName.almost_finished_puzzle: AODItemData(AOD_BASE_ID + 8, ItemClassification.progression),
-    ItemName.finished_puzzle: AODItemData(AOD_BASE_ID + 9, ItemClassification.progression),
-}
+    # Hints
+    {"name": ItemName.hint_one, "id": AOD_BASE_ID + 10, "classification": ItemClassification.useful},
+    {"name": ItemName.scroll_hint, "id": AOD_BASE_ID + 11, "classification": ItemClassification.useful},
+    {"name": ItemName.gold_bar, "id": AOD_BASE_ID + 12, "classification": ItemClassification.useful},
+    {"name": ItemName.fragment_clue, "id": AOD_BASE_ID + 13, "classification": ItemClassification.useful},
+    {"name": ItemName.hint_three, "id": AOD_BASE_ID + 14, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.clue_one, "id": AOD_BASE_ID + 15, "classification": ItemClassification.useful},
+    {"name": ItemName.clue_one_part_two, "id": AOD_BASE_ID + 16, "classification": ItemClassification.useful},
+    {"name": ItemName.clue_two, "id": AOD_BASE_ID + 17, "classification": ItemClassification.useful},
+    {"name": ItemName.hint_fragment_a, "id": AOD_BASE_ID + 18, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_b, "id": AOD_BASE_ID + 19, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_c, "id": AOD_BASE_ID + 20, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_d, "id": AOD_BASE_ID + 21, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_e, "id": AOD_BASE_ID + 22, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_f, "id": AOD_BASE_ID + 23, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_g, "id": AOD_BASE_ID + 24, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_h, "id": AOD_BASE_ID + 25, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_i, "id": AOD_BASE_ID + 26, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_j, "id": AOD_BASE_ID + 27, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_k, "id": AOD_BASE_ID + 28, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_l, "id": AOD_BASE_ID + 29, "classification": ItemClassification.progression_skip_balancing},
+    {"name": ItemName.hint_fragment_m, "id": AOD_BASE_ID + 30, "classification": ItemClassification.progression_skip_balancing},
 
-hint_related_data_table: Dict[str, AODItemData] = {
-    ItemName.hint_one: AODItemData(AOD_BASE_ID + 10, ItemClassification.useful),
-    ItemName.scroll_hint: AODItemData(AOD_BASE_ID + 11, ItemClassification.useful),
-    ItemName.gold_bar: AODItemData(AOD_BASE_ID + 12, ItemClassification.useful),
-    ItemName.fragment_clue: AODItemData(AOD_BASE_ID + 13, ItemClassification.useful),
-    ItemName.hint_three: AODItemData(AOD_BASE_ID + 14, ItemClassification.progression_skip_balancing),
-    ItemName.clue_one: AODItemData(AOD_BASE_ID + 15, ItemClassification.useful),
-    ItemName.clue_one_part_two: AODItemData(AOD_BASE_ID + 16, ItemClassification.useful),
-    ItemName.clue_two: AODItemData(AOD_BASE_ID + 17, ItemClassification.useful),
-    ItemName.hint_fragment_a: AODItemData(AOD_BASE_ID + 18, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_b: AODItemData(AOD_BASE_ID + 19, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_c: AODItemData(AOD_BASE_ID + 20, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_d: AODItemData(AOD_BASE_ID + 21, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_e: AODItemData(AOD_BASE_ID + 22, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_f: AODItemData(AOD_BASE_ID + 23, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_g: AODItemData(AOD_BASE_ID + 24, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_h: AODItemData(AOD_BASE_ID + 25, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_i: AODItemData(AOD_BASE_ID + 26, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_j: AODItemData(AOD_BASE_ID + 27, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_k: AODItemData(AOD_BASE_ID + 28, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_l: AODItemData(AOD_BASE_ID + 29, ItemClassification.progression_skip_balancing),
-    ItemName.hint_fragment_m: AODItemData(AOD_BASE_ID + 30, ItemClassification.progression_skip_balancing),
-}
-
-other_progression_data_table: Dict[str, AODItemData] = {
-    ItemName.key: AODItemData(AOD_BASE_ID + 31, ItemClassification.progression),
-    ItemName.glue_stick: AODItemData(AOD_BASE_ID + 32, ItemClassification.progression),
-    ItemName.broom: AODItemData(AOD_BASE_ID + 33, ItemClassification.progression),
-    ItemName.empty_bucket: AODItemData(AOD_BASE_ID + 34, ItemClassification.progression),
-    ItemName.filled_bucket: AODItemData(AOD_BASE_ID + 35, ItemClassification.progression),
-    ItemName.magnifying_glass: AODItemData(AOD_BASE_ID + 36, ItemClassification.progression),
-    ItemName.lighter: AODItemData(AOD_BASE_ID + 37, ItemClassification.progression),
-}
-
-item_data_table: Dict[str, AODItemData] = {**puzzle_related_item_data_table, **hint_related_data_table, **other_progression_data_table}
-
-item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
+    # Progression Items
+    {"name": ItemName.key, "id": AOD_BASE_ID + 31, "classification": ItemClassification.progression},
+    {"name": ItemName.glue_stick, "id": AOD_BASE_ID + 32, "classification": ItemClassification.progression},
+    {"name": ItemName.broom, "id": AOD_BASE_ID + 33, "classification": ItemClassification.progression},
+    {"name": ItemName.empty_bucket, "id": AOD_BASE_ID + 34, "classification": ItemClassification.progression},
+    {"name": ItemName.filled_bucket, "id": AOD_BASE_ID + 35, "classification": ItemClassification.progression},
+    {"name": ItemName.magnifying_glass, "id": AOD_BASE_ID + 36, "classification": ItemClassification.progression},
+    {"name": ItemName.lighter, "id": AOD_BASE_ID + 37, "classification": ItemClassification.progression},
+]
