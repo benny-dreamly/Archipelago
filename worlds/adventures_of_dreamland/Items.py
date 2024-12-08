@@ -11,7 +11,7 @@ class AODItemData(NamedTuple):
     code: Optional[int] = None
     type: ItemClassification = ItemClassification.filler
 
-puzzle_related_item_data_table: Dict[str, AODItemData]{
+puzzle_related_item_data_table: Dict[str, AODItemData] = {
     ItemName.puzzle_piece_one: AODItemData(adventures_of_dreamland_base_id + 1, ItemClassification.progression),
     ItemName.puzzle_piece_two: AODItemData(adventures_of_dreamland_base_id + 2, ItemClassification.progression),
     ItemName.puzzle_piece_three: AODItemData(adventures_of_dreamland_base_id + 3, ItemClassification.progression),
@@ -23,7 +23,7 @@ puzzle_related_item_data_table: Dict[str, AODItemData]{
     ItemName.finished_puzzle: AODItemData(adventures_of_dreamland_base_id + 9, ItemClassification.progression),
 }
 
-hint_related_data_table: Dict[str, AODItemData]{
+hint_related_data_table: Dict[str, AODItemData] = {
     ItemName.hint_one: AODItemData(adventures_of_dreamland_base_id + 10, ItemClassification.useful),
     ItemName.scroll_hint: AODItemData(adventures_of_dreamland_base_id + 11, ItemClassification.useful),
     ItemName.gold_bar: AODItemData(adventures_of_dreamland_base_id + 12, ItemClassification.useful),
@@ -47,7 +47,7 @@ hint_related_data_table: Dict[str, AODItemData]{
     ItemName.hint_fragment_m: AODItemData(adventures_of_dreamland_base_id + 30, ItemClassification.progression_skip_balancing),
 }
 
-other_progression_data_table: Dict[str, AODItemData]{
+other_progression_data_table: Dict[str, AODItemData] = {
     ItemName.key: AODItemData(adventures_of_dreamland_base_id + 31, ItemClassification.progression),
     ItemName.glue_stick: AODItemData(adventures_of_dreamland_base_id + 32, ItemClassification.progression),
     ItemName.broom: AODItemData(adventures_of_dreamland_base_id + 33, ItemClassification.progression),
