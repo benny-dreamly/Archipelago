@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional, TypedDict
+from typing import Dict, List, NamedTuple, Optional, TypedDict
 from BaseClasses import ItemClassification
 from .Names import ItemName
 from .Constants import AOD_BASE_ID
@@ -8,7 +8,7 @@ class ItemDict(TypedDict):
     id: int
     classification: ItemClassification
 
-item_table = [
+item_table: List[TypedDict] = [
     # Puzzles
     {"name": ItemName.puzzle_piece_one, "id": AOD_BASE_ID + 1, "classification":ItemClassification.progression},
     {"name": ItemName.puzzle_piece_two, "id": AOD_BASE_ID + 2, "classification": ItemClassification.progression},
