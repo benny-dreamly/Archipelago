@@ -1,10 +1,12 @@
 from typing import Dict, List
 
-from BaseClasses import Region, Entrance, Tutorial, ItemClassification
+from BaseClasses import Item, Region, Entrance, Tutorial, ItemClassification
 from Options import PerGameCommonOptions
-from worlds.AutoWorld import World, WebWorld
-from .Names import ItemName
-from .Items import AODItem, puzzle_related_item_data_table, hint_related_data_table, other_progression_data_table, item_data_table, item_table
+from worlds.AutoWorld import World#, WebWorld
+from .Items import item_table
+
+class AODItem(Item):
+    game: str = "Adventures of Dreamland"
 
 class AdventuresOfDreamlandWorld(World):
     """
@@ -12,9 +14,17 @@ class AdventuresOfDreamlandWorld(World):
     """
     game = "Adventures of Dreamland"
     options_dataclass = PerGameCommonOptions
-    item_name_to_id = item_table
+    item_name_to_id = {item["name"]: item["id"] for item in item_table}
 
     def create_items(self) -> None:
-        item_pool = List[AODItem] = []
+        itempool = []
+        for item in item_table:
+            count = item["count"]
 
-        self.multiworld.itempool += item_pool
+            if count <= 0:
+                continue
+            else:
+                for i in range(count):
+                    itempool.append(self.create_item(item["name"]))
+
+        self.multiworld.itempool += itempool
