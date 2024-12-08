@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, Optional, TypedDict
+from typing import List, TypedDict
 from BaseClasses import ItemClassification
 from .Names import ItemName
 from .Constants import AOD_BASE_ID
