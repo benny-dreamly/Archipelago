@@ -1,12 +1,10 @@
 from typing import Dict, List
 
-from BaseClasses import Item, Region, Entrance, Tutorial, ItemClassification
+from BaseClasses import Item, Location, Region, Entrance, Tutorial, ItemClassification
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World#, WebWorld
 from .Items import item_table
-
-class AODItem(Item):
-    game: str = "Adventures of Dreamland"
+from .Locations import location_table
 
 class AdventuresOfDreamlandWorld(World):
     """
@@ -28,3 +26,9 @@ class AdventuresOfDreamlandWorld(World):
                     itempool.append(self.create_item(item["name"]))
 
         self.multiworld.itempool += itempool
+
+class AODItem(Item):
+    game: str = "Adventures of Dreamland"
+
+class AODLocation(Location):
+    game = "Adventures of Dreamland"
