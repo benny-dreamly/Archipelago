@@ -1,5 +1,4 @@
 from typing import Dict, List
-
 from BaseClasses import Item, Location, Region, Entrance, Tutorial, ItemClassification
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World#, WebWorld
@@ -13,6 +12,12 @@ class AdventuresOfDreamlandWorld(World):
     game = "Adventures of Dreamland"
     options_dataclass = PerGameCommonOptions
     item_name_to_id = {item["name"]: item["id"] for item in item_table}
+    location_name_to_id = {location["name"]: location["id"] for location in location_table}
+
+    def create_item(self, name: str) -> "AODItem":
+        classification = item_table["name"]["id"]["classification"]
+
+        return AODItem(name, classification, player=self.player)
 
     def create_items(self) -> None:
         itempool = []
