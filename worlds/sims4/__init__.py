@@ -22,14 +22,16 @@ components.append(Component("The Sims 4 Client", func=run_client, component_type
 
 
 class Sims4Web(WebWorld):
-    tutorials = [Tutorial(
+    setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up The Sims 4 for MultiWorld.",
         "English",
         "setup_en.md",
         "setup/en",
         ["mrsummer360"]
-    )]
+    )
+    
+    tutorials = [setup]
 
 
 class Sims4World(World):
