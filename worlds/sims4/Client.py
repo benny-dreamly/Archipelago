@@ -7,6 +7,7 @@ import os
 import Utils
 from CommonClient import ClientCommandProcessor, gui_enabled, get_base_parser, CommonContext, server_loop, logger, ClientStatus
 from MultiServer import mark_raw
+from . import Gifting
 
 # Gets the sims 4 mods folder
 if Utils.is_windows:
@@ -202,6 +203,34 @@ async def game_watcher(ctx: SimsContext):
                 if json_data:
                     ctx.syncing = True
                     print_json(False, 'sync.json', ctx)
+
+            # gifting stuff
+            await ctx.send_msgs([{
+                "cmd": "Get",
+                "keys": [f"GiftBoxes;{ctx.team}"]
+            }])
+
+            if f"GiftBox;{ctx.team};{ctx.slot}" not in ctx.stored_data:
+                local_giftbox = {
+                    "is_open": True,
+                    **Gifting.sims4_gifting_options,
+                }
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"GiftBoxes;{ctx.team}",
+                "want_reply": False,
+                "default": {},
+                "operations": [{"operation": "update", "value": local_giftbox}]
+            }])
+
+            await ctx.send_msgs([{
+                "cmd": "Get",
+                "keys": [f"GiftBox;{ctx.team};{ctx.slot}"]
+            }])
+        await ctx.send_msgs([{
+            "cmd": "SetNotify",
+            "keys": [f"GiftBox;{ctx.team};{ctx.slot}", f"GiftBoxes;{ctx.team}"]
+        }])
         await asyncio.sleep(0.5)
 
 
