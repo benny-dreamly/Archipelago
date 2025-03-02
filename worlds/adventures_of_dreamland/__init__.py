@@ -4,6 +4,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import World#, WebWorld
 from .Items import item_table
 from .Locations import location_table
+from .Rules import create_rules
 
 class AdventuresOfDreamlandWorld(World):
     """
@@ -13,6 +14,7 @@ class AdventuresOfDreamlandWorld(World):
     options_dataclass = PerGameCommonOptions
     item_name_to_id = {item["name"]: item["id"] for item in item_table}
     location_name_to_id = {location["name"]: location["id"] for location in location_table}
+    create_rules = create_rules
 
     def create_item(self, name: str) -> "AODItem":
         classification = item_table["name"]["id"]["classification"]
