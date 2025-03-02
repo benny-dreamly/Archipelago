@@ -1,69 +1,49 @@
 from worlds.generic.Rules import forbid_items_for_player, add_rule, set_rule
-from typing import Optional, TypedDict, Dict, List, Tuple
 from .data import LocationName, ItemName
-
-class LocationLogic(TypedDict):
-    name: str
-    requires: Optional[Tuple[str]]
-
-normal_logic_table: List[LocationLogic] = [
-    {
-        "name": LocationName.solve_3,
-        "requires": (ItemName.pp3, ItemName.p3, ItemName.broom, ItemName.magnifying_glass),
-     },
-    {
-        "name": LocationName.solve_4,
-        "requires": (ItemName.pp4, ItemName.p4),
-     },
-    {"name": LocationName.pickup_hb, "requires": ItemName.hf_a},
-    {"name": LocationName.pickup_hc, "requires": ItemName.hf_b},
-    {"name": LocationName.pickup_hd, "requires": ItemName.hf_c},
-    {"name": LocationName.pickup_he, "requires": ItemName.hf_d},
-    {"name": LocationName.pickup_hf, "requires": ItemName.hf_e},
-    {"name": LocationName.pickup_hg, "requires": ItemName.hf_f},
-    {"name": LocationName.pickup_hh, "requires": ItemName.hf_g},
-    {"name": LocationName.pickup_hi, "requires": ItemName.hf_h},
-    {"name": LocationName.pickup_hj, "requires": ItemName.hf_i},
-    {"name": LocationName.pickup_hk, "requires": ItemName.hf_j},
-    {"name": LocationName.pickup_hl, "requires": ItemName.hf_k},
-    {"name": LocationName.pickup_hm, "requires": ItemName.hf_l},
-    {"name": LocationName.pickup_fc, "requires": ItemName.hf_m},
-    {"name": LocationName.unlock_sfe, "requires": ItemName.p2},
-    {"name": LocationName.pickup_pp2, "requires": ItemName.p2},
-    {
-        "name": LocationName.reassemble_h3,
-        "requires": (
-            ItemName.hf_a, ItemName.hf_b, ItemName.hf_c, ItemName.hf_d,
-            ItemName.hf_e, ItemName.hf_f, ItemName.hf_g, ItemName.hf_h,
-            ItemName.hf_i, ItemName.hf_j, ItemName.hf_k, ItemName.hf_l,
-            ItemName.hf_m, ItemName.glue_stick
-        ),
-    },
-    {
-        "name": LocationName.decipher_h3,
-        "requires": (
-            ItemName.hf_a, ItemName.hf_b, ItemName.hf_c, ItemName.hf_d,
-            ItemName.hf_e, ItemName.hf_f, ItemName.hf_g, ItemName.hf_h,
-            ItemName.hf_i, ItemName.hf_j, ItemName.hf_k, ItemName.hf_l,
-            ItemName.hf_m, ItemName.glue_stick, ItemName.h3
-        )
-    },
-    {"name": LocationName.decipher_h1, "requires": (ItemName.h1, ItemName.c1, ItemName.c1_2)},
-    {"name": LocationName.fill_bkt, "requires": ItemName.empty_bucket},
-    {"name": LocationName.pickup_mg, "requires": ItemName.h3},
-    {"name": LocationName.open_tdr, "requires": (ItemName.broom, ItemName.magnifying_glass)},
-    {"name": LocationName.pickup_pp3, "requires": (ItemName.magnifying_glass, ItemName.broom)},
-    {"name": LocationName.burn_bm, "requires": (ItemName.broom, ItemName.lighter, ItemName.filled_bucket, ItemName.empty_bucket)},
-    {"name": LocationName.extinguish_fire, "requires": (ItemName.broom, ItemName.lighter, ItemName.filled_bucket, ItemName.empty_bucket)},
-    {"name": LocationName.pickup_pp4, "requires": (ItemName.broom, ItemName.lighter, ItemName.filled_bucket, ItemName.empty_bucket)},
-]
 
 
 def create_rules(self):
-    player = self.multiworld
+    player = self.player
+    world = self.multiworld
 
-    set_rule(self.multiworld.get_entrance("Cell Puzzle"), lambda state: state.can_solve_puzzle_1(player))
-    set_rule(self.multiworld.get_entrance("Vault"))
+    set_rule(world.get_location(LocationName.solve_1, player), lambda state: state.can_solve_puzzle_1(player))
+    set_rule(world.get_location(LocationName.solve_2, player), lambda state: state.can_solve_puzzle_2(player))
+    set_rule(world.get_location(LocationName.solve_3, player), lambda state: state.can_solve_puzzle_3(player))
+    set_rule(world.get_location(LocationName.solve_4, player), lambda state: state.can_solve_puzzle_4(player))
+
+    set_rule(world.get_location(LocationName.decipher_h1, player), lambda state: state.has(ItemName.h1, player) and state.has(ItemName.c1, player) and state.has(ItemName.c1_2, player))
+
+    set_rule(world.get_location(LocationName.unlock_sfe, player), lambda state: state.can_unlock_safe(player))
+    set_rule(world.get_location(LocationName.pickup_pp2, player), lambda state: state.can_unlock_safe(player))
+
+    set_rule(world.get_location(LocationName.solve_2, player), lambda state: state.can_solve_puzzle_2(player))
+
+    set_rule(world.get_location(LocationName.pickup_hb, player), lambda state: state.has(ItemName.hf_a, player))
+    set_rule(world.get_location(LocationName.pickup_hc, player), lambda state: state.has(ItemName.hf_b, player))
+    set_rule(world.get_location(LocationName.pickup_hd, player), lambda state: state.has(ItemName.hf_c, player))
+    set_rule(world.get_location(LocationName.pickup_he, player), lambda state: state.has(ItemName.hf_d, player))
+    set_rule(world.get_location(LocationName.pickup_hf, player), lambda state: state.has(ItemName.hf_e, player))
+    set_rule(world.get_location(LocationName.pickup_hg, player), lambda state: state.has(ItemName.hf_f, player))
+    set_rule(world.get_location(LocationName.pickup_hh, player), lambda state: state.has(ItemName.hf_g, player))
+    set_rule(world.get_location(LocationName.pickup_hi, player), lambda state: state.has(ItemName.hf_h, player))
+    set_rule(world.get_location(LocationName.pickup_hj, player), lambda state: state.has(ItemName.hf_i, player))
+    set_rule(world.get_location(LocationName.pickup_hk, player), lambda state: state.has(ItemName.hf_j, player))
+    set_rule(world.get_location(LocationName.pickup_hl, player), lambda state: state.has(ItemName.hf_k, player))
+    set_rule(world.get_location(LocationName.pickup_hm, player), lambda state: state.has(ItemName.hf_l, player))
+    set_rule(world.get_location(LocationName.pickup_fc, player), lambda state: state.has(ItemName.hf_m, player))
+
+    set_rule(world.get_location(LocationName.reassemble_h3, player), lambda state: state.can_reassemble_hint(player))
+    set_rule(world.get_location(LocationName.decipher_h3, player), lambda state: state.can_reassemble_hint and state.has(ItemName.h3, player))
+
+    set_rule(world.get_location(LocationName.fill_bkt, player), lambda state: state.has(ItemName.empty_bucket, player))
+    set_rule(world.get_location(LocationName.pickup_mg, player), lambda state: state.has(ItemName.h3, player))
+    set_rule(world.get_locaiton(LocationName.open_tdr, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.magnifying_glass, player))
+    set_rule(world.get_location(LocationName.pickup_pp3, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.magnifying_glass, player))
+
+    set_rule(world.get_location(LocationName.burn_bm, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.lighter, player))
+    set_rule(world.get_location(LocationName.extinguish_fire, player), lambda state: state.can_reach_location(LocationName.burn_bm, player) and state.has(ItemName.filled_bucket, player))
+    set_rule(world.get_location(LocationName.pickup_pp4, player), lambda state: state.can_reach_location(LocationName.extinguish_fire, player))
+
 
 
 def can_solve_puzzle_1(self, player):
@@ -72,3 +52,18 @@ def can_solve_puzzle_1(self, player):
 def can_solve_puzzle_2(self, player):
     return self.has(ItemName.p2, player) and self.has(ItemName.pp2, player)
 
+def can_solve_puzzle_3(self, player):
+    return self.has(ItemName.p3, player) and self.has(ItemName.pp3, player)
+
+def can_solve_puzzle_4(self, player):
+    return self.has(ItemName.p4, player) and self.has(ItemName.pp4, player)
+
+def can_unlock_safe(self, player):
+    return self.can_solve_puzzle_1(player) and self.has(ItemName.p2, player)
+
+def can_reassemble_hint(self, player):
+    return (self.has(ItemName.hf_a, player) and self.has(ItemName.hf_b, player) and self.has(ItemName.hf_c, player) and self.has(ItemName.hf_d, player)
+            and self.has(ItemName.hf_e, player) and self.has(ItemName.hf_f, player) and self.has(ItemName.hf_g, player)
+            and self.has(ItemName.hf_h, player) and self.has(ItemName.hf_i, player) and self.has(ItemName.hf_j, player)
+            and self.has(ItemName.hf_k, player) and self.has(ItemName.hf_l, player) and self.has(ItemName.hf_m, player)
+            and self.has(ItemName.glue_stick, player))
