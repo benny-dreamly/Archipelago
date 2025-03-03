@@ -2,6 +2,7 @@ from typing import Dict, List
 from BaseClasses import Item, Location, Region, Entrance, Tutorial, ItemClassification
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World#, WebWorld
+from .Constants import AOD_BASE_ID
 from .Items import item_table
 from .Locations import location_table
 from .Rules import create_rules
@@ -12,27 +13,48 @@ class AdventuresOfDreamlandWorld(World):
     """
     game = "Adventures of Dreamland"
     options_dataclass = PerGameCommonOptions
-    item_name_to_id = {item["name"]: item["id"] for item in item_table}
-    location_name_to_id = {location["name"]: location["id"] for location in location_table}
+    item_name_to_id = {name: data["id"] for name, data in item_table.items()}
+    location_name_to_id = {name: data["id"] for name, data in location_table.items()}
     create_rules = create_rules
 
     def create_item(self, name: str) -> "AODItem":
-        classification = item_table["name"]["id"]["classification"]
+        item_id: int = self.item_name_to_id[name]
+        classification = item_table[name]["classification"]
 
-        return AODItem(name, classification, player=self.player)
+        return AODItem(name, classification, item_id, player=self.player)
 
     def create_items(self) -> None:
-        itempool = []
-        for item in item_table:
-            count = item["count"]
+        itempool = [self.create_item(name) for name in item_table]
 
-            if count <= 0:
-                continue
-            else:
-                for i in range(count):
-                    itempool.append(self.create_item(item["name"]))
+        # Ensure the item count matches the location count
+        num_extra_items = len(location_table) - len(item_table)
+        for _ in range(num_extra_items):
+            filler_item = AODItem("Filler Item", ItemClassification.filler, None, player=self.player)
+            itempool.append(filler_item)
 
         self.multiworld.itempool += itempool
+
+    def create_region(self, name: str, locations=None, exits=None):
+        ret = Region(name, self.player, self.multiworld)
+        if locations:
+            for location in locations:
+                loc_id = self.location_name_to_id.get(location, None)
+                location = AODLocation(self.player, location, loc_id, ret)
+                ret.locations.append(location)
+        if exits:
+            for region_exit in exits:
+                ret.exits.append(Entrance(self.player, region_exit, ret))
+        return ret
+
+    def create_regions(self):
+        menu = self.create_region("Menu", locations=None, exits=None)
+
+        for name, data in location_table.items():
+            menu.locations.append(
+                AODLocation(self.player, name, data["id"], menu)
+            )
+
+        self.multiworld.regions.append(menu)
 
 class AODItem(Item):
     game: str = "Adventures of Dreamland"
