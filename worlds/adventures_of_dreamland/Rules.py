@@ -46,6 +46,7 @@ def create_rules(self):
     set_rule(world.get_location(LocationName.unlock_ed, player), lambda state: state.has(ItemName.key))
 
 
+    world.completion_condition[player] = lambda state: state.can_reach(world.get_location(LocationName.unlock_ed, player), player=player)
 
 def can_solve_puzzle_1(self, player):
     return self.has(ItemName.p1, player) and self.has(ItemName.pp1, player)
