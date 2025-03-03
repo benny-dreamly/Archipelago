@@ -37,7 +37,7 @@ def create_rules(self):
 
     set_rule(world.get_location(LocationName.fill_bkt, player), lambda state: state.has(ItemName.empty_bucket, player))
     set_rule(world.get_location(LocationName.pickup_mg, player), lambda state: state.has(ItemName.h3, player))
-    set_rule(world.get_locaiton(LocationName.open_tdr, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.magnifying_glass, player))
+    set_rule(world.get_location(LocationName.open_tdr, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.magnifying_glass, player))
     set_rule(world.get_location(LocationName.pickup_pp3, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.magnifying_glass, player))
 
     set_rule(world.get_location(LocationName.burn_bm, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.lighter, player))
