@@ -6,6 +6,7 @@ from .Constants import AOD_BASE_ID
 from .Items import item_table
 from .Locations import location_table
 from .Rules import create_rules
+from .data import LocationName
 
 class AdventuresOfDreamlandWorld(World):
     """
@@ -15,7 +16,6 @@ class AdventuresOfDreamlandWorld(World):
     options_dataclass = PerGameCommonOptions
     item_name_to_id = {name: data["id"] for name, data in item_table.items()}
     location_name_to_id = {name: data["id"] for name, data in location_table.items()}
-    create_rules = create_rules
 
     def create_item(self, name: str) -> "AODItem":
         item_id: int = self.item_name_to_id[name]
@@ -55,6 +55,9 @@ class AdventuresOfDreamlandWorld(World):
             )
 
         self.multiworld.regions.append(menu)
+
+    def set_rules(self) -> None:
+        create_rules(self)
 
 class AODItem(Item):
     game: str = "Adventures of Dreamland"
