@@ -43,6 +43,7 @@ def create_rules(self):
     set_rule(world.get_location(LocationName.burn_bm, player), lambda state: state.has(ItemName.broom, player) and state.has(ItemName.lighter, player))
     set_rule(world.get_location(LocationName.extinguish_fire, player), lambda state: state.can_reach_location(LocationName.burn_bm, player) and state.has(ItemName.filled_bucket, player))
     set_rule(world.get_location(LocationName.pickup_pp4, player), lambda state: state.can_reach_location(LocationName.extinguish_fire, player))
+    set_rule(world.get_location(LocationName.unlock_ed, player), lambda state: state.has(ItemName.key))
 
 
 
