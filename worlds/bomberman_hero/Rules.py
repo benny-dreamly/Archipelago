@@ -266,24 +266,24 @@ def get_location_rules(player):
         "Freeze Lake Points":
             lambda state: state.has("Bombup",player, 3),
     
-        "Crystals 200":
+        "Crystals 1":
             lambda state: state.has_from_list(STAGE_ITEMS, player,5),
-        "Crystals 400":
+        "Crystals 2":
             lambda state: state.has_from_list(STAGE_ITEMS, player,10),
-        "Crystals 600":
+        "Crystals 3":
             lambda state: state.has_from_list(STAGE_ITEMS, player,20),
-        "Crystals 800":
+        "Crystals 4":
             lambda state: state.has_from_list(STAGE_ITEMS, player,30),
-        "Crystals 1000":
+        "Crystals 5":
             lambda state: state.has_from_list(STAGE_ITEMS, player,40),
-        "Crystals 1200":
+        "Crystals 6":
             lambda state: state.has_from_list(STAGE_ITEMS, player,45),
-        "Crystals 1400":
+        "Crystals 7":
             lambda state: state.has_from_list(STAGE_ITEMS, player,50),
-        "Crystals 1600":
+        "Crystals 8":
             lambda state: state.has_from_list(STAGE_ITEMS, player,55),
-        "Crystals 1800":
+        "Crystals 9":
             lambda state: state.has_from_list(STAGE_ITEMS, player,60),
-        "Crystals 2000":
+        "Crystals 10":
             lambda state: state.has_from_list(STAGE_ITEMS, player,65),
     }

@@ -152,7 +152,7 @@ class BombHWorld(World):
             #menu_region.locations.append(loc)
             planbomb_region = self.get_region("Planet Bomber")
             for x in range(1,(self.options.gem_check_total.value+1),1):
-                check_name = f"Crystals {str(x*200)}"
+                check_name = f"Crystals {str(x)}"
                 check_address = 0x1348060 + x
                 planbomb_region.add_locations({check_name:check_address},BombHLocation)
                 #loc = BombHLocation(self.player,check_name, None, planbomb_region)
@@ -168,10 +168,10 @@ class BombHWorld(World):
             self.get_location(location_name).place_locked_item(locked_item)
 
         if self.options.item_health.value == 0:
-            self.get_location("Crystals 200").place_locked_item(self.create_item("Healthup"))
-            self.get_location("Crystals 400").place_locked_item(self.create_item("Healthup"))
-            self.get_location("Crystals 600").place_locked_item(self.create_item("Healthup"))
-            self.get_location("Crystals 800").place_locked_item(self.create_item("Healthup"))
+            self.get_location("Crystals 1").place_locked_item(self.create_item("Healthup"))
+            self.get_location("Crystals 2").place_locked_item(self.create_item("Healthup"))
+            self.get_location("Crystals 3").place_locked_item(self.create_item("Healthup"))
+            self.get_location("Crystals 4").place_locked_item(self.create_item("Healthup"))
         
 
     def get_filler_item_name(self) -> str:

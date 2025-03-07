@@ -829,43 +829,43 @@ location_data_table: Dict[str, BombHLocationData] = {
 
 }
 gem_data_table: Dict[str, BombHLocationData] = {
-    "Crystals 200": BombHLocationData(
+    "Crystals 1": BombHLocationData(
         region="Planet Bomber",
         address=0x1348061,
     ),
-    "Crystals 400": BombHLocationData(
+    "Crystals 2": BombHLocationData(
         region="Planet Bomber",
         address=0x1348062,
     ),
-    "Crystals 600": BombHLocationData(
+    "Crystals 3": BombHLocationData(
         region="Planet Bomber",
         address=0x1348063,
     ),
-    "Crystals 800": BombHLocationData(
+    "Crystals 4": BombHLocationData(
         region="Planet Bomber",
         address=0x1348064,
     ),
-    "Crystals 1000": BombHLocationData(
+    "Crystals 5": BombHLocationData(
         region="Planet Bomber",
         address=0x1348065,
     ),
-    "Crystals 1200": BombHLocationData(
+    "Crystals 6": BombHLocationData(
         region="Planet Bomber",
         address=0x1348066,
     ),
-    "Crystals 1400": BombHLocationData(
+    "Crystals 7": BombHLocationData(
         region="Planet Bomber",
         address=0x1348067,
     ),
-    "Crystals 1600": BombHLocationData(
+    "Crystals 8": BombHLocationData(
         region="Planet Bomber",
         address=0x1348068,
     ),
-    "Crystals 1800": BombHLocationData(
+    "Crystals 9": BombHLocationData(
         region="Planet Bomber",
         address=0x1348069,
     ),
-    "Crystals 2000": BombHLocationData(
+    "Crystals 10": BombHLocationData(
         region="Planet Bomber",
         address=0x134806A,
     ),
