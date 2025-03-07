@@ -109,7 +109,7 @@ def get_location_rules(player):
         "Untouchable Treasure Card 3":
             lambda state: state.has("Power Bombs", player) and state.has("Remote Bombs", player),
         "Untouchable Treasure Card 1": # Power Glove needed for bombup too
-            lambda state: (state.has("Bombup", player) and state.has("Remote Bombs", player) and state.has("Power Glove", player)) or state.has("Power Bombs", player),
+            lambda state: can_hit_floating(state, player) and (can_build_bridge(state, player) or state.has("Power Bombs", player)),
 
         "To Have or Have Not Card 1":
             lambda state: can_hit_floating(state, player),
