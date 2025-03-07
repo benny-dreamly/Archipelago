@@ -20,6 +20,8 @@ import pkgutil
 import Patch
 import settings
 
+# Testing
+
 COLOR_PATCHES = [
     "BomberWhite.bsdiff4",
     "BomberBlack.bsdiff4",
