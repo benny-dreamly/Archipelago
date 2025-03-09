@@ -309,37 +309,72 @@ location_data_table: Dict[str, BomberTLocationData] = {
     ),
 
     # Fusions
-    "Magnet - Fuse Fangs": BomberTLocationData(
-        region="MagBase",
+
+        # Fusions
+    "Beta - Fuse Fangs": BomberTLocationData(
+        region="Beta",
         type="karabon",
         code=0x1C2A93,
         address=0x352A9,
         mask=0x8,
-        locked_item="P Fangs",
+        #locked_item="P Fangs",
     ),
-    "Pretty - Fuse Sea": BomberTLocationData(
-        region="PttyBase",
+    "Beta - Fuse Sea": BomberTLocationData(
+        region="Beta",
         type="karabon",
         code=0x1C2AA1,
         address=0x352AA,
         mask=0x2,
-        locked_item="P Sea",
+        #locked_item="P Sea",
     ),
-    "Plasma - Fuse Dragon": BomberTLocationData(
-        region="PlzmBase",
+    "Beta - Fuse Dragon": BomberTLocationData(
+        region="Beta",
         type="karabon",
         code=0x1C2AB3,
         address=0x352AB,
         mask=0x40,
-        locked_item="P Dragon",
+        #locked_item="P Dragon",
     ),
-    "Golem - Fuse SeaWing": BomberTLocationData(
-        region="GlmBase",
+    "Beta - Fuse SeaWing": BomberTLocationData(
+        region="Beta",
         type="karabon",
         code=0x1C2AB5,
         address=0x352AB,
         mask=0x20,
-        locked_item="SeaWing",
+        #locked_item="SeaWing",
+    ),
+
+    "Magnet - SID": BomberTLocationData(
+        region="MagBase",
+        type="chest",
+        code=0x1C2A81,
+        address=0x352A9,
+        mask=0x8,
+        #locked_item="P Fangs",
+    ),
+    "Pretty - SID": BomberTLocationData(
+        region="PttyBase",
+        type="chest",
+        code=0x1C2A82,
+        address=0x352AA,
+        mask=0x2,
+        #locked_item="P Sea",
+    ),
+    "Plasma - SID": BomberTLocationData(
+        region="PlzmBase",
+        type="chest",
+        code=0x1C2A83,
+        address=0x352AB,
+        mask=0x40,
+        #locked_item="P Dragon",
+    ),
+    "Golem - SID": BomberTLocationData(
+        region="GlmBase",
+        type="chest",
+        code=0x1C2A84,
+        address=0x352AB,
+        mask=0x20,
+        #locked_item="SeaWing",
     ),
 
     # Chests
@@ -755,7 +790,7 @@ location_data_table: Dict[str, BomberTLocationData] = {
         code=0x1C2912,
         address=0x35291,
         mask=0xFF,
-        locked_item="Victory",
+        locked_item="MAX",
     ),
 
 }

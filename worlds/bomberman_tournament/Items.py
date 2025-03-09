@@ -91,6 +91,7 @@ id_to_string = {
 }
 
 kara_hints = [
+    "Pommy",
     "Ceedrun",
     "Elifan",
     "P Fangs",
@@ -686,7 +687,7 @@ item_data_table: Dict[str, BomberTItemData] = {
     ),
 
 
-    "Victory": BomberTItemData(
+    "MAX": BomberTItemData(
         code=0x1C202F,
         type=ItemClassification.progression,
         num_exist= 0

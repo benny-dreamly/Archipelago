@@ -52,6 +52,17 @@ class BaseSpeed(Range):
 class RandomEnemy(Toggle):
     """Randomizes Enemy objects in maps"""
 
+class RandomFuse(Choice):
+    """Randomizes Fusion Materials for Karabon Fusions
+    vanilla - No Randomization
+    materials - Only the materials are randomized
+    materialandresult - Both the materials and the result are randomized"""
+    display_name = "Random SID Fusion"
+    option_vanilla = 0
+    option_materials = 1
+    option_materialandresult = 2
+    default = 0
+
 class RandomMusic(Toggle):
     """Randomizes the music table every time the client is loaded"""
 class RandomSound(Toggle):
@@ -74,6 +85,7 @@ class BomberTOptions(PerGameCommonOptions):
     mapsanity: Mapsanity
     rocksanity: Rocksanity
     random_enemy: RandomEnemy
+    random_fuse: RandomFuse
     random_npc: NPCSprite
     move_speed: BaseSpeed
     kara_multiply: KaraMultiply

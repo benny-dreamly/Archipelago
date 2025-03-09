@@ -404,7 +404,14 @@ item_flag_adr = {
      # Warp fixes
     0x2FCE02: [0x1E,0x00], # Magnet Door Scene
     0x2FD080: [0x50,0x00,0x1F,0x00], # Pretty Boat Scene
-    
+     # SID Chest
+    0x2FBC50: [0x25, 0x00, 0x31, 0x00, 0x94, 0x00, 0x21, 0x07], # Magbase
+    0x2FBE04: [0x07, 0x00, 0x45, 0x00, 0x94, 0x00, 0x22, 0x07], # PrettyBase
+    0x2FC1BE: [0x43, 0x00, 0x51, 0x00, 0x94, 0x00, 0x23, 0x07], # PlasmaBase
+    0x2FC6A2: [0x34, 0x00, 0x3D, 0x00, 0x94, 0x00, 0x24, 0x07], # GolemBase
+     # Beta House SID Warp
+    0x2FD8D8: [0x25, 0x00, 0x24, 0x00, 0x00, 0x03, 0x01, 0x00], # Inside Beta House -> Inside SID Room
+    0x2FD920: [0x23, 0x00, 0x07, 0x00, 0x02, 0x00, 0x00, 0x00], # Inside SID Room -> Outside Beta House
 }
 
 softlock_fixes = {
@@ -491,10 +498,10 @@ location_replace_txt = {
     "Bomb Synthesis - Landmine": [0, 0x31B1AA, 9],
 
     # Fusions 
-    "Magnet - Fuse Fangs": [0,0x21C45A, 15],
-    "Pretty - Fuse Sea": [0,0x21C475, 13],
-    "Plasma - Fuse Dragon": [0, 0x21C48E,16],
-    "Golem - Fuse SeaWing": [0,0x21C4AA,15],
+    "Beta - Fuse Fangs": [0,0x21C45A, 15],
+    "Beta - Fuse Sea": [0,0x21C475, 13],
+    "Beta - Fuse Dragon": [0, 0x21C48E,16],
+    "Beta - Fuse SeaWing": [0,0x21C4AA,15],
 
     # Medals
     "Magnet - Magnet Clear": [0x21853D, 0x21854F,16],
@@ -717,7 +724,7 @@ def comicHints(world:World):
 
 
 
-def write_tokens(world:World, patch:BomberTProcedurePatch):
+def write_tokens(world:World, patch:BomberTProcedurePatch, fuse_dict):
     # Skip Intro dialog
     #patch.write_token(APTokenTypes.WRITE, 0x0216531, bytearray([0xFF]))
     # Do not gain items from dialog
@@ -728,6 +735,42 @@ def write_tokens(world:World, patch:BomberTProcedurePatch):
                 if objlist[objnum] in enemy_rando_types:
                     randenemy = random.choice(enemy_rando_types)
                     patch.write_token(APTokenTypes.WRITE, objoffset, bytearray([randenemy]))
+    fuse_items = ["Beta - Fuse Fangs", "Beta - Fuse Sea", "Beta - Fuse Dragon", "Beta - Fuse SeaWing"]
+    baseoffset = 0x30204C
+    #fuse_results = [0x03, 0x09, 0x0E, 0x15]
+    kara_list = [
+    "Pommy",
+    "Ceedrun",
+    "Elifan",
+    "P Fangs",
+    "Sharkun",
+    "Th Liger",
+    "Kai-man",
+    "TwinDrag",
+    "P Nucklz",
+    "P Sea",
+    "ToughGuy",
+    "P Beast",
+    "Pteradon",
+    "Dorako",
+    "P Dragon",
+    "Youno",
+    "Sibaloon",
+    "P Animal",
+    "Unagi",
+    "Elekong",
+    "Youni",
+    "SeaWing",
+    "KameKing",
+    "MarinGon",
+    "Firekong",
+    ]
+    for x in range(4):
+        karaval1 = kara_list.index(fuse_dict[fuse_items[x]][0])
+        karaval2 = kara_list.index(fuse_dict[fuse_items[x]][1])
+        fuse_token = bytearray([karaval1, karaval2]) #fuse_results[x],0x00, x+ 0x2C, 0x01])
+        patch.write_token(APTokenTypes.WRITE, baseoffset + (x << 3), fuse_token)
+
     for offset, val in item_flag_adr.items():
         patch.write_token(APTokenTypes.WRITE, offset, bytearray(val))
     # Prevent Karaboms for setting themselves

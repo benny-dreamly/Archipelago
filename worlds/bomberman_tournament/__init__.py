@@ -61,6 +61,8 @@ class BomberTWorld(World):
     location_name_to_id.update(map_location_table)
     item_name_to_id = item_table
 
+    fusion_dict = {}
+
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
 
@@ -69,6 +71,24 @@ class BomberTWorld(World):
 
     def create_items(self) -> None:
         item_pool: List[BomberTItem] = []
+        
+        if self.options.random_fuse.value:
+            from .Items import kara_hints
+            karalist = kara_hints
+            random.shuffle(karalist)
+            fuse_items = ["Beta - Fuse Fangs", "Beta - Fuse Sea", "Beta - Fuse Dragon", "Beta - Fuse SeaWing"]
+            for x in range(4):
+                kara1 = karalist.pop()
+                kara2 = karalist.pop()
+                self.fusion_dict.update({fuse_items[x]: [kara1, kara2]})
+        else:
+            self.fusion_dict = {
+                "Beta - Fuse Fangs": ["Pommy", "Elifan"],
+                "Beta - Fuse Sea": ["Kai-man", "P Nucklz"],
+                "Beta - Fuse Dragon": ["P Beast", "Dorako"],
+                "Beta - Fuse SeaWing": ["Youni", "Youno"]
+            }
+
         for name, item in item_data_table.items():
             if item.code and item.can_create(self):
                 for x in range(item.num_exist):
@@ -87,6 +107,11 @@ class BomberTWorld(World):
             self.multiworld.push_precollected(self.create_item("Magnet Door Key"))
             self.multiworld.push_precollected(self.create_item("Boat Key"))
             self.multiworld.push_precollected(self.create_item("Desert Key"))
+        if self.options.random_fuse == 2:
+            item_pool.append(self.create_item("P Fangs"))
+            item_pool.append(self.create_item("P Sea"))
+            item_pool.append(self.create_item("P Dragon"))
+            item_pool.append(self.create_item("SeaWing"))
 
         self.multiworld.push_precollected(self.create_item("Pommy"))
         junk = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
@@ -144,6 +169,11 @@ class BomberTWorld(World):
             self.get_location("Magnet - Magnet Clear").place_locked_item(self.create_item("Magnet Door Key"))
             self.get_location("Pretty - Pretty Clear").place_locked_item(self.create_item("Boat Key"))
             self.get_location("Plasma - Plasma Clear").place_locked_item(self.create_item("Desert Key"))
+        if self.options.random_fuse.value != 2:
+            self.get_location("Beta - Fuse Fangs").place_locked_item(self.create_item("P Fangs"))
+            self.get_location("Beta - Fuse Sea").place_locked_item(self.create_item("P Sea"))
+            self.get_location("Beta - Fuse Dragon").place_locked_item(self.create_item("P Dragon"))
+            self.get_location("Beta - Fuse SeaWing").place_locked_item(self.create_item("SeaWing"))
         # Set priority location for the Big Red Button!
         #self.options.priority_locations.value.add("The Big Red Button")
 
@@ -178,9 +208,13 @@ class BomberTWorld(World):
             #if name in location_rules and location_data_table[name].can_create(self.multiworld, player):
             if name in location_rules:
                 location.access_rule = location_rules[name]
-
+        location_rules = fusion_rules(player,self.fusion_dict)
+        for location in self.multiworld.get_locations(player):
+            name = location.name
+            if name in location_rules:
+                location.access_rule = location_rules[name]
         # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("MAX", self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -200,7 +234,7 @@ class BomberTWorld(World):
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "bombt.bsdiff4"))
         procedure = [("apply_bsdiff4", ["base_patch.bsdiff4"]), ("apply_tokens", ["token_data.bin"])]
         patch.procedure = procedure
-        write_tokens(self, patch)
+        write_tokens(self, patch, self.fusion_dict)
         out_file_name = self.multiworld.get_out_file_name_base(self.player)
         patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
         
