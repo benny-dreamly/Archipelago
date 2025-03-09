@@ -39,6 +39,14 @@ def plasma_clear_rules(state, player):
 def fantasy_clear_rules(state, player):
     return state.has("ToughGuy", player) and state.has("Elifan", player) and state.has("Sibaloon", player),
 
+def general_sid_rules(state,player):
+    return (
+        (state.has("Pommy", player) and state.has("Elifan", player)) or
+        (state.has("Kai-man", player) and state.has("P Nucklz", player)) and (state.has("RC Bomb", player) or state.has("ToughGuy", player) or (state.has("TwinDrag", player) or state.has("FireUp",player, 2))) or
+        (plasma_clear_rules(state, player) and state.has("P Beast", player)) or
+        (state.has("Youno", player) and state.has("Youni", player))
+    )
+
 def get_region_rules(player):
     return{
         "Alpha -> Plains":
@@ -234,13 +242,17 @@ def get_location_rules(player):
 
         # Fusions
         "Magnet - Fuse Fangs":
-            lambda state: state.has("Pommy", player) and state.has("Elifan", player),
+            lambda state: general_sid_rules(state,player),
+            #lambda state: state.has("Pommy", player) and state.has("Elifan", player),
         "Pretty - Fuse Sea":
-            lambda state: (state.has("Kai-man", player) and state.has("P Nucklz", player)) and (state.has("RC Bomb", player) or state.has("ToughGuy", player) or (state.has("TwinDrag", player) or state.has("FireUp",player, 2))),
+            lambda state: general_sid_rules(state,player),
+            #lambda state: (state.has("Kai-man", player) and state.has("P Nucklz", player)) and (state.has("RC Bomb", player) or state.has("ToughGuy", player) or (state.has("TwinDrag", player) or state.has("FireUp",player, 2))),
         "Plasma - Fuse Dragon":
-            lambda state: plasma_clear_rules(state, player) and state.has("P Beast", player),
+            lambda state: general_sid_rules(state,player),
+            #lambda state: plasma_clear_rules(state, player) and state.has("P Beast", player),
         "Golem - Fuse SeaWing":
-            lambda state: state.has("Youno", player) and state.has("Youni", player),
+            lambda state: general_sid_rules(state,player),
+            #lambda state: state.has("Youno", player) and state.has("Youni", player),
 
         # Dungeon Clears 
         "Magnet - Magnet Bomber Defeated":

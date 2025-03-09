@@ -49,6 +49,9 @@ class BaseSpeed(Range):
     range_end = 8
     default = 4
 
+class RandomEnemy(Toggle):
+    """Randomizes Enemy objects in maps"""
+
 class RandomMusic(Toggle):
     """Randomizes the music table every time the client is loaded"""
 class RandomSound(Toggle):
@@ -70,6 +73,7 @@ class BomberTOptions(PerGameCommonOptions):
     pool_medals: PoolMedals
     mapsanity: Mapsanity
     rocksanity: Rocksanity
+    random_enemy: RandomEnemy
     random_npc: NPCSprite
     move_speed: BaseSpeed
     kara_multiply: KaraMultiply
