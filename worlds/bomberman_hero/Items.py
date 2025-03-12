@@ -127,7 +127,7 @@ item_data_table: Dict[str, BombHItemData] = {
     ),
     "Healthup": BombHItemData(
         code=0x165245,
-        type=ItemClassification.useful,
+        type=ItemClassification.progression,
         num_exist=0
     ),
     "1 UP": BombHItemData(

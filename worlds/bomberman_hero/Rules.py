@@ -245,6 +245,10 @@ def get_region_rules(player):
 
 def get_location_rules(player):
     return {
+        "Heaven Sky Clear":
+            lambda state: state.has("Bombup", player),
+        "Heaven Sky Points":
+            lambda state: state.has("Bombup", player),
         "Vs Endol Points":
             lambda state: state.has("Fireup", player, 3),
         "Vs Baruda Points":
@@ -257,6 +261,10 @@ def get_location_rules(player):
             lambda state: state.has("Fireup", player, 3) and state.has("Healthup", player, 2),
         "Boss Room 2 Points":
             lambda state: state.has("Fireup", player, 3),
+        "Boss Room 5 Clear":
+            lambda state: state.has("Bombup", player, 1),
+        "Boss Room 5 Points":
+            lambda state: state.has("Bombup", player, 2),
         "Boss Room 6 Clear":
             lambda state: state.has("Fireup", player, 3),
         "Boss Room 6 Points":
