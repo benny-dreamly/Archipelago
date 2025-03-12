@@ -40,6 +40,11 @@ class BomberColor(Choice):
     option_black = 1
     option_red = 2
     option_blue = 3
+    option_magnet = 4
+    option_pretty = 5
+    option_plasma = 6
+    option_golem = 7
+    option_max = 8
     default = 0
 
 class BaseSpeed(Range):
