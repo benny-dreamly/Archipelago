@@ -14,6 +14,11 @@ from worlds.AutoWorld import World
 
 MD5Hash = "79aef9bbe1378adfbd688cd66e11a7be"
 
+def randomize_dict_items(input_dict):
+    items_list = list(input_dict.items())
+    random.shuffle(items_list)
+    return dict(items_list)
+
 def split_into_xbit_chunks(byte_array,size):
    #Splits a byte array into chunks of 32 bits (4 bytes).
 
@@ -534,7 +539,7 @@ object_rando_bytes = {
         0x1B, 0x1E, 0x1E, 0x1E, 0x1B, 0x1B, 0x1B, 0x1C, 0x1E, 0x1C, 0x1C, 0x1B, 0x8F, 0x1F, 0x1B, 0x1C, 0x1B, 0x8F, 0x8F, 0x1C, 0x8F, 0x1C, 0x1F, 0x1F, 0xC4, 0x8F, 0x8F, 0x1B, 0x1F, 0x1C, 
         0x1F, 0x1F, 0x1B, 0x1F, 0x8F, 0x1B, 0xC4, 0xC4, 0x1F, 0x1D, 0x1F, 0x1D, 0x1F, 0xC4, 0x1D, 0xC4, 0x1F, 0xC4, 0x8E, 0x1D, 0x1F, 0x1D, 0x1D, 0xC4, 0x8E, 0x1D, 0x1D, 0x1D,],
     0x2FBBD0: [#Magbase
-        0x2C, 0x05, 0x08, 0x01, 0x08, 0x80, 0x05, 0x94, 0x07, 0x80, 0x80, 0x80, 0x07, 0x80, 0x80, 0x80, 0x80, 0x80, 0x05, 0x05, 0x05, 0x05, 0x07, 0x80, 0x80, 0xC0, 0x80, 0x07, 0x06, 0x07, 
+        0x2C, 0x05, 0x08, 0x94, 0x08, 0x80, 0x05, 0x94, 0x07, 0x80, 0x80, 0x80, 0x07, 0x80, 0x80, 0x80, 0x80, 0x80, 0x05, 0x05, 0x05, 0x05, 0x07, 0x80, 0x80, 0xC0, 0x80, 0x07, 0x06, 0x07, 
         0x06, 0x06, 0x07, 0x80, 0x06, 0xC0, 0xC0, 0x94, 0x08, 0x80, 0x08, 0x80, 0x94, 0x08, 0x80, 0x07, 0x08, 0x07, 0x07, 0x08, 0x08, 0x07,],
     0x2FBDAC: [# Pretty Base
         0x85, 0x11, 0x88, 0x85, 0x11, 0x88, 0x94, 0x85, 0x88, 0x11, 0x85, 0x11, 0x88, 0x88, 0x86, 0x86, 0x86, 0x86, 0x86, 0x86, 0x86, 0x86, 0x86, 0x85, 0x86, 0x86, 0x86, 0x86, 0x94, 0x07, 
@@ -592,7 +597,7 @@ enemy_rando_types = [
     0x1A, #Flying Devil
     0x1B, #Green Slime
     0x1C, #Living Rock
-    0x1D, #Quicksand Worm
+    0x1D, #Quicksand Worm ; Takes up too much sprite space
     0x1E, #Fire Tribesman
     0x1F, #Purple Devil
     0x20, #Mummy
@@ -728,12 +733,29 @@ def write_tokens(world:World, patch:BomberTProcedurePatch, fuse_dict):
     # Skip Intro dialog
     #patch.write_token(APTokenTypes.WRITE, 0x0216531, bytearray([0xFF]))
     # Do not gain items from dialog
-    if world.options.random_enemy:
+    enemy_rando = world.options.random_enemy.value
+    if enemy_rando:
+        if enemy_rando == 1: # Shuffle
+            enemy_pool = {}
+            for x in range(len(enemy_rando_types)): # Create a dict of enetype: enetype
+                enemy_pool.update({enemy_pool[x]:enemy_pool[x]})
+            randomize_dict_items(enemy_pool) # Then shuffle the items
+        elif enemy_rando == 2: # Chatoic random
+            patch.write_token(APTokenTypes.WRITE, 0x2E564, bytearray([0x80])) # Adjust Object Sprite Start Address
         for base_offset, objlist in object_rando_bytes.items():
+            if enemy_rando == 2: # Chatoic random
+                enemy_pool = enemy_rando_types
+                random.shuffle(enemy_pool)
+                region_enemy_pool = []
+                for x in range(8):
+                    region_enemy_pool.append(enemy_pool.pop(0))
             for objnum in range(len(objlist)):
                 objoffset = (base_offset + (objnum * 0x08)) + 4
                 if objlist[objnum] in enemy_rando_types:
-                    randenemy = random.choice(enemy_rando_types)
+                    if enemy_rando == 1: # Shuffle
+                        randenemy = enemy_pool[objlist[objnum]]
+                    elif enemy_rando == 2:# Chatoic random
+                        randenemy = random.choice(enemy_rando_types)
                     patch.write_token(APTokenTypes.WRITE, objoffset, bytearray([randenemy]))
     fuse_items = ["Beta - Fuse Fangs", "Beta - Fuse Sea", "Beta - Fuse Dragon", "Beta - Fuse SeaWing"]
     baseoffset = 0x30204C
@@ -814,7 +836,7 @@ def write_tokens(world:World, patch:BomberTProcedurePatch, fuse_dict):
     if world.options.random_sound:
         patch.write_token(APTokenTypes.WRITE, 0x31C890, ramdomize_table_with_exclude(SOUND_TBL,0x8,sound_exclude) )
     if world.options.random_music:
-        patch.write_token(APTokenTypes.WRITE, 0x31CB00, ramdomize_table_with_exclude(SOUND_TBL,0x8,music_exclude) )
+        patch.write_token(APTokenTypes.WRITE, 0x31C890, ramdomize_table_with_exclude(SOUND_TBL,0x8,music_exclude) )
 
     # Randomize NPC sprites, Very unstable
     if world.options.random_npc:

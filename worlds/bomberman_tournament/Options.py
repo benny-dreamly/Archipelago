@@ -49,8 +49,18 @@ class BaseSpeed(Range):
     range_end = 8
     default = 4
 
-class RandomEnemy(Toggle):
-    """Randomizes Enemy objects in maps"""
+class RandomEnemy(Choice):
+    """Randomizes Enemy objects in maps
+    vanilla - No Randomization
+    shuffle - Shuffles Enemy types with each other
+    chaotic - Randomizes the enemies in each region with any enemy type
+    only 8 unqiue enemy types will be shuffled to a region
+    """
+    display_name = "Randomize Enemies"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_chaotic = 2
+    default = 0
 
 class RandomFuse(Choice):
     """Randomizes Fusion Materials for Karabon Fusions
