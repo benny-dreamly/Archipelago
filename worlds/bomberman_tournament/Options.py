@@ -40,6 +40,7 @@ class BomberColor(Choice):
     option_black = 1
     option_red = 2
     option_blue = 3
+    option_purple = 9
     option_magnet = 4
     option_pretty = 5
     option_plasma = 6
