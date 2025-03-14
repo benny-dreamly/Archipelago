@@ -34,19 +34,6 @@ class KaraMultiply(Range):
     range_end = 10
     default = 2
 
-class BomberColor(Choice):
-    """Determines Bomberman's Color Palette"""
-    option_white = 0
-    option_black = 1
-    option_red = 2
-    option_blue = 3
-    option_purple = 9
-    option_magnet = 4
-    option_pretty = 5
-    option_plasma = 6
-    option_golem = 7
-    option_max = 8
-    default = 0
 
 class BaseSpeed(Range):
     """Sets the base movement speed, the games vanilla base value is 2"""
@@ -91,6 +78,95 @@ class NPCSprite(Toggle):
     """If enabled NPCs will have a random sprite"""
     display_name = "Randomize NPC Sprites"
 
+class BomberColor(Choice):
+    """Determines Bomberman's Color Palette
+    by part - Select each color of each part individually"""
+    option_white = 0
+    option_black = 1
+    option_red = 2
+    option_blue = 3
+    option_purple = 9
+    option_magnet = 4
+    option_pretty = 5
+    option_plasma = 6
+    option_golem = 7
+    option_max = 8
+    option_bypart = 16
+    default = 0
+
+class PrimaryColor(Choice):
+    """If By part is chosen for the Bomber Color option then this will set the body and head color"""
+    option_classic = 0
+    option_black = 1
+    option_magnet = 2
+    option_pretty = 3
+    option_plasma = 4
+    option_golem = 5
+    option_max = 6
+    option_red = 7
+    option_orange = 8
+    option_yellow = 9
+    option_green = 10
+    option_mint = 11
+    option_cyan = 12
+    option_blue = 13
+    option_purple = 14
+    option_magenta = 15
+    option_pink = 16
+    option_white = 17
+    option_brown = 18
+
+    
+class LimbColor(Choice):
+    """If By part is chosen for the Bomber Color option then this will set the hand and feet color"""
+    option_classic = 0
+    option_green = 1
+    option_blue = 2
+    option_red = 3
+    option_gold = 4
+    option_orange = 5
+    option_yellow = 6
+    option_purple = 7
+    option_pink = 12
+    option_beige = 8
+    option_brown = 9
+    option_white = 10
+    option_black = 11
+    default = 0
+
+class AntennaColor(Choice):
+    """If By part is chosen for the Bomber Color option then this will set the antenna color"""
+    option_classic = 0
+    option_green = 1
+    option_blue = 2
+    option_red = 3
+    option_gold = 4
+    option_orange = 5
+    option_yellow = 6
+    option_purple = 7
+    option_pink = 12
+    option_beige = 8
+    option_brown = 9
+    option_white = 10
+    option_black = 11
+    default = 0
+
+class armColor(Choice):
+    """If By part is chosen for the Bomber Color option then this will set the arm color"""
+    option_classic = 10
+    option_green = 1
+    option_blue = 2
+    option_red = 3
+    option_gold = 4
+    option_orange = 5
+    option_yellow = 6
+    option_purple = 7
+    option_pink = 12
+    option_beige = 8
+    option_brown = 9
+    option_black = 11
+    default = 10
+
 @dataclass
 class BomberTOptions(PerGameCommonOptions):
     #color: ButtonColor
@@ -105,8 +181,13 @@ class BomberTOptions(PerGameCommonOptions):
     random_npc: NPCSprite
     move_speed: BaseSpeed
     kara_multiply: KaraMultiply
-    bomber_color: BomberColor
     random_music: RandomMusic
     random_sound: RandomSound
     autosave: Autosave
     death_link: DeathLink
+    bomber_color: BomberColor
+    bomber_body_color: PrimaryColor
+    bomber_limb_color: LimbColor
+    bomber_antenna_color: AntennaColor
+    bomber_arm_color: armColor
+    

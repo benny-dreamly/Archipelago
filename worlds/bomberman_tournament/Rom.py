@@ -4,7 +4,7 @@ import os
 import struct
 import random
 
-from rom_data import *
+from .rom_data import *
 from settings import get_settings
 import Utils
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
@@ -189,8 +189,8 @@ def write_tokens(world:World, patch:BomberTProcedurePatch, fuse_dict):
                 enemy_pool = enemy_rando_types
                 random.shuffle(enemy_pool)
                 region_enemy_pool = []
-                for x in range(8):
-                    region_enemy_pool.append(enemy_pool.pop(0))
+                for x in range(7):
+                    region_enemy_pool.append(enemy_pool[x])
             for objnum in range(len(objlist)):
                 objoffset = (base_offset + (objnum * 0x08)) + 4
                 if objlist[objnum] in enemy_rando_types:
@@ -228,7 +228,15 @@ def write_tokens(world:World, patch:BomberTProcedurePatch, fuse_dict):
             patch.write_token(APTokenTypes.WRITE, offset, bytearray(val) )
     # Write Rom name
     if world.options.bomber_color:
-        patch.write_token(APTokenTypes.WRITE, 0x6DC08, bytearray(bomber_colors[world.options.bomber_color]) )
+        if world.options.bomber_color.value != 16:
+            patch.write_token(APTokenTypes.WRITE, 0x6DC08, bytearray(bomber_colors[world.options.bomber_color.value]) )
+        else:
+            patch.write_token(APTokenTypes.WRITE, 0x6DC0C, bytearray(bomber_color_primaries[world.options.bomber_body_color.value][0]) )
+            patch.write_token(APTokenTypes.WRITE, 0x6DC1C, bytearray(bomber_color_primaries[world.options.bomber_body_color.value][1]) )
+
+            patch.write_token(APTokenTypes.WRITE, 0x6DC16, bytearray(bomber_color_secondaries[world.options.bomber_limb_color.value]) )
+            patch.write_token(APTokenTypes.WRITE, 0x6DC24, bytearray(bomber_color_secondaries[world.options.bomber_antenna_color.value]) )
+            patch.write_token(APTokenTypes.WRITE, 0x6DC20, bytearray(bomber_color_secondaries[world.options.bomber_arm_color.value]) )
     for j, b in enumerate(world.romName):
         patch.write_token(APTokenTypes.WRITE, 0x10 + j, struct.pack("<B", b))
     for j, b in enumerate(world.playerName):
