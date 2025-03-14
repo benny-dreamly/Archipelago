@@ -59,7 +59,7 @@ class RandomFuse(Choice):
     """Randomizes Fusion Materials for Karabon Fusions
     vanilla - No Randomization
     materials - Only the materials are randomized
-    materialandresult - Both the materials and the result are randomized"""
+    materialandresult - Both the materials and the result are randomized (currently broken)"""
     display_name = "Random SID Fusion"
     option_vanilla = 0
     option_materials = 1
@@ -190,4 +190,3 @@ class BomberTOptions(PerGameCommonOptions):
     bomber_limb_color: LimbColor
     bomber_antenna_color: AntennaColor
     bomber_arm_color: armColor
-    
