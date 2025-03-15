@@ -2084,6 +2084,9 @@ def patch_rom(world: World, rom: LocalRom):
     rom.write_bytes(0x1FBEA, bytearray([0xA0, 0x60, 0xFE])) #LDY #$FE60
     rom.write_bytes(0x1FE60, bytearray([0x40, 0x92]))
 
+    # Bridge Food Increase
+    rom.write_bytes(0x1C0E5, bytearray([0x30])) # LDY #$30
+
     #Graphics
     #AP Ofering Icons
     rom.write_bytes(0xF0AC, bytearray([0xA0, 0xFF])) # Use Bag Icon Pointer
