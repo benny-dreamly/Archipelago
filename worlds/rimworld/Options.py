@@ -2,6 +2,8 @@ import typing
 from dataclasses import dataclass
 from Options import Option, Choice, PerGameCommonOptions, Range
 
+max_research_locations = 250
+
 class FakeOption(Choice):
     display_name = "Fake Option"
     option_vanilla = 0
@@ -11,7 +13,7 @@ class FakeOption(Choice):
 class ResearchLocationCount(Range):
 	display_name = "Research Location Count"
 	range_start = 50
-	range_end = 250
+	range_end = max_research_locations
 	default = 155
 
 class ResearchBaseCost(Range):

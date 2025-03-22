@@ -5,9 +5,9 @@ import settings
 import typing
 import xml.etree.ElementTree as ElementTree
 from typing import Dict
-from .Options import rimworld_options, RimworldOptions
+from .Options import RimworldOptions, max_research_locations, rimworld_options
 from .Items import RimworldItem
-from .Locations import RimworldLocation
+from .Locations import RimworldLocation, base_location_id
 from worlds.AutoWorld import World
 from BaseClasses import LocationProgressType, Region, Location, Entrance, Item, ItemClassification
 
@@ -33,9 +33,9 @@ class RimworldWorld(World):
     for item in item_root:
         item_name_to_id[item[3].text] = int(item[0].text)
 
-    for i in range(250):
+    for i in range(max_research_locations):
         locationName = "Research Location "+ str(i)
-        locationId = i + 5197648000
+        locationId = i + base_location_id
         location_name_to_id[locationName] = locationId
 
 
@@ -66,14 +66,13 @@ class RimworldWorld(World):
 
         for i in range(researchLocationCount):
             locationName = "Research Location " + str(i)
-            locationId = i + 5197648000
+            locationId = i + base_location_id
             self.location_pool[locationName] = locationId
 
         main_region.add_locations(self.location_pool, RimworldLocation)
-        for i in range(researchLocationCount):
-            locationName = "Research Location " + str(i)
-            locationId = i + 5197648000
+        for locationName in self.location_pool:
             self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
+
         self.multiworld.regions.append(main_region)
 
         menu_region.connect(main_region)
