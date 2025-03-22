@@ -1,5 +1,6 @@
 # world/rimworld/__init__.py
 
+import pkgutil
 import settings
 import typing
 import xml.etree.ElementTree as ElementTree
@@ -27,6 +28,23 @@ class RimworldWorld(World):
     item_name_to_id = {}
     location_name_to_id = {}
 
+    item_root = ElementTree.fromstring(pkgutil.get_data(__name__,"ArchipelagoItemDefs.xml"));
+
+    for item in item_root:
+        item_name_to_id[item[3].text] = int(item[0].text)
+
+    # researchLocationCount = getattr(options, "ResearchLocationCount").value
+
+    for i in range(250):
+        locationName = "Research Location "+ str(i)
+        locationId = i + 5197648000
+        location_pool[locationName] = locationId
+        location_name_to_id[locationName] = locationId
+
+
+
+
+
     def fill_slot_data(self):
         slot_data = {}
 
@@ -49,13 +67,6 @@ class RimworldWorld(World):
 
         researchLocationCount = getattr(self.options, "ResearchLocationCount").value
 
-        for i in range(researchLocationCount):
-            locationName = "Research Location "+ str(i)
-            locationId = i + 5197648000
-            self.location_pool[locationName] = locationId
-            self.location_name_to_id[locationName] = locationId
-            # print("Loc: " + locationName + " id " + str(locationId))
-
         main_region.add_locations(self.location_pool, RimworldLocation)
         for i in range(researchLocationCount):
             self.multiworld.get_location("Research Location " + str(i), self.player).progress_type = LocationProgressType.DEFAULT
@@ -70,12 +81,8 @@ class RimworldWorld(World):
         return RimworldItem(item[3].text, ItemClassification.progression_skip_balancing, int(item[0].text), self.player)
 
     def create_items(self) -> None:
-        tree = ElementTree.parse('worlds/rimworld/ArchipelagoItemDefs.xml');
-        root = tree.getroot()
-
         itempool = []
-        for item in root:
-            itempool.append(self.create_item_from_xml_node(item))
-            self.item_name_to_id[item[3].text] = int(item[0].text)
+        for item in self.item_name_to_id:
+            itempool.append(self.create_item(item))
         
         self.multiworld.itempool += itempool

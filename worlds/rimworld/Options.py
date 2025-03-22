@@ -11,20 +11,27 @@ class FakeOption(Choice):
 class ResearchLocationCount(Range):
 	display_name = "Research Location Count"
 	range_start = 50
-	range_end = 155
-	default = 69
+	range_end = 250
+	default = 155
+
+class ResearchBaseCost(Range):
+	display_name = "Research Base Cost"
+	range_start = 10
+	range_end = 8000
+	default = 500
 
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
     fake_option: FakeOption
     ResearchLocationCount: ResearchLocationCount
+    ResearchBaseCost: ResearchBaseCost
     
 
 rimworld_options: typing.Dict[str, type(Option)] = {
 	**{
 		option.__name__: option
 		for option in {
-			ResearchLocationCount
+			ResearchLocationCount, ResearchBaseCost
 		}
 	}
 }
