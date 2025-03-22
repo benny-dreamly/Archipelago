@@ -33,12 +33,9 @@ class RimworldWorld(World):
     for item in item_root:
         item_name_to_id[item[3].text] = int(item[0].text)
 
-    # researchLocationCount = getattr(options, "ResearchLocationCount").value
-
     for i in range(250):
         locationName = "Research Location "+ str(i)
         locationId = i + 5197648000
-        location_pool[locationName] = locationId
         location_name_to_id[locationName] = locationId
 
 
@@ -67,9 +64,16 @@ class RimworldWorld(World):
 
         researchLocationCount = getattr(self.options, "ResearchLocationCount").value
 
+        for i in range(researchLocationCount):
+            locationName = "Research Location " + str(i)
+            locationId = i + 5197648000
+            self.location_pool[locationName] = locationId
+
         main_region.add_locations(self.location_pool, RimworldLocation)
         for i in range(researchLocationCount):
-            self.multiworld.get_location("Research Location " + str(i), self.player).progress_type = LocationProgressType.DEFAULT
+            locationName = "Research Location " + str(i)
+            locationId = i + 5197648000
+            self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
         self.multiworld.regions.append(main_region)
 
         menu_region.connect(main_region)
