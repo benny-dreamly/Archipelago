@@ -7,7 +7,8 @@ import xml.etree.ElementTree as ElementTree
 from typing import Dict
 from .Options import RimworldOptions, max_research_locations, rimworld_options
 from .Items import RimworldItem
-from .Locations import RimworldLocation, base_location_id
+from .Locations import RimworldLocation, base_location_id, location_id_gap
+from ..generic.Rules import set_rule
 from worlds.AutoWorld import World
 from BaseClasses import LocationProgressType, Region, Location, Entrance, Item, ItemClassification
 
@@ -31,11 +32,26 @@ class RimworldWorld(World):
     item_root = ElementTree.fromstring(pkgutil.get_data(__name__,"ArchipelagoItemDefs.xml"));
 
     for item in item_root:
-        item_name_to_id[item[3].text] = int(item[0].text)
+        itemName = item.find("label").text
+        itemId = item.find("Id").text
+        item_name_to_id[itemName] = int(itemId)
 
+    baseLocationId = base_location_id
     for i in range(max_research_locations):
-        locationName = "Research Location "+ str(i)
-        locationId = i + base_location_id
+        locationName = "Basic Research Location "+ str(i)
+        locationId = i + baseLocationId
+        location_name_to_id[locationName] = locationId
+
+    baseLocationId = baseLocationId + location_id_gap
+    for i in range(max_research_locations):
+        locationName = "Hi-Tech Research Location "+ str(i)
+        locationId = i + baseLocationId
+        location_name_to_id[locationName] = locationId
+
+    baseLocationId = baseLocationId + location_id_gap
+    for i in range(max_research_locations):
+        locationName = "Multi-Analyzer Research Location "+ str(i)
+        locationId = i + baseLocationId
         location_name_to_id[locationName] = locationId
 
 
@@ -62,11 +78,28 @@ class RimworldWorld(World):
         
         main_region = Region("Main", self.player, self.multiworld)
 
-        researchLocationCount = getattr(self.options, "ResearchLocationCount").value
+        basicResearchLocationCount = getattr(self.options, "BasicResearchLocationCount").value
+        baseLocationId = base_location_id
+        for i in range(basicResearchLocationCount):
+            locationName = "Basic Research Location " + str(i)
+            locationId = i + baseLocationId
+            self.location_name_to_id[locationName] = locationId
+            self.location_pool[locationName] = locationId
 
-        for i in range(researchLocationCount):
-            locationName = "Research Location " + str(i)
-            locationId = i + base_location_id
+        hiTechResearchLocationCount = getattr(self.options, "HiTechResearchLocationCount").value
+        baseLocationId = baseLocationId + location_id_gap
+        for i in range(hiTechResearchLocationCount):
+            locationName = "Hi-Tech Research Location " + str(i)
+            locationId = i + baseLocationId
+            self.location_name_to_id[locationName] = locationId
+            self.location_pool[locationName] = locationId
+
+        multiAnalyzerResearchLocationCount = getattr(self.options, "MultiAnalyzerResearchLocationCount").value
+        baseLocationId = baseLocationId + location_id_gap
+        for i in range(multiAnalyzerResearchLocationCount):
+            locationName = "Multi-Analyzer Research Location " + str(i)
+            locationId = i + baseLocationId
+            self.location_name_to_id[locationName] = locationId
             self.location_pool[locationName] = locationId
 
         main_region.add_locations(self.location_pool, RimworldLocation)
@@ -78,10 +111,10 @@ class RimworldWorld(World):
         menu_region.connect(main_region)
 
     def create_item(self, item: str) -> RimworldItem:
-        return RimworldItem(item, ItemClassification.progression_skip_balancing, self.item_name_to_id[item], self.player)
+        return RimworldItem(item, ItemClassification.progression, self.item_name_to_id[item], self.player)
 
     def create_item_from_xml_node(self, item) -> RimworldItem:
-        return RimworldItem(item[3].text, ItemClassification.progression_skip_balancing, int(item[0].text), self.player)
+        return RimworldItem(item[3].text, ItemClassification.progression, int(item[0].text), self.player)
 
     def create_items(self) -> None:
         itempool = []
@@ -89,3 +122,15 @@ class RimworldWorld(World):
             itempool.append(self.create_item(item))
         
         self.multiworld.itempool += itempool
+
+    def set_rules(self) -> None:
+        for locationName in self.location_pool:
+            locationId = self.location_name_to_id[locationName]
+            if locationId >= base_location_id + location_id_gap + location_id_gap:
+                set_rule(self.multiworld.get_location(locationName, self.player),
+                    lambda state: state.has("Microelectronics", self.player) and state.has("Multi-Analyzer", self.player))
+            elif locationId >= base_location_id + location_id_gap:
+                set_rule(self.multiworld.get_location(locationName, self.player),
+                    lambda state: state.has("Microelectronics", self.player))
+
+

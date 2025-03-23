@@ -2,19 +2,25 @@ import typing
 from dataclasses import dataclass
 from Options import Option, Choice, PerGameCommonOptions, Range
 
-max_research_locations = 250
+max_research_locations = 200
 
-class FakeOption(Choice):
-    display_name = "Fake Option"
-    option_vanilla = 0
-    option_fake_option = 1
-    default = 0
-
-class ResearchLocationCount(Range):
-	display_name = "Research Location Count"
-	range_start = 50
+class BasicResearchLocationCount(Range):
+	display_name = "Basic Research Location Count"
+	range_start = 0
 	range_end = max_research_locations
-	default = 155
+	default = 55
+
+class HiTechResearchLocationCount(Range):
+	display_name = "Hi-Tech Research Location Count"
+	range_start = 0
+	range_end = max_research_locations
+	default = 50
+
+class MultiAnalyzerResearchLocationCount(Range):
+	display_name = "Multi-Analyzer Research Location Count"
+	range_start = 0
+	range_end = max_research_locations
+	default = 50
 
 class ResearchBaseCost(Range):
 	display_name = "Research Base Cost"
@@ -24,8 +30,9 @@ class ResearchBaseCost(Range):
 
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
-    fake_option: FakeOption
-    ResearchLocationCount: ResearchLocationCount
+    BasicResearchLocationCount: BasicResearchLocationCount
+    HiTechResearchLocationCount: HiTechResearchLocationCount
+    MultiAnalyzerResearchLocationCount: MultiAnalyzerResearchLocationCount
     ResearchBaseCost: ResearchBaseCost
     
 
@@ -33,7 +40,8 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 	**{
 		option.__name__: option
 		for option in {
-			ResearchLocationCount, ResearchBaseCost
+			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
+			ResearchBaseCost
 		}
 	}
 }
