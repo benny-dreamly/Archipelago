@@ -28,12 +28,19 @@ class ResearchBaseCost(Range):
 	range_end = 8000
 	default = 500
 
+class ResearchMaxPrerequisites(Range):
+	display_name = "Research Max Prerequisites"
+	range_start = 0
+	range_end = 3
+	default = 3
+
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
     BasicResearchLocationCount: BasicResearchLocationCount
     HiTechResearchLocationCount: HiTechResearchLocationCount
     MultiAnalyzerResearchLocationCount: MultiAnalyzerResearchLocationCount
     ResearchBaseCost: ResearchBaseCost
+    ResearchMaxPrerequisites: ResearchMaxPrerequisites
     
 
 rimworld_options: typing.Dict[str, type(Option)] = {
@@ -41,7 +48,7 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 		option.__name__: option
 		for option in {
 			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
-			ResearchBaseCost
+			ResearchBaseCost, ResearchMaxPrerequisites
 		}
 	}
 }

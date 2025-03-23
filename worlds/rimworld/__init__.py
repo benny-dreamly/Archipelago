@@ -61,6 +61,7 @@ class RimworldWorld(World):
     def fill_slot_data(self):
         slot_data = {}
 
+        slot_data["seed"] = self.multiworld.seed_name
         options = slot_data["options"] = {}
         for option_name in rimworld_options:
             option = getattr(self.options, option_name)
