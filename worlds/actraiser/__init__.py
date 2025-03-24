@@ -87,7 +87,7 @@ class ActraiserWorld(World):
             if self.options.max_crystal.value >= self.options.crystal_count.value:
                 total_crystals = self.options.max_crystal.value
             else:
-                total_crystals = self.crystal_count.max_crystal.value
+                total_crystals = self.options.max_crystal.value
             if self.options.boss_crystal:
                 total_crystals = total_crystals - self.options.boss_crystal.value
             for x in range(total_crystals):

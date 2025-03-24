@@ -6,7 +6,7 @@ class Goal(Choice):
     Required Goal to complete the seed
     Noah - Clear the game by defeating the final boss, determined by the final boss option
     Generators - Clear the game by clearing a certain number of planets
-    Stone Hunt - Clear the game by collecting all of elemental stones
+    Stone Hunt - Clear the game by collecting all of the Elemental Stones.
     """
     #display_name = "Goal"
     option_noah = 0
@@ -27,14 +27,14 @@ class NoahAccess(Choice):
     default = 0
 
 class BossGoal(Choice):
-    """Determines what final boss should be fought at Noah to complete the game"""
+    """Determines which final boss should be fought at Noah to complete the game"""
     option_sthertoth = 0
     option_lilith = 1
     option_angel = 2
     default = 0
 
 class RequiredPlanets(Range):
-    """Number of generators needed to be destroyed to access Noah or Clear the game depending on other options"""
+    """Number of generators which need to be destroyed to access Noah or Clear the game depending on other options"""
     display_name = "Required Generators"
     range_start = 1
     range_end = 7
@@ -52,7 +52,7 @@ class StartingElement(Choice):
     default = 7
 
 class StartingPlanets(Range):
-    """Number of random planets you can visit from the start, you can always visit Alcatraz, Noah is will not be included."""
+    """Number of random planets you can visit from the start, you can always visit Alcatraz, Noah will not be included."""
     display_name = "Starting Planets"
     range_start = 1
     range_end = 7
@@ -60,7 +60,7 @@ class StartingPlanets(Range):
 
 class IncludeKeys(Toggle):
     """If enabled will add 3 Warship Key items into the item pool which each will autocomplete sections of Warship Noah
-    but are not neccesarry to progress, this option will always be set if keys are set to open Warship Noah"""
+    but are not necessary to progress, this option will always be set if keys are set to open Warship Noah"""
 
 class IncludeTraps(DefaultOnToggle):
     """If enabled will add negative traps to the item pool"""
