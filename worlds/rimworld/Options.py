@@ -8,19 +8,19 @@ class BasicResearchLocationCount(Range):
 	display_name = "Basic Research Location Count"
 	range_start = 0
 	range_end = max_research_locations
-	default = 55
+	default = 35
 
 class HiTechResearchLocationCount(Range):
 	display_name = "Hi-Tech Research Location Count"
 	range_start = 0
 	range_end = max_research_locations
-	default = 50
+	default = 35
 
 class MultiAnalyzerResearchLocationCount(Range):
 	display_name = "Multi-Analyzer Research Location Count"
 	range_start = 0
 	range_end = max_research_locations
-	default = 50
+	default = 35
 
 class ResearchBaseCost(Range):
 	display_name = "Research Base Cost"
@@ -34,6 +34,12 @@ class ResearchMaxPrerequisites(Range):
 	range_end = 3
 	default = 3
 
+class CraftLocationCount(Range):
+	display_name = "Craft Location Count"
+	range_start = 0
+	range_end = max_research_locations
+	default = 50
+
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
     BasicResearchLocationCount: BasicResearchLocationCount
@@ -41,6 +47,7 @@ class RimworldOptions(PerGameCommonOptions):
     MultiAnalyzerResearchLocationCount: MultiAnalyzerResearchLocationCount
     ResearchBaseCost: ResearchBaseCost
     ResearchMaxPrerequisites: ResearchMaxPrerequisites
+    CraftLocationCount: CraftLocationCount
     
 
 rimworld_options: typing.Dict[str, type(Option)] = {
@@ -48,7 +55,7 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 		option.__name__: option
 		for option in {
 			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
-			ResearchBaseCost, ResearchMaxPrerequisites
+			ResearchBaseCost, ResearchMaxPrerequisites, CraftLocationCount
 		}
 	}
 }

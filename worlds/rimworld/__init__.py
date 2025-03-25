@@ -1,6 +1,7 @@
 # world/rimworld/__init__.py
 
 import pkgutil
+import random
 import settings
 import typing
 import xml.etree.ElementTree as ElementTree
@@ -29,12 +30,32 @@ class RimworldWorld(World):
     item_name_to_id = {}
     location_name_to_id = {}
 
+    craftable_item_id_to_name = {}
+    craftable_item_id_to_prereqs = {}
+    location_prerequisites = {}
+    craft_location_recipes = {}
+
     item_root = ElementTree.fromstring(pkgutil.get_data(__name__,"ArchipelagoItemDefs.xml"));
 
     for item in item_root:
         itemName = item.find("label").text
         itemId = item.find("Id").text
-        item_name_to_id[itemName] = int(itemId)
+        defType = item.find("DefType").text
+        if (defType == "ResearchProjectDef"):
+            item_name_to_id[itemName] = int(itemId)
+        elif (defType == "ThingDef"):
+            craftable_item_id_to_prereqs[itemId] = []
+            defName = item.find("defName").text
+            defName = defName.replace("Thing", "")
+            craftable_item_id_to_name[itemId] = defName
+            prerequisites = item.find("Prerequisites")
+            if (prerequisites is not None):
+                for prereq in prerequisites:
+                    craftable_item_id_to_prereqs[itemId].append(prereq.text)
+
+
+
+
 
     baseLocationId = base_location_id
     for i in range(max_research_locations):
@@ -47,10 +68,18 @@ class RimworldWorld(World):
         locationName = "Hi-Tech Research Location "+ str(i)
         locationId = i + baseLocationId
         location_name_to_id[locationName] = locationId
+        location_prerequisites[locationName] = ["Microelectronics"]
 
     baseLocationId = baseLocationId + location_id_gap
     for i in range(max_research_locations):
         locationName = "Multi-Analyzer Research Location "+ str(i)
+        locationId = i + baseLocationId
+        location_name_to_id[locationName] = locationId
+        location_prerequisites[locationName] = ["Microelectronics", "Multi-Analyzer"]
+
+    baseLocationId = baseLocationId + location_id_gap
+    for i in range(max_research_locations):
+        locationName = "Craft Location " + str(i)
         locationId = i + baseLocationId
         location_name_to_id[locationName] = locationId
 
@@ -71,6 +100,8 @@ class RimworldWorld(World):
             except TypeError:
                 pass
 
+        slot_data["craft_recipes"] = self.craft_location_recipes
+
         return slot_data
 
     def create_regions(self) -> None:
@@ -84,7 +115,6 @@ class RimworldWorld(World):
         for i in range(basicResearchLocationCount):
             locationName = "Basic Research Location " + str(i)
             locationId = i + baseLocationId
-            self.location_name_to_id[locationName] = locationId
             self.location_pool[locationName] = locationId
 
         hiTechResearchLocationCount = getattr(self.options, "HiTechResearchLocationCount").value
@@ -92,7 +122,6 @@ class RimworldWorld(World):
         for i in range(hiTechResearchLocationCount):
             locationName = "Hi-Tech Research Location " + str(i)
             locationId = i + baseLocationId
-            self.location_name_to_id[locationName] = locationId
             self.location_pool[locationName] = locationId
 
         multiAnalyzerResearchLocationCount = getattr(self.options, "MultiAnalyzerResearchLocationCount").value
@@ -100,7 +129,19 @@ class RimworldWorld(World):
         for i in range(multiAnalyzerResearchLocationCount):
             locationName = "Multi-Analyzer Research Location " + str(i)
             locationId = i + baseLocationId
-            self.location_name_to_id[locationName] = locationId
+            self.location_pool[locationName] = locationId
+
+        craftLocationCount = getattr(self.options, "CraftLocationCount").value
+        baseLocationId = baseLocationId + location_id_gap
+        for i in range(craftLocationCount):
+            locationName = "Craft Location " + str(i)
+            locationId = i + baseLocationId
+            itemId1, itemName1 = random.choice(list(self.craftable_item_id_to_name.items()))
+            # Allows duplicate items - maybe fix it? Maybe who cares?
+            itemId2, itemName2 = random.choice(list(self.craftable_item_id_to_name.items()))
+            prerequisites = list(set(self.craftable_item_id_to_prereqs[itemId1]) | set(self.craftable_item_id_to_prereqs[itemId2]))
+            self.location_prerequisites[locationName] = prerequisites
+            self.craft_location_recipes[locationId] = [itemName1, itemName2]
             self.location_pool[locationName] = locationId
 
         main_region.add_locations(self.location_pool, RimworldLocation)
@@ -126,12 +167,15 @@ class RimworldWorld(World):
 
     def set_rules(self) -> None:
         for locationName in self.location_pool:
-            locationId = self.location_name_to_id[locationName]
+            if locationName in self.location_prerequisites:
+                set_rule(self.multiworld.get_location(locationName, self.player),
+                    lambda state: state.has_all(self.location_prerequisites[locationName], self.player))
+            '''locationId = self.location_name_to_id[locationName]
             if locationId >= base_location_id + location_id_gap + location_id_gap:
                 set_rule(self.multiworld.get_location(locationName, self.player),
                     lambda state: state.has("Microelectronics", self.player) and state.has("Multi-Analyzer", self.player))
             elif locationId >= base_location_id + location_id_gap:
                 set_rule(self.multiworld.get_location(locationName, self.player),
-                    lambda state: state.has("Microelectronics", self.player))
+                    lambda state: state.has("Microelectronics", self.player))'''
 
 
