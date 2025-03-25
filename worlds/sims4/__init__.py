@@ -1,6 +1,8 @@
+import os
 import typing
 from typing import Mapping, Any, ClassVar
 
+import Utils
 from BaseClasses import Tutorial, Item, ItemClassification, Region, Entrance
 from .Locations import location_table, Sims4Location, skill_locations_table
 from .Items import item_table, skills_table, Sims4Item, junk_table, filler_set
@@ -13,6 +15,7 @@ from ..LauncherComponents import Component, components, Type
 from multiprocessing import Process
 import settings
 from pathlib import Path
+from win32com.shell import shell, shellcon
 
 def run_client():
     from worlds.sims4.Client import main
@@ -28,7 +31,14 @@ class Sims4Settings(settings.Group):
         """Path to the Sims 4 Mods folder"""
         description = "the folder your Sims 4 mods are installed to"
 
-    mods_folder: ModsFolder = ModsFolder(Path.home() / "Documents" / "Electronic Arts" / "The Sims 4" / "Mods")
+    if Utils.is_windows():
+        # Use modern SHGetKnownFolderPath for better compatibility
+        docs_path = Path(shell.SHGetKnownFolderPath(shellcon.FOLDERID_Documents, 0, None))
+    else:
+        # Respect XDG_DOCUMENTS_DIR if available, otherwise default to ~/Documents
+        docs_path = Path(os.getenv("XDG_DOCUMENTS_DIR", Path.home() / "Documents"))
+
+    mods_folder: ModsFolder = ModsFolder(docs / "Documents" / "Electronic Arts" / "The Sims 4" / "Mods")
 
 
 class Sims4Web(WebWorld):
