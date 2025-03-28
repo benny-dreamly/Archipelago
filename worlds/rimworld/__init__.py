@@ -83,6 +83,11 @@ class RimworldWorld(World):
         locationId = i + baseLocationId
         location_name_to_id[locationName] = locationId
 
+    baseLocationId = baseLocationId + location_id_gap
+    locationName = "Space Victory"
+    locationId = baseLocationId
+    location_name_to_id[locationName] = locationId
+
 
 
 
@@ -142,11 +147,17 @@ class RimworldWorld(World):
             prerequisites = list(set(self.craftable_item_id_to_prereqs[itemId1]) | set(self.craftable_item_id_to_prereqs[itemId2]))
             self.location_prerequisites[locationName] = prerequisites
             self.craft_location_recipes[locationId] = [itemName1, itemName2]
+            # print(locationName + ": " + itemName1 + " + " + itemName2)
             self.location_pool[locationName] = locationId
 
         main_region.add_locations(self.location_pool, RimworldLocation)
         for locationName in self.location_pool:
             self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
+
+        baseLocationId = baseLocationId + location_id_gap
+        self.location_pool["Space Victory"] = baseLocationId
+        self.location_prerequisites["Space Victory"] = []
+        main_region.locations.append(RimworldLocation(self.player, "Space Victory", None, main_region))
 
         self.multiworld.regions.append(main_region)
 
@@ -155,8 +166,8 @@ class RimworldWorld(World):
     def create_item(self, item: str) -> RimworldItem:
         return RimworldItem(item, ItemClassification.progression, self.item_name_to_id[item], self.player)
 
-    def create_item_from_xml_node(self, item) -> RimworldItem:
-        return RimworldItem(item[3].text, ItemClassification.progression, int(item[0].text), self.player)
+    def create_event(self, event: str) -> RimworldItem:
+        return RimworldItem(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
         itempool = []
@@ -168,14 +179,13 @@ class RimworldWorld(World):
     def set_rules(self) -> None:
         for locationName in self.location_pool:
             if locationName in self.location_prerequisites:
-                set_rule(self.multiworld.get_location(locationName, self.player),
-                    lambda state: state.has_all(self.location_prerequisites[locationName], self.player))
-            '''locationId = self.location_name_to_id[locationName]
-            if locationId >= base_location_id + location_id_gap + location_id_gap:
-                set_rule(self.multiworld.get_location(locationName, self.player),
-                    lambda state: state.has("Microelectronics", self.player) and state.has("Multi-Analyzer", self.player))
-            elif locationId >= base_location_id + location_id_gap:
-                set_rule(self.multiworld.get_location(locationName, self.player),
-                    lambda state: state.has("Microelectronics", self.player))'''
+                # print("prereqs: " + locationName + ": " + str(self.location_prerequisites[locationName]))
+                set_rule(self.get_location(locationName),
+                    lambda state, prereqs = self.location_prerequisites[locationName]: state.has_all(prereqs, self.player))
 
-
+        victoryLocation = self.multiworld.get_location("Space Victory", self.player)
+        set_rule(victoryLocation,
+            lambda state: state.has_all(["Starflight Basics", "Vacuum Cryptosleep Casket", "Starship Reactor", "Machine Persuasion",
+                "Starflight Sensors", "Starflight Basics", "Advanced Fabrication", "Fabrication", "Electricity"], self.player))
+        victoryLocation.place_locked_item(self.create_event("Victory"))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
