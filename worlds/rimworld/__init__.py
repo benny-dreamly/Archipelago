@@ -8,8 +8,8 @@ import xml.etree.ElementTree as ElementTree
 from typing import Dict
 from .Options import RimworldOptions, max_research_locations, rimworld_options
 from .Items import RimworldItem
-from .Locations import RimworldLocation, base_location_id, location_id_gap
-from ..generic.Rules import set_rule
+from .Locations import RimworldLocation, base_location_id, location_id_gap, generic_victory_requirements, ship_launch_victory_requirements, royalty_victory_requirements, archonexus_victory_requirements, anomaly_victory_requirements
+from ..generic.Rules import set_rule, add_rule
 from worlds.AutoWorld import World
 from BaseClasses import LocationProgressType, Region, Location, Entrance, Item, ItemClassification
 
@@ -83,9 +83,22 @@ class RimworldWorld(World):
         locationId = i + baseLocationId
         location_name_to_id[locationName] = locationId
 
+
     baseLocationId = baseLocationId + location_id_gap
     locationName = "Space Victory"
     locationId = baseLocationId
+    location_name_to_id[locationName] = locationId
+
+    locationName = "Royalty Victory"
+    locationId = baseLocationId + 1
+    location_name_to_id[locationName] = locationId
+
+    locationName = "Archonexus Victory"
+    locationId = baseLocationId + 2
+    location_name_to_id[locationName] = locationId
+
+    locationName = "Anomaly Victory"
+    locationId = baseLocationId + 3
     location_name_to_id[locationName] = locationId
 
 
@@ -155,9 +168,29 @@ class RimworldWorld(World):
             self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
 
         baseLocationId = baseLocationId + location_id_gap
-        self.location_pool["Space Victory"] = baseLocationId
-        self.location_prerequisites["Space Victory"] = []
-        main_region.locations.append(RimworldLocation(self.player, "Space Victory", None, main_region))
+        victoryCondition = getattr(self.options, "VictoryCondition")
+        # Any or Ship Launch
+        if (victoryCondition == 0 or victoryCondition == 1):
+            self.location_pool["Space Victory"] = baseLocationId
+            self.location_prerequisites["Space Victory"] = []
+            main_region.locations.append(RimworldLocation(self.player, "Space Victory", None, main_region))
+        # Any or Royalty
+        if (victoryCondition == 0 or victoryCondition == 2):
+            self.location_pool["Royalty Victory"] = baseLocationId + 1
+            self.location_prerequisites["Royalty Victory"] = []
+            main_region.locations.append(RimworldLocation(self.player, "Royalty Victory", None, main_region))
+        # Since Archonexus has lower strict requirements, I want the generator to only consider the
+        #   other 3 victory conditions if the player opts for "any". Nexus still counts as "any", but
+        #   this will ensure both Nexus and another victory are in logic.
+        if (victoryCondition == 3):
+            self.location_pool["Archonexus Victory"] = baseLocationId + 2
+            self.location_prerequisites["Archonexus Victory"] = []
+            main_region.locations.append(RimworldLocation(self.player, "Archonexus Victory", None, main_region))
+        # Any or Anomaly
+        if (victoryCondition == 0 or victoryCondition == 4):
+            self.location_pool["Anomaly Victory"] = baseLocationId + 3
+            self.location_prerequisites["Anomaly Victory"] = []
+            main_region.locations.append(RimworldLocation(self.player, "Anomaly Victory", None, main_region))
 
         self.multiworld.regions.append(main_region)
 
@@ -183,9 +216,33 @@ class RimworldWorld(World):
                 set_rule(self.get_location(locationName),
                     lambda state, prereqs = self.location_prerequisites[locationName]: state.has_all(prereqs, self.player))
 
-        victoryLocation = self.multiworld.get_location("Space Victory", self.player)
-        set_rule(victoryLocation,
-            lambda state: state.has_all(["Starflight Basics", "Vacuum Cryptosleep Casket", "Starship Reactor", "Machine Persuasion",
-                "Starflight Sensors", "Starflight Basics", "Advanced Fabrication", "Fabrication", "Electricity"], self.player))
-        victoryLocation.place_locked_item(self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+        victoryCondition = getattr(self.options, "VictoryCondition")
+        if (victoryCondition == 0 or victoryCondition == 1):
+            victoryLocation = self.get_location("Space Victory")
+            for victoryRequirement in generic_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            for victoryRequirement in ship_launch_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            victoryLocation.place_locked_item(self.create_event("Victory"))
+        if (victoryCondition == 0 or victoryCondition == 2):
+            victoryLocation = self.get_location("Royalty Victory")
+            for victoryRequirement in generic_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            for victoryRequirement in royalty_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            victoryLocation.place_locked_item(self.create_event("Victory"))
+        if (victoryCondition == 3):
+            victoryLocation = self.get_location("Archonexus Victory")
+            for victoryRequirement in generic_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            for victoryRequirement in royalty_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            victoryLocation.place_locked_item(self.create_event("Victory"))
+        if (victoryCondition == 0 or victoryCondition == 4):
+            victoryLocation = self.get_location("Anomaly Victory")
+            for victoryRequirement in generic_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            for victoryRequirement in anomaly_victory_requirements:
+                add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            victoryLocation.place_locked_item(self.create_event("Victory"))

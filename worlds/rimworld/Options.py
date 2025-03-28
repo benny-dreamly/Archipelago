@@ -47,7 +47,7 @@ class VictoryCondition(Choice):
 	option_royalty = 2
 	option_archonexus = 3
 	option_anomaly = 4
-	default = 0
+	default = 1
 
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
