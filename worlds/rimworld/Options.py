@@ -80,6 +80,42 @@ class StartingResearchLevel(Choice):
 	option_crashlanded = 2
 	default = 0
 
+class NeolithicItemWeight(Range):
+	display_name = "Neolithic Item Weight"
+	range_start = 0
+	range_end = 100
+	default = 60
+
+class MedievalItemWeight(Range):
+	display_name = "Medieval Item Weight"
+	range_start = 0
+	range_end = 100
+	default = 60
+
+class IndustrialItemWeight(Range):
+	display_name = "Industrial Item Weight"
+	range_start = 0
+	range_end = 100
+	default = 30
+
+class SpacerItemWeight(Range):
+	display_name = "Spacer Item Weight"
+	range_start = 0
+	range_end = 100
+	default = 10
+
+class HardToMakeItemWeight(Range):
+	display_name = "Hard To Make Item Weight"
+	range_start = 0
+	range_end = 100
+	default = 0
+
+class AnomalyItemWeight(Range):
+	display_name = "Anomaly Item Weight"
+	range_start = 0
+	range_end = 100
+	default = 0
+
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
     BasicResearchLocationCount: BasicResearchLocationCount
@@ -94,6 +130,12 @@ class RimworldOptions(PerGameCommonOptions):
     BiotechEnabled: BiotechEnabled
     AnomalyEnabled: AnomalyEnabled
     StartingResearchLevel: StartingResearchLevel
+    NeolithicItemWeight: NeolithicItemWeight
+    MedievalItemWeight: MedievalItemWeight
+    IndustrialItemWeight: IndustrialItemWeight
+    SpacerItemWeight: SpacerItemWeight
+    HardToMakeItemWeight: HardToMakeItemWeight
+    AnomalyItemWeight: AnomalyItemWeight
     
 
 rimworld_options: typing.Dict[str, type(Option)] = {

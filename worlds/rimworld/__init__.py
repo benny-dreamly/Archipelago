@@ -39,6 +39,7 @@ class RimworldWorld(World):
 
     craftable_item_id_to_name = {}
     craftable_item_id_to_prereqs = {}
+    craftable_item_tech_level = {}
     craft_location_recipes = {}
 
     item_root = ElementTree.fromstring(pkgutil.get_data(__name__,"ArchipelagoItemDefs.xml"));
@@ -62,8 +63,10 @@ class RimworldWorld(World):
             craftable_item_id_to_prereqs[itemId] = []
             defName = item.find("defName").text
             defName = defName.replace("Thing", "")
+            techLevel = item.find("TechLevel").text
             craftable_item_id_to_name[itemId] = defName
             item_name_to_expansion[defName] = expansion
+            craftable_item_tech_level[itemId] = techLevel
             prerequisites = item.find("Prerequisites")
             if (prerequisites is not None):
                 for prereq in prerequisites:
@@ -183,12 +186,52 @@ class RimworldWorld(World):
                 continue
             possibleItems[itemId] = itemName
 
+        item_weights = {}
+        total_weight = 0
+        neolithic_weight = getattr(self.options, "NeolithicItemWeight")
+        medieval_weight = getattr(self.options, "MedievalItemWeight")
+        industrial_weight = getattr(self.options, "IndustrialItemWeight")
+        spacer_weight = getattr(self.options, "SpacerItemWeight")
+        hardtomake_weight = getattr(self.options, "HardToMakeItemWeight")
+        anomaly_weight = getattr(self.options, "AnomalyItemWeight")
+        for itemId in self.craftable_item_tech_level:
+            if self.craftable_item_tech_level[itemId] == "Neolithic":
+                item_weights[itemId] = neolithic_weight
+            if self.craftable_item_tech_level[itemId] == "Medieval":
+                item_weights[itemId] = medieval_weight
+            if self.craftable_item_tech_level[itemId] == "Industrial":
+                item_weights[itemId] = industrial_weight
+            if self.craftable_item_tech_level[itemId] == "Spacer":
+                item_weights[itemId] = spacer_weight
+            if self.craftable_item_tech_level[itemId] == "HardToMake":
+                item_weights[itemId] = hardtomake_weight
+            if self.craftable_item_tech_level[itemId] == "Anomaly":
+                item_weights[itemId] = anomaly_weight
+            total_weight += item_weights[itemId]
+
         for i in range(craftLocationCount):
             locationName = "Craft Location " + str(i)
             locationId = i + baseLocationId
-            itemId1, itemName1 = random.choice(list(possibleItems.items()))
+
+            randomWeight = random.randrange(total_weight)
+            for itemId in item_weights:
+                if randomWeight < item_weights[itemId]:
+                    itemId1 = itemId
+                    itemName1 = self.craftable_item_id_to_name[itemId]
+                    break
+                else:
+                    randomWeight -= item_weights[itemId]
+
             # Allows duplicate items - maybe fix it? Maybe who cares?
-            itemId2, itemName2 = random.choice(list(possibleItems.items()))
+            randomWeight = random.randrange(total_weight)
+            for itemId in item_weights:
+                if randomWeight < item_weights[itemId]:
+                    itemId2 = itemId
+                    itemName2 = self.craftable_item_id_to_name[itemId]
+                    break
+                else:
+                    randomWeight -= item_weights[itemId]
+
             prerequisites = list(set(self.craftable_item_id_to_prereqs[itemId1]) | set(self.craftable_item_id_to_prereqs[itemId2]))
             self.location_prerequisites[locationName] = prerequisites
             self.craft_location_recipes[locationId] = [itemName1, itemName2]
