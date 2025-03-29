@@ -1,5 +1,6 @@
 # world/rimworld/__init__.py
 
+import logging
 import pkgutil
 import random
 import settings
@@ -12,6 +13,9 @@ from .Locations import RimworldLocation, base_location_id, location_id_gap, gene
 from ..generic.Rules import set_rule, add_rule
 from worlds.AutoWorld import World
 from BaseClasses import LocationProgressType, Region, Location, Entrance, Item, ItemClassification
+from Options import OptionError
+
+logger = logging.getLogger("Rimworld")
 
 class RimworldSettings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -25,7 +29,6 @@ class RimworldWorld(World):
     options: RimworldOptions # typing hints for option results
     settings: typing.ClassVar[RimworldSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
-    location_pool: Dict[str, int] = {}
 
     item_name_to_id = {}
     location_name_to_id = {}
@@ -42,11 +45,16 @@ class RimworldWorld(World):
     craftable_item_tech_level = {}
     craft_location_recipes = {}
 
+    location_counts = {}
+    max_item_id = 0
+
     item_root = ElementTree.fromstring(pkgutil.get_data(__name__,"ArchipelagoItemDefs.xml"));
 
     for item in item_root:
         itemName = item.find("label").text
         itemId = item.find("Id").text
+        if int(itemId) > max_item_id:
+            max_item_id = int(itemId)
         defType = item.find("DefType").text
         expansion = item.find("RequiredExpansion").text
         if (defType == "ResearchProjectDef"):
@@ -71,6 +79,9 @@ class RimworldWorld(World):
             if (prerequisites is not None):
                 for prereq in prerequisites:
                     craftable_item_id_to_prereqs[itemId].append(prereq.text)
+
+    item_name_to_id["Temp Filler"] = max_item_id + 1
+    item_name_to_expansion["Temp Filler"] = "Filler"
 
 
 
@@ -123,6 +134,17 @@ class RimworldWorld(World):
 
 
 
+    def generate_early(self):
+        royalty_enabled = getattr(self.options, "RoyaltyEnabled")
+        ideology_enabled = getattr(self.options, "IdeologyEnabled")
+        anomaly_enabled = getattr(self.options, "AnomalyEnabled")
+        victoryCondition = getattr(self.options, "VictoryCondition")
+        if not royalty_enabled and victoryCondition == 2:
+            raise OptionError("Win condition cannot be Royalty while Royalty is disabled!")
+        if not ideology_enabled and victoryCondition == 3:
+            raise OptionError("Win condition cannot be Archonexus while Ideology is disabled!")
+        if not anomaly_enabled and victoryCondition == 4:
+            raise OptionError("Win condition cannot be Anomaly while Anomaly is disabled!")
 
     def fill_slot_data(self):
         slot_data = {}
@@ -144,36 +166,31 @@ class RimworldWorld(World):
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
+        location_pool: Dict[str, int] = {}
+        self.location_counts[self.player] = 0
         
         main_region = Region("Main", self.player, self.multiworld)
 
         basicResearchLocationCount = getattr(self.options, "BasicResearchLocationCount").value
-        baseLocationId = base_location_id
         for i in range(basicResearchLocationCount):
             locationName = "Basic Research Location " + str(i)
-            locationId = i + baseLocationId
-            self.location_pool[locationName] = locationId
+            location_pool[locationName] = self.location_name_to_id[locationName]
 
         hiTechResearchLocationCount = getattr(self.options, "HiTechResearchLocationCount").value
-        baseLocationId = baseLocationId + location_id_gap
         for i in range(hiTechResearchLocationCount):
             locationName = "Hi-Tech Research Location " + str(i)
-            locationId = i + baseLocationId
-            self.location_pool[locationName] = locationId
+            location_pool[locationName] = self.location_name_to_id[locationName]
 
         multiAnalyzerResearchLocationCount = getattr(self.options, "MultiAnalyzerResearchLocationCount").value
-        baseLocationId = baseLocationId + location_id_gap
         for i in range(multiAnalyzerResearchLocationCount):
             locationName = "Multi-Analyzer Research Location " + str(i)
-            locationId = i + baseLocationId
-            self.location_pool[locationName] = locationId
+            location_pool[locationName] = self.location_name_to_id[locationName]
 
         craftLocationCount = getattr(self.options, "CraftLocationCount").value
         royalty_disabled = not getattr(self.options, "RoyaltyEnabled")
         ideology_disabled = not getattr(self.options, "IdeologyEnabled")
         biotech_disabled = not getattr(self.options, "BiotechEnabled")
         anomaly_disabled = not getattr(self.options, "AnomalyEnabled")
-        baseLocationId = baseLocationId + location_id_gap
         possibleItems = {}
         for itemId, itemName in list(self.craftable_item_id_to_name.items()):
             if royalty_disabled and self.item_name_to_expansion[itemName] == "Ludeon.RimWorld.Royalty":
@@ -211,7 +228,7 @@ class RimworldWorld(World):
 
         for i in range(craftLocationCount):
             locationName = "Craft Location " + str(i)
-            locationId = i + baseLocationId
+            locationId = self.location_name_to_id[locationName]
 
             randomWeight = random.randrange(total_weight)
             for itemId in item_weights:
@@ -236,34 +253,30 @@ class RimworldWorld(World):
             self.location_prerequisites[locationName] = prerequisites
             self.craft_location_recipes[locationId] = [itemName1, itemName2]
             # print(locationName + ": " + itemName1 + " + " + itemName2)
-            self.location_pool[locationName] = locationId
+            location_pool[locationName] = locationId
 
-        main_region.add_locations(self.location_pool, RimworldLocation)
-        for locationName in self.location_pool:
+        self.location_counts[self.player] += len(location_pool)
+        main_region.add_locations(location_pool, RimworldLocation)
+        for locationName in location_pool:
             self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
 
-        baseLocationId = baseLocationId + location_id_gap
         victoryCondition = getattr(self.options, "VictoryCondition")
         # Any or Ship Launch
         if (victoryCondition == 0 or victoryCondition == 1):
-            self.location_pool["Space Victory"] = baseLocationId
             self.location_prerequisites["Space Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Space Victory", None, main_region))
         # Any or Royalty
         if ((victoryCondition == 0 and not royalty_disabled) or victoryCondition == 2):
-            self.location_pool["Royalty Victory"] = baseLocationId + 1
             self.location_prerequisites["Royalty Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Royalty Victory", None, main_region))
         # Since Archonexus has lower strict requirements, I want the generator to only consider the
         #   other 3 victory conditions if the player opts for "any". Nexus still counts as "any", but
         #   this will ensure both Nexus and another victory are in logic.
         if (victoryCondition == 3):
-            self.location_pool["Archonexus Victory"] = baseLocationId + 2
             self.location_prerequisites["Archonexus Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Archonexus Victory", None, main_region))
         # Any or Anomaly
         if ((victoryCondition == 0 and not anomaly_disabled) or victoryCondition == 4):
-            self.location_pool["Anomaly Victory"] = baseLocationId + 3
             self.location_prerequisites["Anomaly Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Anomaly Victory", None, main_region))
 
@@ -271,8 +284,8 @@ class RimworldWorld(World):
 
         menu_region.connect(main_region)
 
-    def create_item(self, item: str) -> RimworldItem:
-        return RimworldItem(item, ItemClassification.progression, self.item_name_to_id[item], self.player)
+    def create_item(self, item: str, classification: ItemClassification) -> RimworldItem:
+        return RimworldItem(item, classification, self.item_name_to_id[item], self.player)
 
     def create_event(self, event: str) -> RimworldItem:
         return RimworldItem(event, ItemClassification.progression, None, self.player)
@@ -284,6 +297,7 @@ class RimworldWorld(World):
         biotech_disabled = not getattr(self.options, "BiotechEnabled")
         anomaly_disabled = not getattr(self.options, "AnomalyEnabled")
         starting_research_level = getattr(self.options, "StartingResearchLevel")
+        item_count = 0
         for item in self.item_name_to_id:
             if royalty_disabled and self.item_name_to_expansion[item] == "Ludeon.RimWorld.Royalty":
                 continue
@@ -295,17 +309,25 @@ class RimworldWorld(World):
                 continue
             # Removing items you start with from the pool
             if starting_research_level == 1 and item in self.tribal_tech_items:
-                self.push_precollected(self.create_item(item))
+                self.push_precollected(self.create_item(item, ItemClassification.progression))
                 continue
             if starting_research_level == 2 and item in self.crashlanded_tech_items:
-                self.push_precollected(self.create_item(item))
+                self.push_precollected(self.create_item(item, ItemClassification.progression))
                 continue
-            itempool.append(self.create_item(item))
+
+            item_count += 1
+            itempool.append(self.create_item(item, ItemClassification.progression))
         
+        if item_count < self.location_counts[self.player]:
+            logger.warning("Player " + self.player_name + " had " + str(item_count) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
+            while item_count < self.location_counts[self.player]:
+                item_count += 1
+                itempool.append(self.create_item("Temp Filler", ItemClassification.filler))
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
-        for locationName in self.location_pool:
+        for location in self.multiworld.get_locations(self.player):
+            locationName = location.name
             if locationName in self.location_prerequisites:
                 # print("prereqs: " + locationName + ": " + str(self.location_prerequisites[locationName]))
                 set_rule(self.get_location(locationName),
@@ -333,7 +355,7 @@ class RimworldWorld(World):
             victoryLocation = self.get_location("Archonexus Victory")
             for victoryRequirement in generic_victory_requirements:
                 add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
-            for victoryRequirement in royalty_victory_requirements:
+            for victoryRequirement in archonexus_victory_requirements:
                 add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
             victoryLocation.place_locked_item(self.create_event("Victory"))
         if ((victoryCondition == 0 and not anomaly_disabled) or victoryCondition == 4):
