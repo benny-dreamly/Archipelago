@@ -49,6 +49,30 @@ class VictoryCondition(Choice):
 	option_anomaly = 4
 	default = 1
 
+class RoyaltyEnabled(Choice):
+	display_name = "Royalty Enabled"
+	option_disabled = 0
+	option_enabled = 1
+	default = 0
+
+class IdeologyEnabled(Choice):
+	display_name = "Ideology Enabled"
+	option_disabled = 0
+	option_enabled = 1
+	default = 0
+
+class BiotechEnabled(Choice):
+	display_name = "Biotech Enabled"
+	option_disabled = 0
+	option_enabled = 1
+	default = 0
+
+class AnomalyEnabled(Choice):
+	display_name = "Anomoly Enabled"
+	option_disabled = 0
+	option_enabled = 1
+	default = 0
+
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
     BasicResearchLocationCount: BasicResearchLocationCount
@@ -58,6 +82,10 @@ class RimworldOptions(PerGameCommonOptions):
     ResearchMaxPrerequisites: ResearchMaxPrerequisites
     CraftLocationCount: CraftLocationCount
     VictoryCondition: VictoryCondition
+    RoyaltyEnabled: RoyaltyEnabled
+    IdeologyEnabled: IdeologyEnabled
+    BiotechEnabled: BiotechEnabled
+    AnomalyEnabled: AnomalyEnabled
     
 
 rimworld_options: typing.Dict[str, type(Option)] = {
@@ -65,7 +93,8 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 		option.__name__: option
 		for option in {
 			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
-			ResearchBaseCost, ResearchMaxPrerequisites, CraftLocationCount, VictoryCondition
+			ResearchBaseCost, ResearchMaxPrerequisites, CraftLocationCount, VictoryCondition,
+			RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled
 		}
 	}
 }
