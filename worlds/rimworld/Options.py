@@ -73,6 +73,13 @@ class AnomalyEnabled(Choice):
 	option_enabled = 1
 	default = 0
 
+class StartingResearchLevel(Choice):
+	display_name = "Starting Research Level"
+	option_none = 0
+	option_tribal = 1
+	option_crashlanded = 2
+	default = 0
+
 @dataclass
 class RimworldOptions(PerGameCommonOptions):
     BasicResearchLocationCount: BasicResearchLocationCount
@@ -86,6 +93,7 @@ class RimworldOptions(PerGameCommonOptions):
     IdeologyEnabled: IdeologyEnabled
     BiotechEnabled: BiotechEnabled
     AnomalyEnabled: AnomalyEnabled
+    StartingResearchLevel: StartingResearchLevel
     
 
 rimworld_options: typing.Dict[str, type(Option)] = {
@@ -94,7 +102,7 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 		for option in {
 			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
 			ResearchBaseCost, ResearchMaxPrerequisites, CraftLocationCount, VictoryCondition,
-			RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled
+			RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled, StartingResearchLevel
 		}
 	}
 }
