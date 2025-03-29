@@ -29,7 +29,11 @@ class RimworldWorld(World):
 
     item_name_to_id = {}
     location_name_to_id = {}
+
+    # Yes, yes, I know this series of dictionaries is bad. I'll probably fix it eventually.
     item_name_to_expansion = {}
+    tribal_tech_items = []
+    crashlanded_tech_items = []
 
     location_prerequisites = {}
 
@@ -47,6 +51,13 @@ class RimworldWorld(World):
         if (defType == "ResearchProjectDef"):
             item_name_to_id[itemName] = int(itemId)
             item_name_to_expansion[itemName] = expansion
+            researchTags = item.find("ResearchTags")
+            if researchTags is not None:
+                for techTag in researchTags:
+                    if techTag.text == "TribalStart":
+                        tribal_tech_items.append(itemName)
+                    if techTag.text == "ClassicStart":
+                        crashlanded_tech_items.append(itemName)
         elif (defType == "ThingDef"):
             craftable_item_id_to_prereqs[itemId] = []
             defName = item.find("defName").text
@@ -229,6 +240,7 @@ class RimworldWorld(World):
         ideology_disabled = not getattr(self.options, "IdeologyEnabled")
         biotech_disabled = not getattr(self.options, "BiotechEnabled")
         anomaly_disabled = not getattr(self.options, "AnomalyEnabled")
+        starting_research_level = getattr(self.options, "StartingResearchLevel")
         for item in self.item_name_to_id:
             if royalty_disabled and self.item_name_to_expansion[item] == "Ludeon.RimWorld.Royalty":
                 continue
@@ -237,6 +249,13 @@ class RimworldWorld(World):
             if biotech_disabled and self.item_name_to_expansion[item] == "Ludeon.RimWorld.Biotech":
                 continue
             if anomaly_disabled and self.item_name_to_expansion[item] == "Ludeon.RimWorld.Anomaly":
+                continue
+            # Removing items you start with from the pool
+            if starting_research_level == 1 and item in self.tribal_tech_items:
+                self.push_precollected(self.create_item(item))
+                continue
+            if starting_research_level == 2 and item in self.crashlanded_tech_items:
+                self.push_precollected(self.create_item(item))
                 continue
             itempool.append(self.create_item(item))
         
