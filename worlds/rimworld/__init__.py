@@ -37,6 +37,7 @@ class RimworldWorld(World):
     item_name_to_expansion = {}
     tribal_tech_items = []
     crashlanded_tech_items = []
+    progression_locations = []
 
     location_prerequisites = {}
 
@@ -211,7 +212,7 @@ class RimworldWorld(World):
         spacer_weight = getattr(self.options, "SpacerItemWeight")
         hardtomake_weight = getattr(self.options, "HardToMakeItemWeight")
         anomaly_weight = getattr(self.options, "AnomalyItemWeight")
-        for itemId in self.craftable_item_tech_level:
+        for itemId in possibleItems:
             if self.craftable_item_tech_level[itemId] == "Neolithic":
                 item_weights[itemId] = neolithic_weight
             if self.craftable_item_tech_level[itemId] == "Medieval":
@@ -252,7 +253,7 @@ class RimworldWorld(World):
             prerequisites = list(set(self.craftable_item_id_to_prereqs[itemId1]) | set(self.craftable_item_id_to_prereqs[itemId2]))
             self.location_prerequisites[locationName] = prerequisites
             self.craft_location_recipes[locationId] = [itemName1, itemName2]
-            # print(locationName + ": " + itemName1 + " + " + itemName2)
+            # print(self.player_name + "'s " + locationName + ": " + itemName1 + " + " + itemName2 + "(" + str(prerequisites) + ")")
             location_pool[locationName] = locationId
 
         self.location_counts[self.player] += len(location_pool)
