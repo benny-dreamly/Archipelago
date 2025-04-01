@@ -336,14 +336,14 @@ class RimworldWorld(World):
                     itemClassification = ItemClassification.progression
                 else:
                     itemClassification = ItemClassification.useful
-                self.push_precollected(self.create_item(item, itemClassification))
+                self.multiworld.push_precollected(self.create_item(item, itemClassification))
                 continue
             if starting_research_level == 2 and item in self.crashlanded_tech_items:
                 if item in self.progression_locations[self.player]:
                     itemClassification = ItemClassification.progression
                 else:
                     itemClassification = ItemClassification.useful
-                self.push_precollected(self.create_item(item, itemClassification))
+                self.multiworld.push_precollected(self.create_item(item, itemClassification))
                 continue
 
             item_count += 1
