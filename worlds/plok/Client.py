@@ -37,6 +37,7 @@ class PlokSNIClient(SNIClient):
 
     queen_item_cnt = 10
     fleasanity = False
+    game_clear = False
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes
         
@@ -112,7 +113,10 @@ class PlokSNIClient(SNIClient):
                 bit_set = (masked_data != 0)
                 invert_bit = ((len(loc_data) >= 3) and loc_data[2])
                 if bit_set != invert_bit:
-                    new_checks.append(loc_id)
+                    if loc_id == 0x1C0027:
+                        self.game_clear = True
+                    else:
+                        new_checks.append(loc_id)
 
         # Warps
         if last_warp != 0:
@@ -222,6 +226,7 @@ class PlokSNIClient(SNIClient):
                        0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00, ]
         max_hp = 0x30
         max_shell = 0x20
+        max_hornet = 0x0
         vechile = 0x0000
         transform = 0x0000
         limb_count = 1
@@ -239,6 +244,8 @@ class PlokSNIClient(SNIClient):
                         limb_count = 4
                 case 0x1C0004: # Health
                     max_hp += 0x18
+                case 0x1C0005: # Hornets
+                    max_hornet += 1
                 case 0x1C0006: # Shell Capacity
                     max_shell += 0x10
                 case 0x1C0007: # Plok Flag
@@ -247,7 +254,7 @@ class PlokSNIClient(SNIClient):
                     write_array[0x12] = 0x1
                 case 0x1C0009: # Flea Pit Rope
                     write_array[0x14] = 0x1
-                case 0x1C0009: # Flashlight
+                case 0x1C000D: # Flashlight
                     write_array[0x1A] = 0x1
                 case 0x1C0011: # Unicycle
                     vechile = vechile | 0x02
@@ -284,6 +291,7 @@ class PlokSNIClient(SNIClient):
         write_array[0x8] = vechile
         write_array[0xA] = transform
         write_array[0x18] = limb_state[limb_count]
+        write_array[0x1C] = max_hornet
         if queen_items >= self.queen_item_cnt:
             write_array[0x16] = 0x1 # Unlock flea queen
         snes_buffered_write(ctx, WRAM_START + 0x7B0, bytearray(write_array))
@@ -317,8 +325,82 @@ class PlokSNIClient(SNIClient):
                     snes_buffered_write(ctx, WRAM_START + 0x83D, bytearray([0x1]))
                     await snes_flush_writes(ctx)
                 case 0x1C000F: # Anger Saw
-                    snes_buffered_write(ctx, WRAM_START + 0x851, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x951, bytearray([0x3]))
                     await snes_flush_writes(ctx)
-            recv_index += 1
-            snes_buffered_write(ctx, WRAM_START + 0x774, bytearray(write_array))
+                # Rentals
+                case 0x1C0040: # Unicycle
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x1]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0041: # Car
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x2]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0042: # Jet
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x3]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0043: # Motorcycle
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x4]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0044: # Helicopter
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x5]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0045: # Tank
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x6]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0046: # UFO
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x7]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0047: # Springs
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x3]))
+                    snes_buffered_write(ctx, WRAM_START + 0x81E, bytearray([0x8]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0048: # Boxing Glove
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x2]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F4, bytearray([0x2]))
+                    await snes_flush_writes(ctx)
+                case 0x1C0049: # Rocket
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x2]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F4, bytearray([0x4]))
+                    await snes_flush_writes(ctx)
+                case 0x1C004A: # Shotgun
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x2]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F4, bytearray([0x5]))
+                    await snes_flush_writes(ctx)
+                case 0x1C004B: # Flamethrower
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x2]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F4, bytearray([0x6]))
+                    await snes_flush_writes(ctx)
+                case 0x1C004C: # Badge
+                    snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x2]))
+                    snes_buffered_write(ctx, WRAM_START + 0x7F4, bytearray([0x7]))
+                    await snes_flush_writes(ctx)
+            recv_index = len(ctx.items_received)
+            #if recv_index > recv_count[0]:
+            snes_buffered_write(ctx, PLOK_RECV_PROGRESS_ADDR, bytearray([recv_index]))
             await snes_flush_writes(ctx)
+
+        # Handle game clear
+        if not ctx.finished_game and self.game_clear == True:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            snes_buffered_write(ctx, WRAM_START + 0x848, bytearray([0x3A, 0x00, 0x3A, 0x00]))
+            await snes_flush_writes(ctx)
+            ctx.finished_game = True

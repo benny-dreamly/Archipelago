@@ -3,6 +3,7 @@ from Utils import read_snes_rom
 from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
 #from .Locations import lookup_id_to_name, all_locations
+from .palette_data import *
 
 USHASH = "478a2723ff6db38428d9b26cf0d504bf"
 ROM_PLAYER_LIMIT = 65535
@@ -361,7 +362,19 @@ def patch_rom(world: World, rom: LocalRom):
     
     # Setup Limb States
     LIMBREAD = bytearray([0xAD, 0xC8, 0x07]) # LDA $07C8
-    rom.write_bytes(0x3221,bytearray([0x22, 0xA0, 0xD4, 0x1F, 0xEA, 0xEA])) # JSL $1FD4A0
+    rom.write_bytes(0x3221,bytearray([
+        0x9C, 0xF4, 0x07,       #   STZ $07F4
+        0x22, 0xA0, 0xD4, 0x1F, # JSL $1FD4A0
+        0xEA, 0xEA, 0xEA, 0xEA ,0xEA])) 
+
+    #rom.write_bytes(0xF92,LIMBREAD)
+    rom.write_bytes(0x138A,LIMBREAD)
+    rom.write_bytes(0x1990,LIMBREAD)
+    #rom.write_bytes(0x3221,LIMBREAD)
+    rom.write_bytes(0x520E,LIMBREAD)
+    rom.write_bytes(0x53AB,LIMBREAD)
+
+    # On Level Load
     rom.write_bytes(0xFD4A0, bytearray([
         0xAD, 0xF4, 0x07, 	#	  LDA $07F4
         0xD0, 0x0C, 	#	  BNE normalimb
@@ -378,14 +391,17 @@ def patch_rom(world: World, rom: LocalRom):
         0xAD, 0xC8, 0x07, 	#	  LDA $07C8
             #	  exit:
         0x8D, 0x22, 0x08, 	#	  STA $0822
+        0xAD,0xB0,0x07, #   LDA $07B0
+        0x8D,0x06,0x08, # STA $0806
+        #0xAD,0x7A,0x07, # LDA $077A
+        #0xF0,0x03, # BEQ $1FD4CA
+        #0x20,0xD0,0xD4, # JSR $D4D0
         0x6B, 	#	  RTL
     ]))
-    #rom.write_bytes(0xF92,LIMBREAD)
-    rom.write_bytes(0x138A,LIMBREAD)
-    #rom.write_bytes(0x1706,LIMBREAD)
-    #rom.write_bytes(0x3221,LIMBREAD)
-    rom.write_bytes(0x520E,LIMBREAD)
-    rom.write_bytes(0x53AB,LIMBREAD)
+#    rom.write_bytes(0xFD4D0, bytearray([
+#
+    #]))
+    # Custom Level Graphics
 
     # Warp Checks
     rom.write_bytes(0x1754, bytearray([0x1A, 0x8D, 0x86, 0x07, 0xEA, 0xEA,0xEA, 0xEA])) # INC -> STA $0786
@@ -520,6 +536,32 @@ def patch_rom(world: World, rom: LocalRom):
         0x6B, 	#	  RTL
         ]))
 
+    if world.options.random_color:
+        for palname, vals in palette_offsets.items():
+            offset = vals[0]
+            clrcount = vals[1]
+            palmode = vals[0]
+            match clrcount:
+                case 3:
+                    writeary = random.choice(list(threecolor.values()))
+                case 4:
+                    writeary = random.choice(list(fourcolor.values()))
+                case 5:
+                    writeary = random.choice(list(fivecolor.values()))
+                case 6:
+                    writeary = random.choice(list(sixcolor.values()))
+                case 7:
+                    writeary = random.choice(list(sevencolor.values()))
+            match palmode:
+                case 1: # Insert a 0x00 byte at positon 6
+                    writeary.insert(6, 0x00)
+                case 2:
+                    writeary.insert(0xC, 0xE2)
+                    writeary.insert(0xC, 0x00)
+                    writeary.insert(0xC, 0x04)
+                case _:
+                    pass
+            rom.write_bytes(offset, bytearray(writeary))
 
     # Do not ADvance levels
     rom.write_bytes(0x8B2, bytearray([0xEA])) # NOP

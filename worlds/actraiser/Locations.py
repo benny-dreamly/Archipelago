@@ -748,10 +748,10 @@ location_data_table: Dict[str, ActraiserLocationData] = {
         address=0x1C10C2
     ),
     
-
-    "Tanzra Dead": ActraiserLocationData(
+    
+    "Crystal Goal": ActraiserLocationData(
         address=0x1C100C,
-        region="Death Heim",
+        region="Sky",
         locked_item="Savior"
     ),
     "Population Goal": ActraiserLocationData(

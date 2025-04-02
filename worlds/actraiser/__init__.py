@@ -83,7 +83,7 @@ class ActraiserWorld(World):
                     item_pool.append(self.create_item(name))
                     item_pool_count[name] += 1
 
-        if self.options.goal == "death_heim": 
+        if self.options.crystal_goal: 
             if self.options.max_crystal.value >= self.options.crystal_count.value:
                 total_crystals = self.options.max_crystal.value
             else:
@@ -141,7 +141,7 @@ class ActraiserWorld(World):
             locked_item = self.create_item(location_data_table[location_name].locked_item)
             mw.get_location(location_name, player).place_locked_item(locked_item)
         
-        if self.options.boss_crystal and self.options.goal == "death_heim":
+        if self.options.boss_crystal and self.options.crystal_goal:
             mw.get_location("FMC - Minotaurus", player).place_locked_item(self.create_item("Dheim Crystal"))
             mw.get_location("BPC - Zeppelin Wolf", player).place_locked_item(self.create_item("Dheim Crystal"))
             mw.get_location("KDP - Pharaoh", player).place_locked_item(self.create_item("Dheim Crystal"))
@@ -170,8 +170,8 @@ class ActraiserWorld(World):
                 os.unlink(rompath)
 
     def get_filler_item_name(self) -> str:
-        filler_items = ["Apple","1UP","1000 Points","Magic", "Bomb","Population Boom"]
-        filler_weights =[0.8, 0.35, 0.45, 0.7, 0.15, 0.3]
+        filler_items = ["Apple","1UP","1000 Points","Magic", "Bomb","Fertility"]
+        filler_weights =[0.8, 0.35, 0.45, 0.7, 0.15, 0.15]
         if self.options.include_traps:
             filler_items.extend(["Skull Trap","Redirect Trap"])
             filler_weights.extend([0.3, 0.4])
@@ -192,9 +192,9 @@ class ActraiserWorld(World):
         player = self.player
         mw = self.multiworld
 
-        if self.options.goal == "death_heim":
-                dh_entrance = mw.get_entrance("Sky -> Death Heim", player)
-                dh_entrance.access_rule = lambda state: state.has("Dheim Crystal", player, self.options.crystal_count.value)
+        #if self.options.goal == "death_heim":
+        #        dh_entrance = mw.get_entrance("Sky -> Death Heim", player)
+        #        dh_entrance.access_rule = lambda state: state.has("Dheim Crystal", player, self.options.crystal_count.value)
                 
 
         region_rules = get_region_rules(player)
@@ -202,17 +202,19 @@ class ActraiserWorld(World):
             entrance = mw.get_entrance(entrance_name, player)
             entrance.access_rule = rule
 
-        location_rules = get_location_rules(player)
+        location_rules = get_location_rules(player, self.options.crystal_count.value)
         for location in mw.get_locations(player):
             name = location.name
             if name in location_rules and location_data_table[name].can_create(mw, player):
                 location.access_rule = location_rules[name]
 
         # Completion condition.
-        if self.options.goal == "death_heim":
-            mw.completion_condition[player] = lambda state: state.has("Savior", player)
-        elif self.options.goal == "population":
+        if self.options.crystal_goal and self.options.population_goal:
+            mw.completion_condition[player] = lambda state: state.has("Savior", player) and state.has("Prosperity", player)
+        elif self.options.population_goal:
             mw.completion_condition[player] = lambda state: state.has("Prosperity", player)
+        elif self.options.crystal_goal:
+            mw.completion_condition[player] = lambda state: state.has("Savior", player)
 
     def fill_slot_data(self) -> dict:
         return {

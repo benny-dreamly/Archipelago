@@ -144,8 +144,14 @@ class PlokWorld(World):
                 os.unlink(rompath)
 
     def get_filler_item_name(self) -> str:
-        filler_items = ["Shells","Extra Plok","Fruit","Force Field","Anger"]
-        filler_weights = [0.5,0.2,0.3,0.6,0.3]
+        filler_items = ["Shells","Extra Plife","Fruit","Force Field","Rage",
+                        #"Unicycle Rental", "Car Rental", "Jet Rental", "Motorcycle Rental",
+                        #"Helicopter Rental", "Tank Rental", "UFO Rental", "Springs Rental",
+                        "Boxing Glove Rental", "Rocket Rental", "Shotgun Rental",
+                        "Flamethrower Rental","Sheriff Badge Rental"]
+        filler_weights = [0.3,0.2,0.3,0.5,0.3,
+                          #0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,
+                          0.2,0.2,0.2,0.2,0.2]
         #if self.options.include_traps:
         #    filler_items.extend(["Stun Trap","Panic Bomb Trap","Fire Trap","Reverse Trap"])
         #    filler_weights.extend([0.3,0.4,0.3,0.4])

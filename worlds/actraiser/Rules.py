@@ -63,7 +63,7 @@ def get_region_rules(player):
         
     }
 
-def get_location_rules(player):
+def get_location_rules(player, crystal_needed):
     return {
         #The level up logic could use some looseing up but this is to keep too many progression items from spawning in the level up pool, logic for it is too complex right now
         "SK - Level 3":
@@ -214,7 +214,8 @@ def get_location_rules(player):
         "NW - Source of Life":
             lambda state: state.has("Lightning", player),
 
-
+        "Crystal Goal":
+            lambda state: state.has("Dheim Crystal", player, crystal_needed),
         "Population Goal":
             lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9) and has_max_civ(state, player),
 

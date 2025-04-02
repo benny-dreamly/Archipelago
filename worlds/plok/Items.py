@@ -63,23 +63,28 @@ item_data_table: Dict[str, PlokItemData] = {
 
     "Shells": PlokItemData(
         code=0x1C000A,
-        type=ItemClassification.filler
+        type=ItemClassification.filler,
+        num_exist=0
     ),
-    "Extra Plok": PlokItemData(
+    "Extra Plife": PlokItemData(
         code=0x1C000B,
-        type=ItemClassification.filler
+        type=ItemClassification.filler,
+        num_exist=0
     ),
     "Fruit": PlokItemData(
         code=0x1C000C,
-        type=ItemClassification.filler
+        type=ItemClassification.filler,
+        num_exist=0
     ),
     "Force Field": PlokItemData(
         code=0x1C000E,
-        type=ItemClassification.filler
+        type=ItemClassification.filler,
+        num_exist=0
     ),
-    "Anger": PlokItemData(
+    "Rage": PlokItemData(
         code=0x1C000F,
-        type=ItemClassification.filler
+        type=ItemClassification.filler,
+        num_exist=0
     ),
 #    "Hornet": PlokItemData(
 #        code=0x1C000B,
@@ -191,6 +196,73 @@ item_data_table: Dict[str, PlokItemData] = {
     "Broken Vase": PlokItemData(
         code=0x1C003C,
         type=ItemClassification.progression
+    ),
+
+    "Unicycle Rental": PlokItemData(
+        code=0x1C0040,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Car Rental": PlokItemData(
+        code=0x1C0041,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Jet Rental": PlokItemData(
+        code=0x1C0042,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Motorcycle Rental": PlokItemData(
+        code=0x1C0043,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Helicopter Rental": PlokItemData(
+        code=0x1C0044,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Tank Rental": PlokItemData(
+        code=0x1C0045,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "UFO Rental": PlokItemData(
+        code=0x1C0046,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Springs Rental": PlokItemData(
+        code=0x1C0047,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+
+    "Boxing Glove Rental": PlokItemData(
+        code=0x1C0048,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Rocket Rental": PlokItemData(
+        code=0x1C0049,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Shotgun Rental": PlokItemData(
+        code=0x1C004A,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Flamethrower Rental": PlokItemData(
+        code=0x1C004B,
+        type=ItemClassification.filler,
+        num_exist=0
+    ),
+    "Sheriff Badge Rental": PlokItemData(
+        code=0x1C004C,
+        type=ItemClassification.filler,
+        num_exist=0
     ),
 
     "Flea Queen Dead": PlokItemData(

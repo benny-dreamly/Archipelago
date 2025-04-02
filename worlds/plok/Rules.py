@@ -11,13 +11,13 @@ def has_fp_vehicles(state, player):
 def get_region_rules(player):
     return {
         "Cotton Island -> Akrillic":
-            lambda state: state.has("Plok Flag", player) and state.has("Spin Jump", player),
+            lambda state: state.has("Plok Flag", player) and state.has("Spin Jump", player) and state.has("HealthUp",player),
         "Akrillic -> Legacy Island":
-            lambda state: state.has("Grandpappy journal", player),
+            lambda state: state.has("Grandpappy journal", player) and state.has("HealthUp",player,2),
         "Akrillic -> Akrillic Cave":
-            lambda state: state.has("Flashlight", player),
+            lambda state: state.has("Flashlight", player)and state.has("HealthUp",player, 4),
         "Akrillic Cave -> Flea Pit":
-            lambda state: state.has("Flea Pit Rope", player) and state.has("Spin Jump", player),
+            lambda state: state.has("Flea Pit Rope", player) and state.has("Spin Jump", player) and state.has("HealthUp",player, 5),
         
         #"Akrillic -> Garlen Beach":
         "Akrillic -> Sleepy Dale":
@@ -31,8 +31,23 @@ def get_region_rules(player):
         "Akrillic Cave -> Creepy Crag":
             lambda state: state.has("Limb", player, 3),
         "Akrillic Cave -> Gohome Cavern":
-            lambda state: state.has("Limb", player),
+            lambda state: state.has("Limb", player, 3),
         #"Akrillic Cave -> Crashing Rocks":
+
+        "Flea Pit -> Cycling Clever":
+            lambda state: state.has("Unicycle", player),
+        "Flea Pit -> Road Hogging":
+            lambda state: state.has("Car", player),
+        "Flea Pit -> High Flying":
+            lambda state: state.has("Jet Booster", player),
+        "Flea Pit -> Easy Riding":
+            lambda state: state.has("Motorcycle", player),
+        "Flea Pit -> In A Spin":
+            lambda state: state.has("Helicopter", player),
+        "Flea Pit -> Real Rumblings":
+            lambda state: state.has("Tank", player),
+        "Flea Pit -> Silent Running":
+            lambda state: state.has("UFO", player),
 
     }
 
@@ -44,9 +59,19 @@ def get_location_rules(player,needed_queen):
     return {
         "CI - Log Falls Clear":
             lambda state: state.has("Spin Jump", player),
+        "CI - Log Falls Fruit": 
+            lambda state: state.has("Spin Jump", player),
+        "CI - Log Falls Squire Gift":
+            lambda state: state.has("Spin Jump", player),
         "CI - Rickety Bridge Clear":
             lambda state: state.has("Spin Jump", player),
+        "CI - Rickety Bridge Fruit":
+            lambda state: state.has("Spin Jump", player),
+        "CI - Crazy Cradles Clear":
+            lambda state: state.has("Spin Jump", player),
         "CI - Blind Leap Clear":
+            lambda state: state.has("Spin Jump", player),
+        "CI - Blind Leap Spire Fruit":
             lambda state: state.has("Spin Jump", player),
         "CI - Beach Warp":
             lambda state: state.has("Helicopter", player) and state.has("HealthUp", player),
@@ -94,20 +119,7 @@ def get_location_rules(player,needed_queen):
         "AK - Rockyfella Clear":
             lambda state: state.has("Limb", player),
 
-        "FP - Cycling Clever Clear":
-            lambda state: state.has("Unicycle", player),
-        "FP - Road Hogging Clear":
-            lambda state: state.has("Car", player),
-        "FP - High Flying Clear":
-            lambda state: state.has("Jet Booster", player),
-        "FP - Easy Riding Clear":
-            lambda state: state.has("Motorcycle", player),
-        "FP - In a Spin Clear":
-            lambda state: state.has("Helicopter", player),
-        "FP - Real Rumblings Clear":
-            lambda state: state.has("Tank", player),
-        "FP - Silent Running Clear":
-            lambda state: state.has("UFO", player),
+
 
         "FP - Flea Queen Clear":
             lambda state:  ((sum(

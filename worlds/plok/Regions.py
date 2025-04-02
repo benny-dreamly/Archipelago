@@ -13,9 +13,11 @@ region_data_table: Dict[str, PlokRegionData] = {
         "Plok Town","Venge Thicket","Dreamy Cove",]),
     "Akrillic Cave": PlokRegionData(["Flea Pit",
         "Creepy Forest","Creepy Crag","Gohome Cavern","Crashing Rocks"]),
-    "Legacy Island": PlokRegionData(["Akrillic"]),
-    "Flea Pit": PlokRegionData([]),
+    "Legacy Island": PlokRegionData([]),
+    "Flea Pit": PlokRegionData(["Cycling Clever","Road Hogging","High Flying",
+                                "Easy Riding","In A Spin","Real Rumblings","Silent Running"]),
 
+    # Akrillic
     "Garlen Beach": PlokRegionData([]),
     "Sleepy Dale": PlokRegionData([]),
     "Plok Town": PlokRegionData([]),
@@ -26,6 +28,15 @@ region_data_table: Dict[str, PlokRegionData] = {
     "Creepy Crag": PlokRegionData([]),
     "Gohome Cavern": PlokRegionData([]),
     "Crashing Rocks": PlokRegionData([]),
+
+    # Flea Pit
+    "Cycling Clever": PlokRegionData([]),
+    "Road Hogging": PlokRegionData([]),
+    "High Flying": PlokRegionData([]),
+    "Easy Riding": PlokRegionData([]),
+    "In A Spin": PlokRegionData([]),
+    "Real Rumblings": PlokRegionData([]),
+    "Silent Running": PlokRegionData([]),
 }
 
 

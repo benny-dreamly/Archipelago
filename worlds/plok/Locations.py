@@ -101,8 +101,8 @@ location_data_table: Dict[str, PlokLocationData] = {
         region="Akrillic",
         address=0x1C0014
     ),
-    "AK - Venge Ticket Clear": PlokLocationData(
-        region="Venge Ticket",
+    "AK - Venge Thicket Clear": PlokLocationData(
+        region="Venge Thicket",
         address=0x1C0015
     ),
     "AK - Dreamy Cove Clear": PlokLocationData(
@@ -136,31 +136,31 @@ location_data_table: Dict[str, PlokLocationData] = {
     ),
 
     "FP - Cycling Clever Clear": PlokLocationData(
-        region="Flea Pit",
+        region="Cycling Clever",
         address=0x1C0020
     ),
     "FP - Road Hogging Clear": PlokLocationData(
-        region="Flea Pit",
+        region="Road Hogging",
         address=0x1C0021
     ),
     "FP - High Flying Clear": PlokLocationData(
-        region="Flea Pit",
+        region="High Flying",
         address=0x1C0022
     ),
     "FP - Easy Riding Clear": PlokLocationData(
-        region="Flea Pit",
+        region="Easy Riding",
         address=0x1C0023
     ),
-    "FP - In a Spin Clear": PlokLocationData(
-        region="Flea Pit",
+    "FP - In A Spin Clear": PlokLocationData(
+        region="In A Spin",
         address=0x1C0024
     ),
     "FP - Real Rumblings Clear": PlokLocationData(
-        region="Flea Pit",
+        region="Real Rumblings",
         address=0x1C0025
     ),
     "FP - Silent Running Clear": PlokLocationData(
-        region="Flea Pit",
+        region="Silent Running",
         address=0x1C0026
     ),
     "FP - Flea Queen Clear": PlokLocationData(
@@ -228,9 +228,13 @@ location_data_table: Dict[str, PlokLocationData] = {
         region="Cotton Island",
         address=0x1C0059
     ),
-    "AK - Garlen Beach Fruit": PlokLocationData(
+    "AK - Garlen Beach Upper Fruit": PlokLocationData(
         region="Garlen Beach",
         address=0x1C0047
+    ),
+    "AK - Garlen Beach Lower Fruit": PlokLocationData(
+        region="Garlen Beach",
+        address=0x1C005A
     ),
     "AK - Sleepy Dale Fruit": PlokLocationData(
         region="Sleepy Dale",
@@ -289,16 +293,24 @@ location_data_table: Dict[str, PlokLocationData] = {
         address=0x1C0055
     ),
     "FP - Road Hogging Fruit": PlokLocationData(
-        region="Flea Pit",
+        region="Road Hogging",
         address=0x1C0056
     ),
     "FP - Easy Riding Fruit": PlokLocationData(
-        region="Flea Pit",
+        region="Easy Riding",
         address=0x1C0057
     ),
-    "FP - In S Spin Fruit": PlokLocationData(
-        region="Flea Pit",
+    "FP - High Flying Fruit": PlokLocationData(
+        region="High Flying",
+        address=0x1C005B
+    ),
+    "FP - In A Spin Fruit": PlokLocationData(
+        region="In A Spin",
         address=0x1C0058
+    ),
+    "FP - Silent Running Fruit": PlokLocationData(
+        region="Silent Running",
+        address=0x1C005C
     ),
     
 

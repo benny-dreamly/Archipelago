@@ -23,11 +23,15 @@ class StartingLives(Range):
     range_end = 9
     default = 3
 
+class RandomColor(Toggle):
+    """Randomizes colors"""
+
 @dataclass
 class PlokOptions(PerGameCommonOptions):
     fleasanity: Fleasanity
     queen_items: QueenItems
     random_music: RandomMusic
     random_limbsfx: RandomAtkSFX
+    random_color: RandomColor
     start_lives: StartingLives
     death_link: DeathLink

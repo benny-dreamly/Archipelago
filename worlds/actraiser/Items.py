@@ -81,10 +81,11 @@ item_data_table: Dict[str, ActraiserItemData] = {
     #    code=0x1C1010,
     #    type=ItemClassification.filler
     #),
-    #"Bomb 2": ActraiserItemData(
-    #    code=0x1C1011,
-    #    type=ItemClassification.useful
-   # ),
+    "Fertility": ActraiserItemData(
+        code=0x1C1011,
+        type=ItemClassification.useful,
+        num_exist=6
+    ),
     "Bomb": ActraiserItemData(
         code=0x1C1012,
         type=ItemClassification.useful,
