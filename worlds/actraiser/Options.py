@@ -47,7 +47,7 @@ class PopGoalCount(Range):
     """Total Population needed to reach the population goal,
     Does nothing if you don't have population goal set"""
     display_name = "Population Goal Count"
-    range_start = 2500
+    range_start = 250
     range_end = 4652 # Max possible population, logic is not designed for this
     default = 4500 # Amount required for level 17
 

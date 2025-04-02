@@ -2395,7 +2395,7 @@ def patch_rom(world: World, rom: LocalRom):
     if world.options.tanzra_require:
         rom.write_byte(TANZRA_ADR, 0x01)
     else:
-        rom.write_byte(CRYGOAL_ADR_ENA, 0x00)
+        rom.write_byte(TANZRA_ADR, 0x00)
 
     from Utils import __version__
     rom.name = bytearray(f'AR{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]

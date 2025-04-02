@@ -50,6 +50,8 @@ class PlokWorld(World):
     data_version = 1
     web = PlokWebWorld()
     options_dataclass = PlokOptions
+    settings: typing.ClassVar[PlokSettings]
+    topology_present = False
     options: PlokOptions
     location_name_to_id = location_table
     location_name_to_id.update(flea_location_table)

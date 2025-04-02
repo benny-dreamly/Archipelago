@@ -229,12 +229,12 @@ def patch_rom(world: World, rom: LocalRom):
             #	  
             #	  stg27:
         0xC9, 0x27, 0x00, 	#	  CMP #$0027
-        0xD0, 0x0B, 	#	  BNE changestage
+        0x90, 0x0B, 	#	  BCC changestage
         0xAD, 0xC6, 0x07, 	#	  LDA $07C6
         0xF0, 0x13, 	#	  BEQ exit
         0xA9, 0x27, 0x00, 	#	  LDA #$0027
         0xAA, 	#	  TAX
-        0x80, 0x00, 	#	  BRA changestage
+        0x80, 0x0F, 	#	  BRA fleaqueenextended
             #	  
             #	  
             #	  changestage:
@@ -248,7 +248,11 @@ def patch_rom(world: World, rom: LocalRom):
             #	  exit:
         0xFA, 	#	  PLX
         0x60,	#	  RTS
-
+        # fleaqueenextended:
+        0xAD, 0x48, 0x08, # LDA $0848
+        0xC9, 0x27, 0x00, # CMP #$0027
+        0xF0, 0xF6, # BEQ exit
+        0x80, 0xE7, # BRA changestage
 
     ])
     STAGE_DEC = bytearray([
@@ -318,7 +322,9 @@ def patch_rom(world: World, rom: LocalRom):
     rom.write_bytes(0xFD300, bytearray([
         0xAD, 0x19, 0x42, 	#	  LDA $4219
         0x29, 0x20, 0x00, 	#	  AND #$0020
-        0xF0, 0x0B, 	#	  BEQ $1FD310
+        0xF0, 0x11, 	#	  BEQ $1FD310
+        0x9C, 0xF4, 0x07,   #  STZ $077A
+        0x9C, 0x1E, 0x08,   #  STZ $077A
         0x9C, 0x7A, 0x07,   #  STZ $077A
         0xA9, 0xFF, 0x01, 	#	  LDA #$01FF
         0x1B, 	#	  TCS
