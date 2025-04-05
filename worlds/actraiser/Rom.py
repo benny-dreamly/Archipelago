@@ -1382,11 +1382,32 @@ def patch_rom(world: World, rom: LocalRom):
         0x02,0x00,	#	  COP #$00
         0x28,	#	  PLP
         0x20,0x90,0x82,	#	  JSR $8290
-        0xA9,0x00, # LDA #$00
-        0x99,0x00,0x00, # STA $0000,Y
+        0xA9,0x11, # LDA #$00
+        0x20, 0xE0, 0x82, # JSR $82E0
+        0xA9, 0x00, # LDA #$00
+        0x99, 0x00, 0x00, # STA $0000,Y
         0x6B,	#	  RTL
     ]))
-    
+    rom.write_bytes(0xF82E0, bytearray([
+        0xA0, 0xA2, 0x02, 	#	  LDY #$02A2
+        0x85, 0x00, 	#	  STA $00
+        0xA9, 0x08, 	#	  LDA #$08
+        0x85, 0x0C, 	#	  STA $0C
+            #	  loop:
+        0xB9, 0x00, 0x00, 	#	  LDA $0000,Y
+        0xC5, 0x00, 	#	  CMP $00
+        0xD0, 0x02, 	#	  BNE next
+        0x18, 	#	  CLC
+        0x60, 	#	  RTS
+            #	  next:
+        0xC8, 	#	  INY
+        0xC6, 0x0C, 	#	  DEC $0C
+        0xD0, 0xF2, 	#	  BNE loop
+        0x38, 	#	  SEC
+        0x60, 	#	  RTS
+
+    ]))
+
 
     #Recieve Population Boom
     rom.write_bytes(0xF8290, bytearray([

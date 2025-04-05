@@ -128,14 +128,20 @@ class ActraiserWorld(World):
             region = mw.get_region(region_name, player)
             region.add_locations({
                 location_name: location_data.address for location_name, location_data in location_data_table.items()
-                if location_data.region == region_name and location_data.can_create(mw, player)
+                if location_data.region == region_name and location_data.can_create(self.options, player)
             }, ActraiserLocation)
             region.add_exits(region_data.connecting_regions)
 
+        #if self.options.crystal_goal:
+        #    region = mw.get_region("Sky", player)
+        #    region.add_locations({"Crystal Goal":0x1C100C})
+        #if self.options.population_goal:
+        #    region = mw.get_region("Sky", player)
+        #    region.add_locations({"Population Goal":0x1C100D})
         # Place locked locations.
         for location_name, location_data in locked_locations.items():
             # Ignore locations we never created.
-            if not location_data.can_create(mw, player):
+            if not location_data.can_create(self.options, player):
                 continue
 
             locked_item = self.create_item(location_data_table[location_name].locked_item)

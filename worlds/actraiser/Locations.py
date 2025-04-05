@@ -752,12 +752,14 @@ location_data_table: Dict[str, ActraiserLocationData] = {
     "Crystal Goal": ActraiserLocationData(
         address=0x1C100C,
         region="Sky",
-        locked_item="Savior"
+        locked_item="Savior",
+        can_create=lambda world, player: world.crystal_goal,
     ),
     "Population Goal": ActraiserLocationData(
         address=0x1C100D,
         region="Sky",
-        locked_item="Prosperity"
+        locked_item="Prosperity",
+        can_create=lambda world, player: world.population_goal,
     ),
 }
 
