@@ -4,8 +4,8 @@ import asyncio
 import json
 import os
 import urllib.parse
+from pathlib import Path
 
-import Utils
 from CommonClient import ClientCommandProcessor, gui_enabled, get_base_parser, server_loop, logger, ClientStatus
 from MultiServer import mark_raw
 
@@ -16,8 +16,6 @@ try:
 except ModuleNotFoundError:
     from CommonClient import CommonContext as SuperContext
 
-from pathlib import Path
-
 from . import Sims4World
 
 # Gets the sims 4 mods folder
@@ -25,13 +23,7 @@ from . import Sims4World
 if Sims4World.settings.mods_folder.exists():
     mod_data_path = Path(Sims4World.settings.mods_folder) / "mod_data" / "s4ap"
 
-
-# documents_path = Path.home() / "Documents"
-#
-# mod_data_path = documents_path / "Electronic Arts" / "The Sims 4" / "Mods" / "mod_data" / "s4ap"
-
 # reads and prints json files
-
 
 def print_json(obj: object, name: str, ctx: SimsContext):
     full_path = os.path.join(mod_data_path, name)
@@ -120,6 +112,7 @@ class SimsContext(SuperContext):
         return ui
 
     def on_package(self, cmd: str, args: dict):
+        super().on_package(cmd, args)
         if cmd == "Connected":
             self.goal = args["slot_data"]["goal"]
             self.career = args["slot_data"]["career"]
