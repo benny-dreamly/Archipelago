@@ -61,7 +61,7 @@ class RimworldWorld(World):
         if (defType == "ResearchProjectDef"):
             item_name_to_id[itemName] = int(itemId)
             item_name_to_expansion[itemName] = expansion
-            researchTags = item.find("ResearchTags")
+            researchTags = item.find("Tags")
             if researchTags is not None:
                 for techTag in researchTags:
                     if techTag.text == "TribalStart":
