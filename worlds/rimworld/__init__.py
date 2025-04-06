@@ -80,9 +80,9 @@ class RimworldWorld(World):
             if (prerequisites is not None):
                 for prereq in prerequisites:
                     craftable_item_id_to_prereqs[itemId].append(prereq.text)
-
-    item_name_to_id["Temp Filler"] = max_item_id + 1
-    item_name_to_expansion["Temp Filler"] = "Filler"
+        elif (defType == "IncidentDef"):
+            item_name_to_id[itemName] = int(itemId)
+            item_name_to_expansion[itemName] = expansion
 
 
 
@@ -357,7 +357,10 @@ class RimworldWorld(World):
             logger.warning("Player " + self.player_name + " had " + str(item_count) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
             while item_count < self.location_counts[self.player]:
                 item_count += 1
-                itempool.append(self.create_item("Temp Filler", ItemClassification.filler))
+                if random.randrange(2) == 0:
+                    itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
+                else:
+                    itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.useful))
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
