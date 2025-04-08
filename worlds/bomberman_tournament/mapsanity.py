@@ -611,13 +611,13 @@ loc_map_data_table: Dict[str, BomberTLocationData] = {
         mask=0x10,
     ),
     # Golem Base
-    "Golem Map 1B4": BomberTLocationData(
-        region="GlmBase",
-        type="map",
-        code=0x1C2C33,
-        address=0x352C3,
-        mask=0x8,
-    ),
+    #"Golem Map 1B4": BomberTLocationData(
+    #    region="GlmBase",
+    #    type="map",
+    #    code=0x1C2C33,
+    #    address=0x352C3,
+    #    mask=0x8,
+    #),
 }
 
 map_location_table = {name: data.code for name, data in loc_map_data_table.items() if data.code is not None}

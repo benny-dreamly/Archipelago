@@ -232,6 +232,8 @@ def get_location_rules(player):
             lambda state: state.has("Power Bombs", player),
         "On the Right Track Custom Yellow":
             lambda state: state.has("Power Bombs", player),
+        "Go For Broke Custom Green":
+            lambda state: state.has("Power Bombs", player),
         "Trap Tower Custom Blue":
             lambda state: can_build_bridge(state, player),
         "Trap Tower Custom Yellow":

@@ -107,7 +107,7 @@ class BomberTWorld(World):
             self.multiworld.push_precollected(self.create_item("Magnet Door Key"))
             self.multiworld.push_precollected(self.create_item("Boat Key"))
             self.multiworld.push_precollected(self.create_item("Desert Key"))
-        if self.options.random_fuse == 2:
+        if self.options.random_fuse.value == 2:
             item_pool.append(self.create_item("P Fangs"))
             item_pool.append(self.create_item("P Sea"))
             item_pool.append(self.create_item("P Dragon"))

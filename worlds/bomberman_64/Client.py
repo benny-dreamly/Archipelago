@@ -256,7 +256,7 @@ class Bomb64Client(BizHawkClient):
         from CommonClient import logger
         #self.cycle += 1
         if ctx.slot is None:
-                await ctx.send_connect(name=ctx.auth)
+            await ctx.send_connect(name=ctx.auth)
 
         try:
             ram_data = await bizhawk.read(
