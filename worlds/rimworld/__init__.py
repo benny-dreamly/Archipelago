@@ -32,6 +32,7 @@ class RimworldWorld(World):
 
     item_name_to_id = {}
     location_name_to_id = {}
+    research_items = {}
 
     # Yes, yes, I know this series of dictionaries is bad. I'll probably fix it eventually.
     item_name_to_expansion = {}
@@ -58,9 +59,10 @@ class RimworldWorld(World):
             max_item_id = int(itemId)
         defType = item.find("DefType").text
         expansion = item.find("RequiredExpansion").text
+        item_name_to_id[itemName] = int(itemId)
+        item_name_to_expansion[itemName] = expansion
         if (defType == "ResearchProjectDef"):
-            item_name_to_id[itemName] = int(itemId)
-            item_name_to_expansion[itemName] = expansion
+            research_items[itemName] = int(itemId)
             researchTags = item.find("Tags")
             if researchTags is not None:
                 for techTag in researchTags:
@@ -80,9 +82,6 @@ class RimworldWorld(World):
             if (prerequisites is not None):
                 for prereq in prerequisites:
                     craftable_item_id_to_prereqs[itemId].append(prereq.text)
-        elif (defType == "IncidentDef"):
-            item_name_to_id[itemName] = int(itemId)
-            item_name_to_expansion[itemName] = expansion
 
 
 
@@ -320,8 +319,7 @@ class RimworldWorld(World):
         biotech_disabled = not getattr(self.options, "BiotechEnabled")
         anomaly_disabled = not getattr(self.options, "AnomalyEnabled")
         starting_research_level = getattr(self.options, "StartingResearchLevel")
-        item_count = 0
-        for item in self.item_name_to_id:
+        for item in self.research_items:
             if royalty_disabled and self.item_name_to_expansion[item] == "Ludeon.RimWorld.Royalty":
                 continue
             if ideology_disabled and self.item_name_to_expansion[item] == "Ludeon.RimWorld.Ideology":
@@ -346,21 +344,24 @@ class RimworldWorld(World):
                 self.multiworld.push_precollected(self.create_item(item, itemClassification))
                 continue
 
-            item_count += 1
             if item in self.progression_locations[self.player]:
                 itemClassification = ItemClassification.progression
             else:
                 itemClassification = ItemClassification.useful
             itempool.append(self.create_item(item, itemClassification))
         
-        if item_count < self.location_counts[self.player]:
-            logger.warning("Player " + self.player_name + " had " + str(item_count) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
-            while item_count < self.location_counts[self.player]:
-                item_count += 1
-                if random.randrange(2) == 0:
+        guaranteedTrapCount = getattr(self.options, "RaidTrapCount")
+        for i in range(guaranteedTrapCount):
+            itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
+
+        trapRandomChance = getattr(self.options, "PercentFillerAsTraps")
+        if len(itempool) < self.location_counts[self.player]:
+            logger.warning("Player " + self.player_name + " had " + str(len(itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
+            while len(itempool) < self.location_counts[self.player]:
+                if random.randrange(100) < trapRandomChance:
                     itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
                 else:
-                    itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.useful))
+                    itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.filler))
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:

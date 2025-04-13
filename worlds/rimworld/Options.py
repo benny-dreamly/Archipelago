@@ -58,6 +58,24 @@ class CraftLocationCount(Range):
 	range_end = 500
 	default = 51
 
+class RaidTrapCount(Range):
+	"""
+	The guaranteed number of raid traps in the game.
+	"""
+	display_name = "Raid Trap Count"
+	range_start = 0
+	range_end = 100
+	default = 0
+
+class PercentFillerAsTraps(Range):
+	"""
+	The chance random filler will become trap items, like raids.
+	"""
+	display_name = "Craft Location Count"
+	range_start = 0
+	range_end = 100
+	default = 20
+
 class VictoryCondition(Choice):
 	"""
 	The way to win. Choosing "any" will ensure one of these is considered "in-logic." They also require a "basic" set of research that isn't strictly required to win, so royalty will consider pianos and noble apparel in logic, while anomaly will consider basic bioferrite research in logic.
@@ -178,6 +196,8 @@ class RimworldOptions(PerGameCommonOptions):
     ResearchBaseCost: ResearchBaseCost
     ResearchMaxPrerequisites: ResearchMaxPrerequisites
     CraftLocationCount: CraftLocationCount
+    RaidTrapCount: RaidTrapCount
+    PercentFillerAsTraps: PercentFillerAsTraps
     VictoryCondition: VictoryCondition
     RoyaltyEnabled: RoyaltyEnabled
     IdeologyEnabled: IdeologyEnabled
