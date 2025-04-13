@@ -2,7 +2,7 @@ from typing import List, Dict, Any, ClassVar
 
 from BaseClasses import Region, Tutorial, MultiWorld, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from .Items import PokePinballItem, item_data_table, item_table
+from .Items import PokePinballItem, item_data_table, item_table, item_filler, item_filler_weight
 from .Locations import PokePinballLocation, location_data_table, location_table, locked_locations
 from .Options import PokePinballOptions
 from .Regions import region_data_table
@@ -60,10 +60,10 @@ class PokePinballWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
 
-    def create_item(self, name):
+    def create_item(self, name: str) -> PokePinballItem:
         return PokePinballItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
     
-    def create_items(self):
+    def create_items(self) -> None:
         item_pool: List[PokePinballItem] = []
 
         for name, item in item_data_table.items():
@@ -75,27 +75,27 @@ class PokePinballWorld(World):
         item_pool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
         self.multiworld.itempool += item_pool
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         for region_name in region_data_table.keys():
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
         for region_name, region_data in region_data_table.items():
+            
+            #if region_name in self.included_stages or region_name in fixed_regions:
             region = self.get_region(region_name)
             region.add_locations({
                 location_name: location_data.address for location_name, location_data in location_data_table.items()
-                if location_data.region == region_name and location_data.can_create(self)
+                if location_data.region == region_name and location_data.can_create(self)# and (region_name in self.included_stages or region_name in fixed_regions)
             }, PokePinballLocation)
-        region.add_exits(region_data_table[region_name].connecting_regions)
+            region.add_exits(region_data_table[region_name].connecting_regions)
 
     
-    def get_filler_item_name(self):
-        filler_items = ["Extra Ball","Pika Power","Ball Saver"]
-        filler_weights = [0.2,0.1,0.8]
-        junk_item = random.choices(filler_items,filler_weights)[0]
+    def get_filler_item_name(self) -> str:
+        junk_item = random.choices(item_filler,item_filler_weight)[0]
         return junk_item
     
-    def set_rules(self):
+    def set_rules(self) -> None:
         player = self.player
         region_rules = get_region_rules(player, self.options)
 
@@ -103,7 +103,7 @@ class PokePinballWorld(World):
             entrance = self.multiworld.get_entrance(entrance_name, player)
             entrance.access_rule = rule
 
-        location_rules = get_location_rules(player)
+        location_rules = get_location_rules(player, self.options.dex_needed.value)
 
         for location in self.multiworld.get_locations(player):
             name = location.name
@@ -111,15 +111,15 @@ class PokePinballWorld(World):
             if name in location_rules:
                 location.access_rule = location_rules[name]
 
-        for location_name, location_data in locked_locations.items():
-            # Ignore locations we never created.
-            if not location_data.can_create(self):
-                continue
-            
-            locked_item = self.create_item(location_data_table[location_name].locked_item)
-            self.get_location(location_name).place_locked_item(locked_item)
-
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", player)
+        #for location_name, location_data in locked_locations.items():
+        #    # Ignore locations we never created.
+        #    if not location_data.can_create(self):
+        #        continue
+        #    
+        #    locked_item = self.create_item(location_data_table[location_name].locked_item)
+        #    self.get_location(location_name).place_locked_item(locked_item)
+        #self.get_location("Pokedex Completed").place_locked_item(self.create_item("Victory"))
+        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Pokedex Completed", player)
     
     def fill_slot_data(self) -> Dict[str, Any]:
         return {

@@ -1,6 +1,25 @@
 from typing import Dict, List, NamedTuple
 
 
+stage_names = [
+    "Viridian Forest",
+    "Pewter City",
+    "Mt Moon",
+    "Cerulean City",
+    "Vermilion City Seaside",
+    "Vermilion City Streets",
+    "Rock Mountain",
+    "Lavender Town",
+    "Cycling Road",
+    "Safari Zone",
+    "Fuchsia City",
+    "Saffron City",
+    "Seafoam Islands",
+    "Cinnabar Island",
+    "Indigo Plateau"
+]
+
+
 class PokePinballRegionData(NamedTuple):
     connecting_regions: List[str] = []
 
@@ -46,7 +65,7 @@ region_data_table: Dict[str, PokePinballRegionData] = {
     "Celadon City": PokePinballRegionData(["Pidgey","Vulpix","Oddish","Meowth","Mankey","Growlithe","Bellsprout","Abra","Scyther","Pinsir","Eevee","Porygon","Dratini"]),
     "Cycling Road": PokePinballRegionData(["Rattata","Spearow","Tentacool","Doduo","Krabby","Lickitung","Goldeen","Magikarp","Snorlax"]),
     "Fuchsia City": PokePinballRegionData(["Venonat","Krabby","Exeggcute","Kangaskhan","Goldeen","Magikarp"]),
-    "Safari Zone": PokePinballRegionData(["NidoranM","Paras","Dodou","Rhyhorn","Chansey","Scyther","Tauros","Dratini", "NidoranF","Pinsir"]),
+    "Safari Zone": PokePinballRegionData(["NidoranM","Paras","Doduo","Rhyhorn","Chansey","Scyther","Tauros","Dratini", "NidoranF","Pinsir"]),
     "Saffron City": PokePinballRegionData(["Pidgey","Ekans","Sandshrew","Vulpix","Oddish","Meowth","Mankey","Growlithe","Hitmonlee","Hitmonchan","Lapras"]),
     "Seafoam Islands": PokePinballRegionData(["Zubat","Psyduck","Tentacool","Slowpoke","Seel","Shellder","Krabby","Horsea","Goldeen","Staryu","Articuno"]),
     "Cinnabar Island": PokePinballRegionData(["Vulpix","Growlithe","Ponyta","Omanyte","Kabuto", "Koffing","Grimer","Tangela","Magmar","Aerodactyl"]),

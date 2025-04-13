@@ -10,6 +10,10 @@ from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from worlds.AutoWorld import World
 
+from .Rom_routines import *
+from .Palette_data import *
+from .Rom_data import ENCOUNTER_DATA
+
 MD5Hash = "fbe20570c2e52c937a9395024069ba3c"
 
 ROM_NAME_ADR = 0xF9F10
@@ -31,7 +35,51 @@ def write_tokens(world:World, patch:PokePinballProcedurePatch):
         patch.write_token(APTokenTypes.WRITE, ROM_NAME_ADR + j, struct.pack("<B", b))
     for j, b in enumerate(world.playerName):
         patch.write_token(APTokenTypes.WRITE, PLAYER_NAME_ADR + j, struct.pack("<B", b))
+    patch.write_token(APTokenTypes.WRITE, OPTION_ADR + 0x0, bytearray([world.options.dex_needed.value]))
+    if world.options.death_link:
+        patch.write_token(APTokenTypes.WRITE, OPTION_ADR + 0x2, bytearray([0x01]))
 
+    if world.options.permanent_ball_saver:
+        patch.write_token(APTokenTypes.WRITE, 0x146BB, bytearray([0x00])) # DEC -> NOP
+    if world.options.strong_tilt:
+        patch.write_token(APTokenTypes.WRITE, 0x372F, bytearray([0x01,0x74,0x01,0x64,0xFF,0xFF,0x01,0x6C,0x01,0x70]))
+
+
+    patch.write_token(APTokenTypes.WRITE, 0xD946, bytearray([0xCD, 0x00, 0x7B])) # CALL $7B00
+    patch.write_token(APTokenTypes.WRITE, 0xFB00, AP_BASE_ROUTINE)
+    patch.write_token(APTokenTypes.WRITE, 0xFB80, AREA_SELECT)
+    patch.write_token(APTokenTypes.WRITE, 0xFB08, bytearray([world.options.map_btn.value])) # Map Button
+
+    # REstrict start stage table
+    patch.write_token(APTokenTypes.WRITE, 0x16605, bytearray([0x00,0x00,0x00,0x00,0x00,0x00,0x00])) # Red Table Palette Town
+    patch.write_token(APTokenTypes.WRITE, 0x1C8AF, bytearray([0x01,0x01,0x01,0x01,0x01,0x01,0x01])) # Blue Table Viridian City
+
+    # Red Table Move area
+    patch.write_token(APTokenTypes.WRITE, 0x312D5, bytearray([0xEA, 0xF1, 0xDA])) # LD ($DAF1), A
+    # Blue Table Move Area
+    patch.write_token(APTokenTypes.WRITE, 0x3145F, bytearray([0xEA, 0xF2, 0xDA])) # LD ($DAF2), A
+
+    if world.options.rebalance_encounters:
+        for offset, data in ENCOUNTER_DATA.items():
+            patch.write_token(APTokenTypes.WRITE, offset, bytearray(data))
+
+    if world.options.mon_colors:
+        for startoffset, endoffset in mon_pal_offsets.items():
+            offset = startoffset
+            while offset < endoffset:
+                pal1 = random.randint(0, 0x7FFF),
+                pal2 = random.randint(0, 0x7FFF),
+                patch.write_token(APTokenTypes.WRITE, offset+2, pal1[0].to_bytes(2, "little"))
+                patch.write_token(APTokenTypes.WRITE, offset+4, pal2[0].to_bytes(2, "little"))
+                offset += 0x08
+    if world.options.map_colors:
+        offset = 0xDC880
+        while offset < 0xdd140:
+                pal1 = random.randint(0, 0x7FFF),
+                pal2 = random.randint(0, 0x7FFF),
+                patch.write_token(APTokenTypes.WRITE, offset+2, pal1[0].to_bytes(2, "little"))
+                patch.write_token(APTokenTypes.WRITE, offset+4, pal2[0].to_bytes(2, "little"))
+                offset += 0x08
 
     patch.write_file("token_data.bin", patch.get_token_binary())
 

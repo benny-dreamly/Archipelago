@@ -5,6 +5,7 @@ from BaseClasses import CollectionState
 if TYPE_CHECKING:
     from . import PokePinballWorld
 
+
 def getdexcount(state, player):
     from .Locations import location_table
     dex_count = 0
@@ -63,8 +64,23 @@ def get_region_rules(player, options):
             
     }
 
-def get_location_rules(player, options):
+def get_location_rules(player, dex_needed):
+    from .Regions import stage_names
     return {
+        "Gastly Bonus":
+            lambda state: state.has_from_list(stage_names, player, 0x04),
+        "Seel Bonus":
+            lambda state: state.has_from_list(stage_names, player, 0x04),
+        "Mewtwo Bonus":
+            lambda state: state.has_from_list(stage_names, player, 0x0A),
+        "50,000,000 Points":
+            lambda state: state.has_from_list(stage_names, player, 0x01),
+        "100,000,000 Points":
+            lambda state: state.has_from_list(stage_names, player, 0x03),
+        "250,000,000 Points":
+            lambda state: state.has_from_list(stage_names, player, 0x06),
+        "500,000,000 Points":
+            lambda state: state.has_from_list(stage_names, player, 0x0A),
         "Pokedex Completed":
-            lambda state: getdexcount(state, player) >= options.dex_needed.value
+            lambda state: state.has_from_list(stage_names, player, 0x0F)
     }
