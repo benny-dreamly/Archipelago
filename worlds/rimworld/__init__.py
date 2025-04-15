@@ -309,7 +309,7 @@ class RimworldWorld(World):
 
         menu_region.connect(main_region)
 
-    def create_item(self, item: str, classification: ItemClassification) -> RimworldItem:
+    def create_item(self, item: str, classification: ItemClassification =  ItemClassification.useful) -> RimworldItem:
         return RimworldItem(item, classification, self.item_name_to_id[item], self.player)
 
     def create_event(self, event: str) -> RimworldItem:
