@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from . import PokePinballWorld
 
 pokemon_names = [
+    #"None",
     "Bulbasaur",
     "Ivysaur",
     "Venusaur",
@@ -34,10 +35,10 @@ pokemon_names = [
     "Raichu",
     "Sandshrew",
     "Sandslash",
-    "Nidoran♀",
+    "Nidoran Female",
     "Nidorina",
     "Nidoqueen",
-    "Nidoran♂",
+    "Nidoran Male",
     "Nidorino",
     "Nidoking",
     "Clefairy",
@@ -88,7 +89,7 @@ pokemon_names = [
     "Slowbro",
     "Magnemite",
     "Magneton",
-    "Farfetch'd",
+    "Farfetchd",
     "Doduo",
     "Dodrio",
     "Seel",
@@ -127,7 +128,7 @@ pokemon_names = [
     "Seaking",
     "Staryu",
     "Starmie",
-    "Mr. Mime",
+    "Mr Mime",
     "Scyther",
     "Jynx",
     "Electabuzz",
@@ -293,28 +294,28 @@ location_data_table: Dict[str, PokePinballLocation] = {
     ),
 
     "Nidoran Female": PokePinballLocationData(
-    region="NidoranF",
+    region="Nidoran Female",
     address=0x1C201d,
     ),
     "Nidorina": PokePinballLocationData(
-    region="NidoranF",
+    region="Nidoran Female",
     address=0x1C201e,
     ),
     "Nidoqueen": PokePinballLocationData(
-    region="NidoranF",
+    region="Nidoran Female",
     address=0x1C201f,
     ),
 
     "Nidoran Male": PokePinballLocationData(
-    region="NidoranM",
+    region="Nidoran Male",
     address=0x1C2020,
     ),
     "Nidorino": PokePinballLocationData(
-    region="NidoranM",
+    region="Nidoran Male",
     address=0x1C2021,
     ),
     "Nidoking": PokePinballLocationData(
-    region="NidoranM",
+    region="Nidoran Male",
     address=0x1C2022,
     ),
 
@@ -346,7 +347,7 @@ location_data_table: Dict[str, PokePinballLocation] = {
     ),
 
     "Zubat": PokePinballLocationData(
-    region="RegZubation",
+    region="Zubat",
     address=0x1C2029,
     ),
     "Golbat": PokePinballLocationData(

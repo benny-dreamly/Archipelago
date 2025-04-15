@@ -3,7 +3,7 @@ from typing import List, Dict, Any, ClassVar
 from BaseClasses import Region, Tutorial, MultiWorld, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Items import PokePinballItem, item_data_table, item_table, item_filler, item_filler_weight
-from .Locations import PokePinballLocation, location_data_table, location_table, locked_locations
+from .Locations import PokePinballLocation, location_data_table, location_table, locked_locations, pokemon_names
 from .Options import PokePinballOptions
 from .Regions import region_data_table
 from .Rules import *
@@ -119,8 +119,20 @@ class PokePinballWorld(World):
         #    locked_item = self.create_item(location_data_table[location_name].locked_item)
         #    self.get_location(location_name).place_locked_item(locked_item)
         #self.get_location("Pokedex Completed").place_locked_item(self.create_item("Victory"))
-        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Pokedex Completed", player)
-    
+
+        #if self.options.required_mons.value:
+        #self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Pokedex Completed", player) and [state.can_reach_region(x, player) for x in self.options.required_mons.value]
+        if self.options.required_mons.value:
+            self.multiworld.completion_condition[self.player] = (
+                lambda state: 
+                (sum([state.can_reach_location(x, player) for x in pokemon_names]) >= self.options.dex_needed.value) 
+                and 
+                (sum([state.can_reach_location(x, player) for x in self.options.required_mons.value]) >= len(self.options.required_mons.value))
+            )
+        else:
+            self.multiworld.completion_condition[self.player] = (
+            lambda state: (sum([state.can_reach_location(x, player) for x in pokemon_names]) >= self.options.dex_needed.value) )
+
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "DeathLink": self.options.death_link.value
