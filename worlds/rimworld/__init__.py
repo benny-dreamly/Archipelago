@@ -8,7 +8,7 @@ import typing
 import xml.etree.ElementTree as ElementTree
 from typing import Dict
 from .Options import RimworldOptions, max_research_locations, rimworld_options
-from .Items import RimworldItem
+from .Items import RimworldItem, any_electricity_items
 from .Locations import RimworldLocation, base_location_id, location_id_gap, generic_victory_requirements, ship_launch_victory_requirements, royalty_victory_requirements, archonexus_victory_requirements, anomaly_victory_requirements
 from ..generic.Rules import set_rule, add_rule
 from worlds.AutoWorld import World
@@ -38,7 +38,7 @@ class RimworldWorld(World):
     item_name_to_expansion = {}
     tribal_tech_items = []
     crashlanded_tech_items = []
-    progression_locations = {}
+    progression_items = {}
 
     location_prerequisites = {}
 
@@ -167,7 +167,10 @@ class RimworldWorld(World):
         location_pool: Dict[str, int] = {}
         self.location_counts[self.player] = 0
         self.location_prerequisites[self.player] = {}
-        self.progression_locations[self.player] = set()
+        self.progression_items[self.player] = set()
+
+        for item in any_electricity_items:
+            self.progression_items[self.player].add(item)
         
         main_region = Region("Main", self.player, self.multiworld)
 
@@ -180,16 +183,16 @@ class RimworldWorld(World):
         for i in range(hiTechResearchLocationCount):
             locationName = "Hi-Tech Research Location " + str(i)
             location_pool[locationName] = self.location_name_to_id[locationName]
-            self.location_prerequisites[self.player][locationName] = ["Microelectronics"]
-            self.progression_locations[self.player].add("Microelectronics")
+            self.location_prerequisites[self.player][locationName] = ["Microelectronics", "AnyElectricity"]
+            self.progression_items[self.player].add("Microelectronics")
 
         multiAnalyzerResearchLocationCount = getattr(self.options, "MultiAnalyzerResearchLocationCount").value
         for i in range(multiAnalyzerResearchLocationCount):
             locationName = "Multi-Analyzer Research Location " + str(i)
             location_pool[locationName] = self.location_name_to_id[locationName]
-            self.location_prerequisites[self.player][locationName] = ["Microelectronics", "Multi-Analyzer"]
-            self.progression_locations[self.player].add("Microelectronics")
-            self.progression_locations[self.player].add("Multi-Analyzer")
+            self.location_prerequisites[self.player][locationName] = ["Microelectronics", "Multi-Analyzer", "AnyElectricity"]
+            self.progression_items[self.player].add("Microelectronics")
+            self.progression_items[self.player].add("Multi-Analyzer")
 
         craftLocationCount = getattr(self.options, "CraftLocationCount").value
         royalty_disabled = not getattr(self.options, "RoyaltyEnabled")
@@ -256,7 +259,7 @@ class RimworldWorld(World):
 
             prerequisites = list(set(self.craftable_item_id_to_prereqs[itemId1]) | set(self.craftable_item_id_to_prereqs[itemId2]))
             for item in prerequisites:
-                self.progression_locations[self.player].add(item)
+                self.progression_items[self.player].add(item)
             self.location_prerequisites[self.player][locationName] = prerequisites
             self.craft_location_recipes[locationId] = [itemName1, itemName2]
             # print(self.player_name + "'s " + locationName + ": " + itemName1 + " + " + itemName2 + "(" + str(prerequisites) + ")")
@@ -270,19 +273,19 @@ class RimworldWorld(World):
         victoryCondition = getattr(self.options, "VictoryCondition")
         for itemList in generic_victory_requirements:
             for item in itemList: 
-                self.progression_locations[self.player].add(item)
+                self.progression_items[self.player].add(item)
         # Any or Ship Launch
         if (victoryCondition == 0 or victoryCondition == 1):
             for itemList in ship_launch_victory_requirements:
                 for item in itemList: 
-                    self.progression_locations[self.player].add(item)
+                    self.progression_items[self.player].add(item)
             self.location_prerequisites[self.player]["Space Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Space Victory", None, main_region))
         # Any or Royalty
         if ((victoryCondition == 0 and not royalty_disabled) or victoryCondition == 2):
             for itemList in royalty_victory_requirements:
                 for item in itemList: 
-                    self.progression_locations[self.player].add(item)
+                    self.progression_items[self.player].add(item)
             self.location_prerequisites[self.player]["Royalty Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Royalty Victory", None, main_region))
         # Since Archonexus has lower strict requirements, I want the generator to only consider the
@@ -291,14 +294,14 @@ class RimworldWorld(World):
         if (victoryCondition == 3):
             for itemList in archonexus_victory_requirements:
                 for item in itemList: 
-                    self.progression_locations[self.player].add(item)
+                    self.progression_items[self.player].add(item)
             self.location_prerequisites[self.player]["Archonexus Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Archonexus Victory", None, main_region))
         # Any or Anomaly
         if ((victoryCondition == 0 and not anomaly_disabled) or victoryCondition == 4):
             for itemList in anomaly_victory_requirements:
                 for item in itemList: 
-                    self.progression_locations[self.player].add(item)
+                    self.progression_items[self.player].add(item)
             self.location_prerequisites[self.player]["Anomaly Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Anomaly Victory", None, main_region))
 
@@ -330,21 +333,21 @@ class RimworldWorld(World):
                 continue
             # Removing items you start with from the pool
             if starting_research_level == 1 and item in self.tribal_tech_items:
-                if item in self.progression_locations[self.player]:
+                if item in self.progression_items[self.player]:
                     itemClassification = ItemClassification.progression
                 else:
                     itemClassification = ItemClassification.useful
                 self.multiworld.push_precollected(self.create_item(item, itemClassification))
                 continue
             if starting_research_level == 2 and item in self.crashlanded_tech_items:
-                if item in self.progression_locations[self.player]:
+                if item in self.progression_items[self.player]:
                     itemClassification = ItemClassification.progression
                 else:
                     itemClassification = ItemClassification.useful
                 self.multiworld.push_precollected(self.create_item(item, itemClassification))
                 continue
 
-            if item in self.progression_locations[self.player]:
+            if item in self.progression_items[self.player]:
                 itemClassification = ItemClassification.progression
             else:
                 itemClassification = ItemClassification.useful
@@ -369,8 +372,13 @@ class RimworldWorld(World):
             locationName = location.name
             if locationName in self.location_prerequisites[self.player]:
                 # print("prereqs: " + locationName + ": " + str(self.location_prerequisites[self.player][locationName]))
-                set_rule(self.get_location(locationName),
-                    lambda state, prereqs = self.location_prerequisites[self.player][locationName]: state.has_all(prereqs, self.player))
+                for req in self.location_prerequisites[self.player][locationName]:
+                    if req == "AnyElectricity":
+                        add_rule(self.get_location(locationName),
+                            lambda state: state.has_any(any_electricity_items, self.player), "and")
+                    else:
+                        add_rule(self.get_location(locationName),
+                            lambda state, prereq = req: state.has(prereq, self.player), "and")
 
         royalty_disabled = not getattr(self.options, "RoyaltyEnabled")
         anomaly_disabled = not getattr(self.options, "AnomalyEnabled")
