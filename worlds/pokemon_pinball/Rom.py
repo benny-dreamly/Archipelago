@@ -53,8 +53,10 @@ def write_tokens(world:World, patch:PokePinballProcedurePatch):
         patch.write_token(APTokenTypes.WRITE, 0x1D399, bytearray([world.options.catch_rotation.value])) # CP XX
     if world.options.evo_rotation.value != 0x03:
         patch.write_token(APTokenTypes.WRITE, 0x107ED, bytearray([world.options.evo_rotation.value])) # CP XX
-        patch.write_token(APTokenTypes.WRITE, 0x1C8F5, bytearray([world.options.evo_rotation.value])) # CP XX
         patch.write_token(APTokenTypes.WRITE, 0x107F0, bytearray([0x38, 0x02])) # JR C, $47F4
+        patch.write_token(APTokenTypes.WRITE, 0x1C8F5, bytearray([world.options.evo_rotation.value, 0x30, 0x04])) # CP XX
+        patch.write_token(APTokenTypes.WRITE, 0x1C960, bytearray([world.options.evo_rotation.value, 0x38, 0x1C])) # CP XX
+        patch.write_token(APTokenTypes.WRITE, 0x1D282, bytearray([world.options.evo_rotation.value, 0x38, 0x14])) # CP XX
 
     if world.options.less_tired:
         patch.write_token(APTokenTypes.WRITE, 0x21030, bytearray([0x00]))
