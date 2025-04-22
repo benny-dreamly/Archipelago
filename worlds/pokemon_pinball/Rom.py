@@ -12,7 +12,7 @@ from worlds.AutoWorld import World
 
 from .Rom_routines import *
 from .Palette_data import *
-from .Rom_data import ENCOUNTER_DATA, slot_rewards, required_mon_data
+from .Rom_data import ENCOUNTER_DATA, slot_rewards, required_mon_data, RECIEVE_TABLE, EVO_COORDS
 
 MD5Hash = "fbe20570c2e52c937a9395024069ba3c"
 
@@ -38,21 +38,47 @@ def write_tokens(world:World, patch:PokePinballProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, OPTION_ADR + 0x0, bytearray([world.options.dex_needed.value]))
     if world.options.death_link:
         patch.write_token(APTokenTypes.WRITE, OPTION_ADR + 0x2, bytearray([0x01]))
+    score_need = world.options.required_score.value
+    patch.write_token(APTokenTypes.WRITE, OPTION_ADR + 0x8, score_need.to_bytes(4, 'little'))
 
     if world.options.permanent_ball_saver:
         patch.write_token(APTokenTypes.WRITE, 0x146BB, bytearray([0x00])) # DEC -> NOP
     if world.options.strong_tilt:
         patch.write_token(APTokenTypes.WRITE, 0x372F, bytearray([0x01,0x74,0x01,0x64,0xFF,0xFF,0x01,0x6C,0x01,0x70]))
 
+    # Catchem/Evo Map rotation requirements
+    if world.options.evo_rotation.value != 0x02:
+        patch.write_token(APTokenTypes.WRITE, 0x15F09, bytearray([world.options.catch_rotation.value])) # CP XX
+        patch.write_token(APTokenTypes.WRITE, 0x1C930, bytearray([world.options.catch_rotation.value])) # CP XX
+        patch.write_token(APTokenTypes.WRITE, 0x1D399, bytearray([world.options.catch_rotation.value])) # CP XX
+    if world.options.evo_rotation.value != 0x03:
+        patch.write_token(APTokenTypes.WRITE, 0x107ED, bytearray([world.options.evo_rotation.value])) # CP XX
+        patch.write_token(APTokenTypes.WRITE, 0x1C8F5, bytearray([world.options.evo_rotation.value])) # CP XX
+        patch.write_token(APTokenTypes.WRITE, 0x107F0, bytearray([0x38, 0x02])) # JR C, $47F4
 
+    if world.options.less_tired:
+        patch.write_token(APTokenTypes.WRITE, 0x21030, bytearray([0x00]))
+        patch.write_token(APTokenTypes.WRITE, 0x20A29, bytearray([0x00]))
+    patch.write_token(APTokenTypes.WRITE, 0x7C30, EVO_COORDS)
+    patch.write_token(APTokenTypes.WRITE, 0x7D00, EVO_ITEM)
+
+    # Base AP routines
+    patch.write_token(APTokenTypes.WRITE, 0x3740, CALL_BANKSWITCH)
     patch.write_token(APTokenTypes.WRITE, 0xD946, bytearray([0xCD, 0x00, 0x7B])) # CALL $7B00
-    patch.write_token(APTokenTypes.WRITE, 0xDB15, bytearray([0xCD, 0x40, 0x7C])) # CALL $7C40
+    patch.write_token(APTokenTypes.WRITE, 0xDB15, bytearray([0xCD, 0x40, 0x7C])) # CALL $7CC0
     patch.write_token(APTokenTypes.WRITE, 0xFB00, AP_BASE_ROUTINE)
     patch.write_token(APTokenTypes.WRITE, 0xFB80, AREA_SELECT)
     patch.write_token(APTokenTypes.WRITE, 0xFC00, CHECK_MOVE)
     patch.write_token(APTokenTypes.WRITE, 0xFC40, SWAP_TABLE)
+    patch.write_token(APTokenTypes.WRITE, 0x83BA, bytearray([0xCD, 0x80, 0x4F])) # CALL $4F80
+    patch.write_token(APTokenTypes.WRITE, 0x8F80, RESTORE_PARTY)
     patch.write_token(APTokenTypes.WRITE, 0xFC04, bytearray([world.options.map_btn.value])) # Map Button
+    patch.write_token(APTokenTypes.WRITE, 0xFC80, RECIEVE_TABLE)
     #patch.write_token(APTokenTypes.WRITE, 0xFC44, bytearray([world.options.map_btn.value])) # Map Button
+
+    # Ensure new mons
+    patch.write_token(APTokenTypes.WRITE, 0x10089, bytearray([0xCD, 0x00, 0x78, 0x28, 0xDE, 0x00])) # CALL $7800 -> JR Z, $4074 -> NOP
+    patch.write_token(APTokenTypes.WRITE, 0x13800, NEW_CATCHEM)
 
     # REstrict start stage table
     patch.write_token(APTokenTypes.WRITE, 0x16605, bytearray([0x00,0x00,0x00,0x00,0x00,0x00,0x00])) # Red Table Palette Town

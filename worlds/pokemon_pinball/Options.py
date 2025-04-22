@@ -12,6 +12,14 @@ class DexNeed(Range):
     range_end = 150
     default = 100
 
+class ScoreNeed(Range):
+    """Determines a high score needed to clear the game
+    leave at 0 to disable"""
+    display_name = "Score Requirement"
+    range_start = 0
+    range_end = 4000000000000
+    default = 0
+
 class MapMove(Choice):
     """Controls what button is needed to move between areas during gameplay"""
     option_a     = 0b00000001 # A Button
@@ -24,6 +32,30 @@ class MapMove(Choice):
     option_down  = 0b10000000 # Down Button
     default      = 0b00010000 # Right
 
+class CatchemRotations(Range):
+    """Number of map routations required to open Bellsprout/Cloyster for Catchem Mode"""
+    range_start = 0
+    range_end = 3
+    default = 2
+
+class EvoRotations(Range):
+    """Number of map routations required to open Ditto/Slowbro for Evolution Mode
+    Doesn't work on blue field yet"""
+    range_start = 0
+    range_end = 3
+    default = 3
+
+
+
+class OakNotes(Toggle):
+    """If enables will include an item where you can add a dex entry using the /research [pokemon name] server command"""
+
+class StartingRoutes(Range):
+    """Number of extra travel locations you start the game with"""
+    range_start = 0
+    range_end = 2
+    default = 0
+
 class BalanceEncounter(DefaultOnToggle):
     """If enabled, will rebalance the encounter tables to make encountering rarer pokemon more common"""
     display_name = "Balanced Encounters"
@@ -31,6 +63,10 @@ class BalanceEncounter(DefaultOnToggle):
 class BallSaver(Toggle):
     """If enabled, the game will make the ball saved permanent"""
     display_name = "Permanent Ball Saver"
+
+class EvoTired(DefaultOnToggle):
+    """If enabled pokemon will not be tired for as long during evolution"""
+    display_name = "Alert Evolution"
 
 class DoubleTimer(Toggle):
     """The amount of minutes you have to catch a Pokemon before it runs away"""
@@ -208,11 +244,16 @@ class PokePinballOptions(PerGameCommonOptions):
     #goal_dex: DexGoal
     dex_needed: DexNeed
     required_mons: RequiredMons
+    required_score: ScoreNeed
     map_btn: MapMove
+    catch_rotation: CatchemRotations
+    evo_rotation: EvoRotations
     rebalance_encounters: BalanceEncounter
+    less_tired: EvoTired
     permanent_ball_saver: BallSaver
     strong_tilt: StrongShake
     double_timer: DoubleTimer
+    include_notes: OakNotes
     mon_colors: ColorRando
     map_colors: MapColor
     death_link: DeathLink

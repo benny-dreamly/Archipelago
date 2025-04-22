@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 RECV_IDX = 0x2FFF
 DEX_SIZE = 0x96
+RECV_PORT = 0x1AF0
 
 class PokePinballClient(BizHawkClient):
     game = "Pokemon Pinball"
@@ -29,8 +30,13 @@ class PokePinballClient(BizHawkClient):
     death_link: bool = False
     sending_death_link: bool = True
     pending_death_link: bool = False
+    score_goal = False
+    all_needed_mons = False
+    dex_complete = False
 
+    notes_used = 0
     dex_need = 151
+    score_need = 1000000000
     #needed_mons = b''
 
     def __init__(self) -> None:
@@ -38,6 +44,7 @@ class PokePinballClient(BizHawkClient):
         self.local_checked_locations = set()
         self.rom_slot_name = None
         self.game_state = False
+        self.research_command = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -49,7 +56,8 @@ class PokePinballClient(BizHawkClient):
             (OPTION_ADR, 0x10, "ROM"), # 1 Options
             (PLAYER_NAME_ADR, 0x32, "ROM"), # 2 Player Name
             (ROM_NAME_ADR, 0x20, "ROM"), # 3 Slot Data
-            (0xDD400, DEX_SIZE, "ROM"), # Needed Mons
+            (0xDD400, DEX_SIZE, "ROM"), # 4 Needed Mons
+            #(0x1962, DEX_SIZE, "WRAM"), # 5 Dex State
             ]
         )
         try:
@@ -71,14 +79,16 @@ class PokePinballClient(BizHawkClient):
         self.needed_mons = needed_mon_raw
         if deathlink:
             self.death_link = True
-
+        #self.notes_used = 0
         self.dex_need = gameoptions[0]
+        self.score_need = int.from_bytes((rom_data[0x8:0x0C]), byteorder='little', signed=False)
         ctx.game = self.game
         ctx.items_handling = 0b111
         self.player_name = rom_data[2].decode("ascii")
+        ctx.command_processor.commands["research"] = cmd_notes
         ctx.slot = chr(rom_data[3][7])
         ctx.want_slot_data = True
-
+        #self.dex_state = rom_data[5]
         return True
     
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: Dict[str, Any]) -> None:
@@ -125,14 +135,13 @@ class PokePinballClient(BizHawkClient):
                     (0x1AF0, 0x20, "WRAM"), # 5 AP RAM
                     (0x19FB, 0x01, "WRAM"), # 6 Pokeon Owned
                     (0x1540, 0x10, "WRAM"), # 7 Current Map
-
-
                 ]
             )
             outbound_writes = []
             game_data = ram_data[0]
             pokedex_data = ram_data[1]
-            game_state = ram_data[2][0]
+            #self.dex_state = pokedex_data
+            game_screen = ram_data[2][0]
             recv_index = ram_data[3][0]
             mon_owned = ram_data[6][0]
             death_state = game_data[0xC9]
@@ -147,9 +156,10 @@ class PokePinballClient(BizHawkClient):
             #mewtwo_clears = ram_data[0xB][0]
 
 
-            if game_state != 0x04:
+            if game_screen != 0x04:
                 # Make sure you are in a pinball game
                 return
+            self.game_state = True
             
             if self.death_link:
                 await ctx.update_death_link(self.death_link)
@@ -196,16 +206,27 @@ class PokePinballClient(BizHawkClient):
                 #outbound_writes.append((0x149A,bytearray([0x00]), "WRAM"))
 
                 # Score
-            score10k = game_data[0x6D]
-            if score10k >= 0x02 and 0x1C20A0 not in self.local_checked_locations:
+            cur_score = 0
+            for x in range(6):
+                offset = 0x6A + x
+                score_digits = game_data[offset]
+                lower_digit = score_digits & 0xF
+                upper_digit = ((score_digits & 0xF0) >> 4) * 10
+                dec_score = upper_digit + lower_digit
+                added_score = (dec_score * (10**(x*2))) * 10
+                cur_score = cur_score + added_score
+                #logger.warning(f"score: {cur_score}, H: {upper_digit}, L: {lower_digit}, DS: {dec_score}, SD: {score_digits}, AS{added_score}")
+            #score10k = game_data[0x6D]
+            
+            if cur_score >= 20000000 and 0x1C20A0 not in self.local_checked_locations:
                 locs_to_send.add(0x1C20A0)
-            if score10k >= 0x05 and 0x1C20A1 not in self.local_checked_locations:
+            if cur_score >= 50000000 and 0x1C20A1 not in self.local_checked_locations:
                 locs_to_send.add(0x1C20A1)
-            if score10k >= 0x10 and 0x1C20A2 not in self.local_checked_locations:
+            if cur_score >= 100000000 and 0x1C20A2 not in self.local_checked_locations:
                 locs_to_send.add(0x1C20A2)
-            if score10k >= 0x25 and 0x1C20A3 not in self.local_checked_locations:
+            if cur_score >= 250000000 and 0x1C20A3 not in self.local_checked_locations:
                 locs_to_send.add(0x1C20A3)
-            if score10k >= 0x50 and 0x1C20A4 not in self.local_checked_locations:
+            if cur_score >= 500000000 and 0x1C20A4 not in self.local_checked_locations:
                 locs_to_send.add(0x1C20A4)
             
             if locs_to_send != self.local_checked_locations:
@@ -215,7 +236,7 @@ class PokePinballClient(BizHawkClient):
 
             # Handle Items
                 # Permanent Items
-            pokeball_level = 0
+            notes_have = 0
             red_stages = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
                          0x00,0x00]
             blue_stages = [0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -224,10 +245,10 @@ class PokePinballClient(BizHawkClient):
             for item in range(len(ctx.items_received)):
                 raw_item = ctx.items_received[item].item
                 match raw_item:
-                    case 0x1C2000:
-                        pokeball_level += 1
-                        if pokeball_level > 3:
-                            pokeball_level = 3
+                    #case 0x1C2000:
+                    #    pokeball_level += 1
+                    #    if pokeball_level > 3:
+                    #        pokeball_level = 3
                     case 0x1C2002: # Viridian Forest
                         red_stages[0x2] = 0x01
                         blue_stages[0x2] = 0x01
@@ -266,42 +287,74 @@ class PokePinballClient(BizHawkClient):
                     case 0x1C2011: # Indigo Plateau
                         red_stages[0x11] = 0x01
                         blue_stages[0x11] = 0x01
-
+                    case 0x1C2020:
+                        notes_have += 1
 
             
-            balltypes = [0x00, 0x02, 0x03, 0x05]
-            outbound_writes.append((0x147E,bytearray(balltypes[pokeball_level]), "WRAM"))
+            #balltypes = [0x00, 0x02, 0x03, 0x05]
+            #outbound_writes.append((0x147E,bytearray(balltypes[pokeball_level]), "WRAM"))
             outbound_writes.append((0x1AB0,bytearray(red_stages), "WRAM"))
             outbound_writes.append((0x1AD0,bytearray(blue_stages), "WRAM"))
 
                 # Temp Items
-            if len(ctx.items_received) > recv_index:
+            if (len(ctx.items_received) > recv_index) and (ap_ram[0] == 0x00) and (stage_cur == 0x01 or stage_cur == 0x5):
                 raw_item = ctx.items_received[recv_index].item
                 #item_name = ctx.items_received[recv_index].player
                 #logger.warning(f"{ctx.items_received[recv_index]}")
                 match raw_item:
                     case 0x1C2030:   # Extra Ball
-                        lives_cur = game_data[0x9B]
-                        if lives_cur == 9:
-                            lives = 9
-                        else:
-                            lives = lives_cur + 1
-                        outbound_writes.append((0x149B, bytearray([lives]), "WRAM"))
+                        #lives_cur = game_data[0x9B]
+                        #if lives_cur == 9:
+                        #    lives = 9
+                        #else:
+                        #    lives = lives_cur + 1
+                        outbound_writes.append((RECV_PORT, bytearray([0x07]), "WRAM"))
                     case 0x1C2031:   # Pika Power
-                        outbound_writes.append((0x151D, bytearray([0x01]), "WRAM"))
+                        outbound_writes.append((RECV_PORT, bytearray([0x03]), "WRAM"))
                     case 0x1C2032:   # Ball Saver
-                        outbound_writes.append((0x14A4, bytearray([0x14]), "WRAM"))
+                        outbound_writes.append((RECV_PORT, bytearray([0x06]), "WRAM"))
                     case 0x1C2033:   # Slots
                         outbound_writes.append((0x1513, bytearray([0x01]), "WRAM"))
+                        outbound_writes.append((RECV_PORT, bytearray([0x02]), "WRAM"))
+                    case 0x1C2034:  # Catchem Mode
+                        outbound_writes.append((RECV_PORT, bytearray([0x01]), "WRAM"))
+                    case 0x1C2035:  # Evolution Mode
+                        outbound_writes.append((0x1543, bytearray([0x03]), "WRAM"))
+                        outbound_writes.append((RECV_PORT, bytearray([0x02]), "WRAM"))
+                        
+                        if stage_cur == 0x04 or stage_cur == 0x05:
+                            # Blue Field
+                            outbound_writes.append((0x14AC, bytearray([0x04]), "WRAM"))
+                            outbound_writes.append((0x14B3, bytearray([0x00, 0x2E, 0x00, 0x77]), "WRAM"))
+                        elif stage_cur == 0x01 or stage_cur == 0x00:
+                            # Red Field
+                            outbound_writes.append((0x14AC, bytearray([0x00]), "WRAM"))
+                            outbound_writes.append((0x14B3, bytearray([0x00, 0x11, 0x00, 0x23]), "WRAM"))
+                        #
+                        #outbound_writes.append((RECV_PORT, bytearray([0x01]), "WRAM"))
                         #outbound_writes.append((0x1608, bytearray([0x01]), "WRAM"))
+                    case 0x1C2036: # Bonus Multiplier
+                        outbound_writes.append((RECV_PORT, bytearray([0x04]), "WRAM"))
+                    case 0x1C2038: # Ball Upgrade
+                        outbound_writes.append((RECV_PORT, bytearray([0x08]), "WRAM"))
                 if raw_item in item_recv_text:
                     #logger.warning(f"Billboard Msg: {item_recv_text[raw_item]}")
                     send_banner_msg(item_recv_text[raw_item].upper(), outbound_writes)
                 outbound_writes.append((RECV_IDX, (recv_index +1).to_bytes(1, "little") , "WRAM"))
 
+            # Handle notes command
+            if self.research_command:
+                dex_offset = self.research_command
+                if (notes_have > self.notes_used) and pokedex_data[dex_offset] != 0x03:
+                    outbound_writes.append((0x1962+dex_offset, bytearray([0x03]), "WRAM"))
+                    self.notes_used += 1
+                else:
+                    self.research_command = None
             # Handle Goal
             goalclear = False
-            all_needed_mons = False
+            #all_needed_mons = False
+            #score_clear = False
+
             counted_mons = 0
 
             for offset in range(DEX_SIZE):
@@ -311,13 +364,20 @@ class PokePinballClient(BizHawkClient):
                     #counted_mons = 0
                     break
             #logger.warning(f"Counted Mons: {counted_mons}, Needed Mons: {self.dex_need}, Mons_Owned: {mon_owned}")
-            if counted_mons >= DEX_SIZE:
-                all_needed_mons = True
-
-            if (mon_owned >= self.dex_need) and all_needed_mons:
+            if counted_mons >= DEX_SIZE and self.all_needed_mons == False:
+                self.all_needed_mons = True
+                send_banner_msg("POKEDEX COMPLETE!", outbound_writes)
+            if (cur_score >= self.score_need) and (self.score_goal == False):
+                self.score_goal = True
+                send_banner_msg("GOAL SCORE COMPLETE!", outbound_writes)
+            if (mon_owned >= self.dex_need) and self.dex_complete == False:
+                self.dex_complete = True
+                send_banner_msg("RESEARCH COMPLETE!", outbound_writes)
+            if self.dex_complete and self.all_needed_mons and self.score_goal:
                 goalclear = True
             if not ctx.finished_game:
                 if goalclear:
+                    send_banner_msg("CONGRADULATIONS YOU WIN!", outbound_writes)
                     await ctx.send_msgs([{
                         "cmd": "StatusUpdate",
                         "status": ClientStatus.CLIENT_GOAL
@@ -328,3 +388,20 @@ class PokePinballClient(BizHawkClient):
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
             pass
+
+def cmd_notes(self, sub: str = ""):
+    from .Locations import pokemon_names
+    """Allows you to research a dex entry for a pokemon you have access to.
+    example: /research Blastoise"""
+    if self.ctx.game != "Pokemon Pinball":
+        logger.warning(f"This command can only be used while playing Pokemon Pinball")
+        return
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+        logger.warning(f"Must be connected to server and in game.")
+        return
+    elif not sub:
+        logger.warning(f"A Pokemon must be named")
+    elif sub not in pokemon_names:
+        logger.warning(f"Pokemon not found")
+    else:
+        self.ctx.client_handler.research_command = pokemon_names.index(sub)

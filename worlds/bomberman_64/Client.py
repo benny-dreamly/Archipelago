@@ -578,7 +578,7 @@ class Bomb64Client(BizHawkClient):
 
 def cmd_power(self, sub: str = ""):
     """Allows you to reduce your firepower back down to 0, useful for building ice bridges.
-    'down' to reduce, 'up' to return it back to normal or simpley /fire to toggle"""
+    'down' to reduce, 'up' to return it back to normal or simply /fire to toggle"""
     if self.ctx.game != "Bomberman 64":
         logger.warning(f"This command can only be used while playing Bomberman 64")
         return

@@ -19,6 +19,7 @@ import os
 import pkgutil
 import Patch
 import settings
+import math
 
 class PokePinballSettings(settings.Group):
     class RomFile(settings.UserFilePath):
@@ -71,6 +72,10 @@ class PokePinballWorld(World):
                     for x in range(item.num_exist):
                         item_pool.append(self.create_item(name))
 
+        if self.options.include_notes:
+            note_count = math.ceil(self.options.dex_needed.value/10)
+            for x in range(note_count):
+                item_pool.append(self.create_item("Oaks Notes"))
         junk = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
         item_pool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
         self.multiworld.itempool += item_pool

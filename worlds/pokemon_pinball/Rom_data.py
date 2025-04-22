@@ -1021,6 +1021,49 @@ ENCOUNTER_DATA = {
         MON_ID["MEW"],
     ],
 }
+EVO_COORDS = bytearray([
+    0x00, 0x11, 0x00, 0x23,#  Red Field
+    0x00, 0x2E, 0x00, 0x77, # Blue Field
+])
+
+RECIEVE_TABLE = bytearray([
+    # Routine
+    0x7A,0xF5,  # 00 Pika Fallback, shouldn't be called
+    0x40,0x3F,  # 01 Catchem Mode
+    0x7A,0xF5,  # 02 Small Reward (Used to clear port)
+    0x6F,0x83,  # 03 Pika Power
+    0x70,0xC1,  # 04 Bonus Multiplier
+    0x6F,0xF3,  # 05 Big Points
+    0x6F,0x69,  # 06 Ball Saver
+    0x6F,0xA7,  # 07 extra Ball
+    0x70,0x40,  # 08 Ball Upgrade
+    0x7D,0x00,  # 09 Evolution Mode
+    0x00,0x00,  # 0A 
+    0x00,0x00,  # 0B 
+    0x00,0x00,  # 0C 
+    0x00,0x00,  # 0D 
+    0x00,0x00,  # 0E 
+    0x7A,0xF5,  # 0F 
+
+    # ROM Bank
+    0x03,  # Fallback
+    0x03,  # 01 Catchem
+    0x03,  # 02
+    0x03,  # 03 Pika Power
+    0x03,  # 04 Bonus Multiplier
+    0x03,  # 05 Big Points
+    0x03,  # 06 Ball Saver
+    0x03,  # 07 extra Ball
+    0x03,  # 08 Ball Upgrade
+    0x03,  # 09 Evolution Mode
+    0x03,  # 0A
+    0x03,  # 0B
+    0x03,  # 0C
+    0x03,  # 0D
+    0x03,  # 0E
+    0x03,  # 0F
+])
+
 slot_rewards = {
     0xF439: 0x07,
     0xF44D: 0x08,

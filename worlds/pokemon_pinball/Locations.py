@@ -904,11 +904,11 @@ location_data_table: Dict[str, PokePinballLocation] = {
     address=0x1C20A4,
     ),
 
-    "Pokedex Completed": PokePinballLocationData(
-    region="Menu",
-    address=0x1C209F,
-    locked_item="Victory"
-    ),
+    #"Pokedex Completed": PokePinballLocationData(
+    #region="Menu",
+    #address=0x1C209F,
+    #locked_item="Victory"
+    #),
 
 }
 

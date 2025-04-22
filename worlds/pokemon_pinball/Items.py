@@ -17,12 +17,7 @@ class PokePinballItemData(NamedTuple):
     fillweight: Optional[float] = None
 
 item_data_table: Dict[str, PokePinballItemData] = {
-    "Ball Upgrade": PokePinballItemData(
-        code=0x1C2000,
-        type=ItemClassification.progression,
-        num_exist = 3,
-        recv_text = "Recieved Ball Upgrade!"
-    ),
+    
 #    "Viridian City": PokePinballItemData(
 #        code=0x1C2001,
 #        type=ItemClassification.progression,
@@ -118,25 +113,30 @@ item_data_table: Dict[str, PokePinballItemData] = {
         type=ItemClassification.progression,
         num_exist=0
     ),
-
+    "Oaks Notes": PokePinballItemData(
+        code=0x1C2020,
+        type=ItemClassification.useful,
+        recv_text= "Oak is ready to research!",
+        num_exist=0,
+    ),
     "Extra Ball": PokePinballItemData(
         code=0x1C2030,
         type=ItemClassification.filler,
-        fillweight=0.2,
+        fillweight=0.1,
         recv_text= "Recieved Extra Ball!",
         num_exist=0,
     ),
     "Pika Power": PokePinballItemData(
         code=0x1C2031,
         type=ItemClassification.filler,
-        fillweight=0.1,
+        fillweight=0.2,
         recv_text= "Recieved Pika Power!",
         num_exist=0,
     ),
     "Ball Saver": PokePinballItemData(
         code=0x1C2032,
         type=ItemClassification.filler,
-        fillweight=0.8,
+        fillweight=0.5,
         recv_text= "Recieved Ball Saver!",
         num_exist=0,
     ),
@@ -146,6 +146,34 @@ item_data_table: Dict[str, PokePinballItemData] = {
         fillweight=0.5,
         recv_text= "Slots are open!",
         num_exist=0,
+    ),
+    "Catchem Mode": PokePinballItemData(
+        code=0x1C2034,
+        type=ItemClassification.filler,
+        fillweight=0.4,
+        recv_text= "Gotta Catch em All!",
+        num_exist=0,
+    ),
+    "Evolution Mode": PokePinballItemData(
+        code=0x1C2035,
+        type=ItemClassification.filler,
+        fillweight=0.3,
+        #recv_text= "Gotta Catch em All!",
+        num_exist=0,
+    ),
+    "Bonus Multiplier": PokePinballItemData(
+        code=0x1C2036,
+        type=ItemClassification.filler,
+        fillweight=0.4,
+        recv_text= "Bonus Multiplier!",
+        num_exist=0,
+    ),
+    "Ball Upgrade": PokePinballItemData(
+        code=0x1C2008,
+        type=ItemClassification.filler,
+        fillweight=0.5,
+        num_exist = 0,
+        #recv_text = "Recieved Ball Upgrade!"
     ),
     #"Victory": PokePinballItemData(
     #   code=0x1C203F,
