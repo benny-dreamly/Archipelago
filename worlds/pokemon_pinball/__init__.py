@@ -71,7 +71,11 @@ class PokePinballWorld(World):
                 if item.code and item.can_create(self):# and (name in self.included_stages):
                     for x in range(item.num_exist):
                         item_pool.append(self.create_item(name))
-
+        if self.options.extra_start_route:
+            from .Items import route_list
+            routes = route_list
+            random.shuffle(routes)
+            self.multiworld.push_precollected(self.create_item(routes[0]))
         if self.options.include_notes:
             note_count = math.ceil(self.options.dex_needed.value/10)
             for x in range(note_count):

@@ -1047,7 +1047,7 @@ RECIEVE_TABLE = bytearray([
 
     # ROM Bank
     0x03,  # Fallback
-    0x03,  # 01 Catchem
+    0x04,  # 01 Catchem
     0x03,  # 02
     0x03,  # 03 Pika Power
     0x03,  # 04 Bonus Multiplier

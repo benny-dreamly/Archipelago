@@ -321,7 +321,7 @@ class PokePinballClient(BizHawkClient):
                     case 0x1C2035:  # Evolution Mode
                         outbound_writes.append((0x1543, bytearray([0x03]), "WRAM"))
                         outbound_writes.append((RECV_PORT, bytearray([0x02]), "WRAM"))
-                        
+
                         if stage_cur == 0x04 or stage_cur == 0x05:
                             # Blue Field
                             outbound_writes.append((0x14AC, bytearray([0x04]), "WRAM"))
@@ -373,11 +373,12 @@ class PokePinballClient(BizHawkClient):
             if (mon_owned >= self.dex_need) and self.dex_complete == False:
                 self.dex_complete = True
                 send_banner_msg("RESEARCH COMPLETE!", outbound_writes)
-            if self.dex_complete and self.all_needed_mons and self.score_goal:
+            if self.dex_complete and self.all_needed_mons and self.score_goal and not ctx.finished_game:
                 goalclear = True
+                send_banner_msg("CONGRADULATIONS YOU WIN!", outbound_writes)
             if not ctx.finished_game:
                 if goalclear:
-                    send_banner_msg("CONGRADULATIONS YOU WIN!", outbound_writes)
+                    
                     await ctx.send_msgs([{
                         "cmd": "StatusUpdate",
                         "status": ClientStatus.CLIENT_GOAL

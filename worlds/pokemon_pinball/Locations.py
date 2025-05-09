@@ -5,6 +5,7 @@ from BaseClasses import Location
 if TYPE_CHECKING:
     from . import PokePinballWorld
 
+
 pokemon_names = [
     #"None",
     "Bulbasaur",

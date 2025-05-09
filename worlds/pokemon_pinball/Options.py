@@ -50,11 +50,10 @@ class EvoRotations(Range):
 class OakNotes(Toggle):
     """If enables will include an item where you can add a dex entry using the /research [pokemon name] server command"""
 
-class StartingRoutes(Range):
-    """Number of extra travel locations you start the game with"""
-    range_start = 0
-    range_end = 2
-    default = 0
+class StartingRoutes(Toggle):
+    """Adds an extra route you can travel to from the start of the run, 
+    this will not remove the extra copy of that route from the item pool"""
+
 
 class BalanceEncounter(DefaultOnToggle):
     """If enabled, will rebalance the encounter tables to make encountering rarer pokemon more common"""
@@ -248,6 +247,7 @@ class PokePinballOptions(PerGameCommonOptions):
     map_btn: MapMove
     catch_rotation: CatchemRotations
     evo_rotation: EvoRotations
+    extra_start_route: StartingRoutes
     rebalance_encounters: BalanceEncounter
     less_tired: EvoTired
     permanent_ball_saver: BallSaver

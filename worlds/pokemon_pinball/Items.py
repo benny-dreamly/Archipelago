@@ -4,6 +4,25 @@ from BaseClasses import Item, ItemClassification
 # Testing 2
 if TYPE_CHECKING:
     from . import PokePinballWorld
+    
+route_list = [
+    "Viridian Forest",
+    "Pewter City",
+    "Mt Moon",
+    "Cerulean City",
+    "Vermilion City Seaside",
+    "Vermilion City Streets",
+    "Rock Mountain",
+    "Lavender Town",
+    "Celadon City",
+    "Cycling Road",
+    "Fuchsia City",
+    "Safari Zone",
+    "Saffron City",
+    "Seafoam Islands",
+    "Cinnabar Island",
+    "Indigo Plateau"
+]
 
 class PokePinballItem(Item):
     game = "Pokemon Pinball"
