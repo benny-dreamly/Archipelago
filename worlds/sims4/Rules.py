@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 
 from worlds.AutoWorld import LogicMixin
+from ..generic.Rules import set_rule
+
 from .Names import SkillNames, CareerNames, AspirationNames
 from .Options import Sims4Options
-from ..generic.Rules import set_rule
 
 
 if TYPE_CHECKING:
