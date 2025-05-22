@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from worlds.AutoWorld import LogicMixin
-from worlds.sims4.Names import SkillNames, CareerNames, AspirationNames
+from .Names import SkillNames, CareerNames, AspirationNames
 from .Options import Sims4Options
 from ..generic.Rules import set_rule
 
