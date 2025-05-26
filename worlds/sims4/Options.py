@@ -108,4 +108,4 @@ class Sims4Options(PerGameCommonOptions):
     stuff_packs: StuffPacks
     cas_kits: CASKits
     build_kits: BuildKits
-    start_inventory_from_pool: StartInventoryPool
+    start_inventory: StartInventoryPool
