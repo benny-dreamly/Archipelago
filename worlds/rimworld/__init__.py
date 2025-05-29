@@ -47,6 +47,9 @@ class RimworldWorld(World):
     craftable_item_tech_level = {}
     craft_location_recipes = {}
 
+    building_name_to_prereqs = {}
+    monument_data = {}
+
     location_counts = {}
     max_item_id = 0
 
@@ -82,7 +85,16 @@ class RimworldWorld(World):
             if (prerequisites is not None):
                 for prereq in prerequisites:
                     craftable_item_id_to_prereqs[itemId].append(prereq.text)
-
+        elif (defType == "BuildingThingDef"):
+            defName = item.find("defName").text
+            defName = defName.replace("Building", "")
+            item_name_to_expansion[defName] = expansion
+            building_name_to_prereqs[defName] = []
+            prerequisites = item.find("Prerequisites")
+            building_name_to_prereqs[defName] = []
+            if (prerequisites is not None):
+                for prereq in prerequisites:
+                    building_name_to_prereqs[defName].append(prereq.text)
 
 
 
@@ -157,7 +169,12 @@ class RimworldWorld(World):
             except TypeError:
                 pass
 
-        slot_data["craft_recipes"] = self.craft_location_recipes
+        slot_data["craft_recipes"] = self.craft_location_recipes[self.player]
+
+        victoryCondition = getattr(self.options, "VictoryCondition")
+        if (victoryCondition == 5):
+            slot_data["monument_buildings"] = self.monument_data[self.player]["MonumentBuildings"]
+            slot_data["monument_wealth"] = self.monument_data[self.player]["MonumentWealthRequirement"]
 
         return slot_data
 
@@ -211,6 +228,20 @@ class RimworldWorld(World):
                 continue
             possibleItems[itemId] = itemName
 
+        victoryCondition = getattr(self.options, "VictoryCondition")
+        if (victoryCondition == 5):
+            possibleBuildings = []
+            for itemName in self.building_name_to_prereqs.keys():
+                if royalty_disabled and self.item_name_to_expansion[itemName] == "Ludeon.RimWorld.Royalty":
+                    continue
+                if ideology_disabled and self.item_name_to_expansion[itemName] == "Ludeon.RimWorld.Ideology":
+                    continue
+                if biotech_disabled and self.item_name_to_expansion[itemName] == "Ludeon.RimWorld.Biotech":
+                    continue
+                if anomaly_disabled and self.item_name_to_expansion[itemName] == "Ludeon.RimWorld.Anomaly":
+                    continue
+                possibleBuildings.append(itemName)
+
         item_weights = {}
         total_weight = 0
         neolithic_weight = getattr(self.options, "NeolithicItemWeight")
@@ -234,6 +265,7 @@ class RimworldWorld(World):
                 item_weights[itemId] = anomaly_weight
             total_weight += item_weights[itemId]
 
+        self.craft_location_recipes[self.player] = {}
         for i in range(craftLocationCount):
             locationName = "Craft Location " + str(i)
             locationId = self.location_name_to_id[locationName]
@@ -261,7 +293,7 @@ class RimworldWorld(World):
             for item in prerequisites:
                 self.progression_items[self.player].add(item)
             self.location_prerequisites[self.player][locationName] = prerequisites
-            self.craft_location_recipes[locationId] = [itemName1, itemName2]
+            self.craft_location_recipes[self.player][locationId] = [itemName1, itemName2]
             # print(self.player_name + "'s " + locationName + ": " + itemName1 + " + " + itemName2 + "(" + str(prerequisites) + ")")
             location_pool[locationName] = locationId
 
@@ -270,7 +302,6 @@ class RimworldWorld(World):
         for locationName in location_pool:
             self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
 
-        victoryCondition = getattr(self.options, "VictoryCondition")
         for itemList in generic_victory_requirements:
             for item in itemList: 
                 self.progression_items[self.player].add(item)
@@ -304,6 +335,20 @@ class RimworldWorld(World):
                     self.progression_items[self.player].add(item)
             self.location_prerequisites[self.player]["Anomaly Victory"] = []
             main_region.locations.append(RimworldLocation(self.player, "Anomaly Victory", None, main_region))
+        if (victoryCondition == 5):
+            self.monument_data[self.player] = {}
+            self.monument_data[self.player]["MonumentBuildings"] = {}
+            self.monument_data[self.player]["MonumentBuildings"]["SculptureArchipelago"] = getattr(self.options, "MonumentStatueCount").value
+            self.monument_data[self.player]["MonumentWealthRequirement"] = getattr(self.options, "MonumentWealthRequirement").value
+            self.location_prerequisites[self.player]["Monument Victory"] = []
+            main_region.locations.append(RimworldLocation(self.player, "Monument Victory", None, main_region))
+            otherBuildingCount = getattr(self.options, "MonumentOtherBuildingRequirementCount").value
+            for _ in range(otherBuildingCount):
+                requiredBuilding = random.choice(possibleBuildings)
+                possibleBuildings.remove(requiredBuilding)
+                self.monument_data[self.player]["MonumentBuildings"][requiredBuilding] = 1
+                for prereq in self.building_name_to_prereqs[requiredBuilding]:
+                    self.progression_items[self.player].add(prereq)
 
         self.multiworld.regions.append(main_region)
 
@@ -352,6 +397,12 @@ class RimworldWorld(World):
             else:
                 itemClassification = ItemClassification.useful
             itempool.append(self.create_item(item, itemClassification))
+
+        victoryCondition = getattr(self.options, "VictoryCondition")
+        if (victoryCondition == 5):
+            statueCount = getattr(self.options, "MonumentStatueCount").value
+            for i in range(statueCount):
+                itempool.append(self.create_item("Archipelago Sculpture", ItemClassification.progression))
         
         guaranteedTrapCount = getattr(self.options, "RaidTrapCount")
         for i in range(guaranteedTrapCount):
@@ -365,6 +416,7 @@ class RimworldWorld(World):
                     itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
                 else:
                     itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.filler))
+
         self.multiworld.itempool += itempool
 
     def set_rules(self) -> None:
@@ -411,4 +463,18 @@ class RimworldWorld(World):
                 add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
             for victoryRequirement in anomaly_victory_requirements:
                 add_rule(victoryLocation, lambda state, req = victoryRequirement: state.has_any(req, self.player), "and")
+            victoryLocation.place_locked_item(self.create_event("Victory"))
+        if (victoryCondition == 5):
+            victoryLocation = self.get_location("Monument Victory")
+            statueCount = getattr(self.options, "MonumentStatueCount").value
+            add_rule(victoryLocation, lambda state, player = self.player, statCount = statueCount: state.has("Archipelago Sculpture", player, statCount), "and")
+            for buildingName in self.monument_data[self.player]["MonumentBuildings"].keys():
+                if buildingName == "SculptureArchipelago":
+                    continue
+
+                for prereq in self.building_name_to_prereqs[buildingName]:
+                    if prereq == "AnyElectricity":
+                        add_rule(victoryLocation, lambda state: state.has_any(any_electricity_items, self.player), "and")
+                    else:
+                        add_rule(victoryLocation, lambda state, req = prereq: state.has(req, self.player), "and")
             victoryLocation.place_locked_item(self.create_event("Victory"))

@@ -78,7 +78,7 @@ class PercentFillerAsTraps(Range):
 
 class VictoryCondition(Choice):
 	"""
-	The way to win. Choosing "any" will ensure one of these is considered "in-logic." They also require a "basic" set of research that isn't strictly required to win, so royalty will consider pianos and noble apparel in logic, while anomaly will consider basic bioferrite research in logic.
+	The way to win. Choosing "any" will ensure one of these is considered "in-logic." They also require a "basic" set of research that isn't strictly required to win, so royalty will consider pianos and noble apparel in logic, while anomaly will consider basic bioferrite research in logic. The monument victory condition will require building a room with special archipelago statues and some number of randomized room conditions.
 	"""
 	display_name = "Victory Condition"
 	option_any = 0
@@ -86,7 +86,34 @@ class VictoryCondition(Choice):
 	option_royalty = 2
 	option_archonexus = 3
 	option_anomaly = 4
+	option_monument = 5
 	default = 1
+
+class MonumentStatueCount(Range):
+	"""
+	If the monument victory condition is enabled, this specifies how many Archipelago statues will be required to create a monument and win the game.
+	"""
+	display_name = "Monument Statue Count"
+	range_start = 1
+	range_end = 30
+	default = 5
+
+class MonumentOtherBuildingRequirementCount(Range):
+	"""
+	If the monument victory condition is enabled, this specifies how many non-statue building requirements will be required to create a monument and win the game.
+	"""
+	display_name = "Monument Other Building Requirement Count"
+	range_start = 0
+	range_end = 20
+	default = 5
+
+class MonumentWealthRequirement(Range):
+	"""
+	If the monument victory condition is enabled, this specifies how much wealth is required in the monument room to win.
+	"""
+	range_start = 0
+	range_end = 350000
+	default = 10000
 
 class RoyaltyEnabled(Choice):
 	"""
@@ -199,6 +226,9 @@ class RimworldOptions(PerGameCommonOptions):
     RaidTrapCount: RaidTrapCount
     PercentFillerAsTraps: PercentFillerAsTraps
     VictoryCondition: VictoryCondition
+    MonumentStatueCount: MonumentStatueCount
+    MonumentOtherBuildingRequirementCount: MonumentOtherBuildingRequirementCount
+    MonumentWealthRequirement: MonumentWealthRequirement
     RoyaltyEnabled: RoyaltyEnabled
     IdeologyEnabled: IdeologyEnabled
     BiotechEnabled: BiotechEnabled

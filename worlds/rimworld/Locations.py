@@ -2,7 +2,7 @@ from BaseClasses import Location
 
 # -----------------------------------------------
 
-base_location_id = 5197648000
+base_location_id = 1
 location_id_gap = 1000
 
 generic_victory_requirements = [["Advanced Fabrication"],
