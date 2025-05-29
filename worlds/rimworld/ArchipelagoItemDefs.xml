@@ -6424,7 +6424,7 @@
     <DefType>BuildingThingDef</DefType>
     <defName>GeneAssemblerBuilding</defName>
     <label>Gene Assembler</label>
-    <RequiredExpansion>Ludeon.RimWorld</RequiredExpansion>
+    <RequiredExpansion>Ludeon.RimWorld.Biotech</RequiredExpansion>
     <Prerequisites>
       <li>Xenogenetics</li>
       <li>Electricity</li>
@@ -6437,7 +6437,7 @@
     <DefType>BuildingThingDef</DefType>
     <defName>GeneBankBuilding</defName>
     <label>Gene Bank</label>
-    <RequiredExpansion>Ludeon.RimWorld</RequiredExpansion>
+    <RequiredExpansion>Ludeon.RimWorld.Biotech</RequiredExpansion>
     <Prerequisites>
       <li>Xenogenetics</li>
       <li>Electricity</li>
@@ -6450,7 +6450,7 @@
     <DefType>BuildingThingDef</DefType>
     <defName>GeneExtractorBuilding</defName>
     <label>Gene Extractor</label>
-    <RequiredExpansion>Ludeon.RimWorld</RequiredExpansion>
+    <RequiredExpansion>Ludeon.RimWorld.Biotech</RequiredExpansion>
     <Prerequisites>
       <li>Xenogenetics</li>
       <li>Electricity</li>
@@ -6794,7 +6794,7 @@
     <DefType>BuildingThingDef</DefType>
     <defName>BioferriteHarvesterBuilding</defName>
     <label>Bioferrite Harvester</label>
-    <RequiredExpansion>Ludeon.RimWorld</RequiredExpansion>
+    <RequiredExpansion>Ludeon.RimWorld.Anomaly</RequiredExpansion>
     <Prerequisites>
       <li>Bioferrite Harvester</li>
       <li>Fabrication</li>
@@ -6807,7 +6807,7 @@
     <DefType>BuildingThingDef</DefType>
     <defName>PsychicRitualSpotBuilding</defName>
     <label>Psychic Ritual Spot</label>
-    <RequiredExpansion></RequiredExpansion>
+    <RequiredExpansion>Ludeon.RimWorld.Anomaly</RequiredExpansion>
     <Prerequisites>
       <li>Void Provocation</li>
     </Prerequisites>

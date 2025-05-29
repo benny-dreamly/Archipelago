@@ -62,8 +62,11 @@ class RimworldWorld(World):
             max_item_id = int(itemId)
         defType = item.find("DefType").text
         expansion = item.find("RequiredExpansion").text
-        item_name_to_id[itemName] = int(itemId)
         item_name_to_expansion[itemName] = expansion
+
+        if (defType == "ResearchProjectDef" or defType == "IncidentDef"):
+            item_name_to_id[itemName] = int(itemId)
+
         if (defType == "ResearchProjectDef"):
             research_items[itemName] = int(itemId)
             researchTags = item.find("Tags")
@@ -100,7 +103,8 @@ class RimworldWorld(World):
 
 
     baseLocationId = base_location_id
-    for i in range(max_research_locations):
+    # Make some extra basic locations, they can be used as filler.
+    for i in range(location_id_gap):
         locationName = "Basic Research Location "+ str(i)
         locationId = i + baseLocationId
         location_name_to_id[locationName] = locationId
@@ -118,7 +122,7 @@ class RimworldWorld(World):
         location_name_to_id[locationName] = locationId
 
     baseLocationId = baseLocationId + location_id_gap
-    for i in range(max_research_locations):
+    for i in range(max_research_locations * 2):
         locationName = "Craft Location " + str(i)
         locationId = i + baseLocationId
         location_name_to_id[locationName] = locationId
@@ -156,6 +160,10 @@ class RimworldWorld(World):
         if not anomaly_enabled and victoryCondition == 4:
             raise OptionError("Win condition cannot be Anomaly while Anomaly is disabled!")
 
+        self.create_regions_early()
+        self.create_items_early()
+        self.create_filler()
+
     def fill_slot_data(self):
         slot_data = {}
 
@@ -178,7 +186,7 @@ class RimworldWorld(World):
 
         return slot_data
 
-    def create_regions(self) -> None:
+    def create_regions_early(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
         location_pool: Dict[str, int] = {}
@@ -360,7 +368,7 @@ class RimworldWorld(World):
     def create_event(self, event: str) -> RimworldItem:
         return RimworldItem(event, ItemClassification.progression, None, self.player)
 
-    def create_items(self) -> None:
+    def create_items_early(self) -> None:
         itempool = []
         royalty_disabled = not getattr(self.options, "RoyaltyEnabled")
         ideology_disabled = not getattr(self.options, "IdeologyEnabled")
@@ -408,16 +416,31 @@ class RimworldWorld(World):
         for i in range(guaranteedTrapCount):
             itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
 
-        trapRandomChance = getattr(self.options, "PercentFillerAsTraps")
-        if len(itempool) < self.location_counts[self.player]:
-            logger.warning("Player " + self.player_name + " had " + str(len(itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
-            while len(itempool) < self.location_counts[self.player]:
-                if random.randrange(100) < trapRandomChance:
-                    itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
-                else:
-                    itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.filler))
-
         self.multiworld.itempool += itempool
+
+    def create_filler(self) -> None:
+        trapRandomChance = getattr(self.options, "PercentFillerAsTraps")
+        if len(self.multiworld.itempool) < self.location_counts[self.player]:
+            logger.warning("Player " + self.player_name + " had " + str(len(self.multiworld.itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
+            while len(self.multiworld.itempool) < self.location_counts[self.player]:
+                if random.randrange(100) < trapRandomChance:
+                    self.multiworld.itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
+                else:
+                    self.multiworld.itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.filler))
+        if len(self.multiworld.itempool) > self.location_counts[self.player]:
+            logger.warning("Player " + self.player_name + " had " + str(len(self.multiworld.itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding basic research as filler.")
+            main_region = self.multiworld.get_region("Main", self.player)
+            basicResearchLocationCount = getattr(self.options, "BasicResearchLocationCount").value
+            i = 1
+            location_pool: Dict[str, int] = {}
+            while len(self.multiworld.itempool) > self.location_counts[self.player] + len(location_pool):
+                locationName = "Basic Research Location " + str(basicResearchLocationCount + i)
+                location_pool[locationName] = self.location_name_to_id[locationName]
+                i += 1
+            main_region.add_locations(location_pool, RimworldLocation)
+            for locationName in location_pool:
+                self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
+
 
     def set_rules(self) -> None:
         for location in self.multiworld.get_locations(self.player):

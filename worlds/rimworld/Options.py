@@ -9,7 +9,7 @@ class BasicResearchLocationCount(Range):
 	The number of basic research locations in the game. These will only require the basic research bench.
 	"""
 	display_name = "Basic Research Location Count"
-	range_start = 0
+	range_start = 10
 	range_end = max_research_locations
 	default = 35
 
@@ -55,7 +55,7 @@ class CraftLocationCount(Range):
 	"""
 	display_name = "Craft Location Count"
 	range_start = 0
-	range_end = 500
+	range_end = max_research_locations * 2
 	default = 51
 
 class RaidTrapCount(Range):
