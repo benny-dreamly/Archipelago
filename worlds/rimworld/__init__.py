@@ -501,3 +501,25 @@ class RimworldWorld(World):
                     else:
                         add_rule(victoryLocation, lambda state, req = prereq: state.has(req, self.player), "and")
             victoryLocation.place_locked_item(self.create_event("Victory"))
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        if (self.player in self.monument_data):
+            monument_buildings_count = len(self.monument_data[self.player]["MonumentBuildings"])
+            if ("SculptureArchipelago" in self.monument_data[self.player]["MonumentBuildings"]):
+                monument_buildings_count -= 1
+            if (monument_buildings_count > 0):
+                spoiler_handle.write("Monument Requirements:\n")
+                for key, _ in self.monument_data[self.player]["MonumentBuildings"].items():
+                    if (key != "SculptureArchipelago"):
+                        spoiler_handle.write(key+ ", ")
+            spoiler_handle.write("\n\n")
+
+        if (len(self.craft_location_recipes[self.player]) > 0):
+            spoiler_handle.write("Crafting Recipes:\n")
+            for lodIc, ingredients in self.craft_location_recipes[self.player].items():
+                for i in range(len(ingredients)):
+                    spoiler_handle.write(ingredients[i])
+                    if (i < len(ingredients) - 1):
+                        spoiler_handle.write(", ")
+                spoiler_handle.write("\n")
+            spoiler_handle.write("\n")
