@@ -39,6 +39,7 @@ class RimworldWorld(World):
     tribal_tech_items = []
     crashlanded_tech_items = []
     progression_items = {}
+    item_counts = {}
 
     location_prerequisites = {}
 
@@ -370,6 +371,7 @@ class RimworldWorld(World):
 
     def create_items_early(self) -> None:
         itempool = []
+        self.item_counts[self.player] = 0
         royalty_disabled = not getattr(self.options, "RoyaltyEnabled")
         ideology_disabled = not getattr(self.options, "IdeologyEnabled")
         biotech_disabled = not getattr(self.options, "BiotechEnabled")
@@ -405,35 +407,39 @@ class RimworldWorld(World):
             else:
                 itemClassification = ItemClassification.useful
             itempool.append(self.create_item(item, itemClassification))
+            self.item_counts[self.player] += 1
 
         victoryCondition = getattr(self.options, "VictoryCondition")
         if (victoryCondition == 5):
             statueCount = getattr(self.options, "MonumentStatueCount").value
             for i in range(statueCount):
+                self.item_counts[self.player] += 1
                 itempool.append(self.create_item("Archipelago Sculpture", ItemClassification.progression))
         
         guaranteedTrapCount = getattr(self.options, "RaidTrapCount")
         for i in range(guaranteedTrapCount):
+            self.item_counts[self.player] += 1
             itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
 
         self.multiworld.itempool += itempool
 
     def create_filler(self) -> None:
         trapRandomChance = getattr(self.options, "PercentFillerAsTraps")
-        if len(self.multiworld.itempool) < self.location_counts[self.player]:
+        if self.item_counts[self.player] < self.location_counts[self.player]:
             logger.warning("Player " + self.player_name + " had " + str(len(self.multiworld.itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
-            while len(self.multiworld.itempool) < self.location_counts[self.player]:
+            while self.item_counts[self.player] < self.location_counts[self.player]:
+                self.item_counts[self.player] += 1
                 if random.randrange(100) < trapRandomChance:
                     self.multiworld.itempool.append(self.create_item("Enemy Raid", ItemClassification.trap))
                 else:
                     self.multiworld.itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.filler))
-        if len(self.multiworld.itempool) > self.location_counts[self.player]:
+        if self.item_counts[self.player] > self.location_counts[self.player]:
             logger.warning("Player " + self.player_name + " had " + str(len(self.multiworld.itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding basic research as filler.")
             main_region = self.multiworld.get_region("Main", self.player)
             basicResearchLocationCount = getattr(self.options, "BasicResearchLocationCount").value
             i = 1
             location_pool: Dict[str, int] = {}
-            while len(self.multiworld.itempool) > self.location_counts[self.player] + len(location_pool):
+            while self.item_counts[self.player] > self.location_counts[self.player] + len(location_pool):
                 locationName = "Basic Research Location " + str(basicResearchLocationCount + i)
                 location_pool[locationName] = self.location_name_to_id[locationName]
                 i += 1
@@ -502,20 +508,20 @@ class RimworldWorld(World):
                         add_rule(victoryLocation, lambda state, req = prereq: state.has(req, self.player), "and")
             victoryLocation.place_locked_item(self.create_event("Victory"))
 
-    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+    def write_spoiler_header(self, spoiler_handle: typing.TextIO) -> None:
         if (self.player in self.monument_data):
             monument_buildings_count = len(self.monument_data[self.player]["MonumentBuildings"])
             if ("SculptureArchipelago" in self.monument_data[self.player]["MonumentBuildings"]):
                 monument_buildings_count -= 1
             if (monument_buildings_count > 0):
-                spoiler_handle.write("Monument Requirements:\n")
+                spoiler_handle.write("\nMonument Requirements:\n")
                 for key, _ in self.monument_data[self.player]["MonumentBuildings"].items():
                     if (key != "SculptureArchipelago"):
                         spoiler_handle.write(key+ ", ")
             spoiler_handle.write("\n\n")
 
         if (len(self.craft_location_recipes[self.player]) > 0):
-            spoiler_handle.write("Crafting Recipes:\n")
+            spoiler_handle.write("\nCrafting Recipes:\n")
             for lodIc, ingredients in self.craft_location_recipes[self.player].items():
                 for i in range(len(ingredients)):
                     spoiler_handle.write(ingredients[i])
