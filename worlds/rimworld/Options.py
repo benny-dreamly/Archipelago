@@ -161,6 +161,25 @@ class StartingResearchLevel(Choice):
 	option_crashlanded = 2
 	default = 0
 
+class ResearchScoutType(Choice):
+	"""
+	How research project scouting works - this will show you what items research projects will send. "None" will show no information for all research. "Summary" options will show the player name and item type (Chris's progressive item). "Fullitem" options will show player name and item name (Chris's progressive item, Master Sword). "Available" options will show only if the research can be started now. "All" options will hint all research.
+	"""
+	option_none = 0
+	option_summary_available = 1
+	option_fullitem_available = 2
+	option_summary_all = 3
+	option_fullitem_all = 4
+	default = 2
+
+class ResearchScoutSecretTraps(Choice):
+	"""
+	If turned on, the game will lie about scouted trap items. If the scout type shows the player and item name, all traps will be replaced by a random progression item from another player (instead of showing Alex's freeze trap, it will show Chris's Master Sword.) If the scout type only shows item type, it will simply show traps as progression items.
+	"""
+	option_off = 0
+	option_on = 1
+	default = 0
+
 class NeolithicItemWeight(Range):
 	"""
 	How likely it will be that low/no-tech items are chosen for crafting locations. Higher weights make this category more likely. 0 will exempt it from the list. Note that these categories are slightly different than the vanilla "Tech Level," to help account for how challenging they are to craft.
@@ -234,6 +253,8 @@ class RimworldOptions(PerGameCommonOptions):
     BiotechEnabled: BiotechEnabled
     AnomalyEnabled: AnomalyEnabled
     StartingResearchLevel: StartingResearchLevel
+    ResearchScoutType: ResearchScoutType
+    ResearchScoutSecretTraps: ResearchScoutSecretTraps
     NeolithicItemWeight: NeolithicItemWeight
     MedievalItemWeight: MedievalItemWeight
     IndustrialItemWeight: IndustrialItemWeight
@@ -248,7 +269,8 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 		for option in {
 			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
 			ResearchBaseCost, ResearchMaxPrerequisites, CraftLocationCount, VictoryCondition,
-			RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled, StartingResearchLevel
+			RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled, StartingResearchLevel,
+			ResearchScoutType, ResearchScoutSecretTraps
 		}
 	}
 }
