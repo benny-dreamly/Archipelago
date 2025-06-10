@@ -179,6 +179,17 @@ class RimworldWorld(World):
                 pass
 
         slot_data["craft_recipes"] = self.craft_location_recipes[self.player]
+        secretTraps = getattr(self.options, "ResearchScoutSecretTraps").value
+        if (secretTraps):
+            fake_trap_options = []
+            for item in self.multiworld.itempool:
+                if item.classification == ItemClassification.progression or item.classification == ItemClassification.progression_skip_balancing:
+                    player_name = self.multiworld.get_player_name(item.player)
+                    fake_trap_options.append(player_name + "," + item.name)
+
+            random.shuffle(fake_trap_options)
+            del fake_trap_options[50:]
+            slot_data["fake_trap_options"] = fake_trap_options
 
         victoryCondition = getattr(self.options, "VictoryCondition")
         if (victoryCondition == 5):
