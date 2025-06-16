@@ -33,6 +33,7 @@ class RimworldWorld(World):
     item_name_to_id = {}
     location_name_to_id = {}
     research_items = {}
+    basic_research_counts = {}
 
     # Yes, yes, I know this series of dictionaries is bad. I'll probably fix it eventually.
     item_name_to_expansion = {}
@@ -177,6 +178,9 @@ class RimworldWorld(World):
                 options[option_name] = optionvalue
             except TypeError:
                 pass
+
+        if (self.player in self.basic_research_counts):
+            options["BasicResearchLocationCount"] = self.basic_research_counts[self.player]
 
         slot_data["craft_recipes"] = self.craft_location_recipes[self.player]
         secretTraps = getattr(self.options, "ResearchScoutSecretTraps").value
@@ -450,10 +454,12 @@ class RimworldWorld(World):
             basicResearchLocationCount = getattr(self.options, "BasicResearchLocationCount").value
             i = 1
             location_pool: Dict[str, int] = {}
+            self.basic_research_counts[self.player] = basicResearchLocationCount
             while self.item_counts[self.player] > self.location_counts[self.player] + len(location_pool):
                 locationName = "Basic Research Location " + str(basicResearchLocationCount + i)
                 location_pool[locationName] = self.location_name_to_id[locationName]
                 i += 1
+                self.basic_research_counts[self.player] += 1
             main_region.add_locations(location_pool, RimworldLocation)
             for locationName in location_pool:
                 self.multiworld.get_location(locationName, self.player).progress_type = LocationProgressType.DEFAULT
