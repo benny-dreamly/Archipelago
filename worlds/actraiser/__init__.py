@@ -89,7 +89,7 @@ class ActraiserWorld(World):
             else:
                 total_crystals = self.options.crystal_count.value
             if self.options.boss_crystal:
-                total_crystals = total_crystals - self.options.boss_crystal.value
+                total_crystals = total_crystals - 6
             for x in range(total_crystals):
                 item_pool.append(self.create_item("Dheim Crystal"))
                 #pool_size -= 1
