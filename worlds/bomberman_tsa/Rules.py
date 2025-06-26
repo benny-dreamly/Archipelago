@@ -19,7 +19,7 @@ def can_destroy_with_immunity(state, player, immunities):
     return False
 
 def can_open_car(state, player):
-    return lambda state: state.has("Guardian Glove", player) or state.has("Earth Stone", player)
+    return lambda state: state.has("Guardian Glove", player) or (state.has("Earth Stone", player) and state.has("FireUp", player, 2))
 
 def has_all_guardian(state, player): # Debug, checks to see if you have all the guardian armor
     return state.has("Guardian Glove", player) and state.has("Guardian Helmet", player) and state.has("Guardian Boots", player)

@@ -57,6 +57,7 @@ class BombHWorld(World):
 
     game = "Bomberman Hero"
     data_version = 1
+    required_client_version = (0, 5, 1)
     web = BombHWebWorld()
     options: BombHOptions
     options_dataclass = BombHOptions
