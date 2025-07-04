@@ -430,6 +430,10 @@ class RimworldWorld(World):
             for i in range(statueCount):
                 self.item_counts[self.player] += 1
                 itempool.append(self.create_item("Archipelago Sculpture", ItemClassification.progression))
+
+        colonistItems = getattr(self.options, "ColonistItemCount").value
+        for i in range(colonistItems):
+            itempool.append(self.create_item("Colonist", ItemClassification.useful))
         
         guaranteedTrapCount = getattr(self.options, "RaidTrapCount")
         for i in range(guaranteedTrapCount):
