@@ -83,6 +83,96 @@ class BombermanColor(Choice):
     #option_blue = 3
     default = 0
 
+class BomberHead(Choice):
+    """Changes Bomberman's head model"""
+    option_bomber = 0xFF
+    option_knight = 0x56
+    option_dragon = 0x53
+    option_iron =   0x55
+    option_cat =    0x52
+    option_girl =   0x54
+    option_cool =   0x51
+    option_chicken =0x58
+    option_samurai =0x59
+    option_clown =  0x57
+    option_gold =   0x50
+    default =       0xFF
+
+class BomberBody(Choice):
+    """Changes Bomberman's body model"""
+    option_bomber = 0xFF
+    option_knight = 0x60
+    option_dragon = 0x5D
+    option_iron =   0x5F
+    option_cat =    0x5C
+    option_girl =   0x5E
+    option_cool =   0x5B
+    option_chicken =0x62
+    option_samurai =0x63
+    option_clown =  0x61
+    option_gold =   0x5A
+    default =       0xFF
+
+class BomberArmLeft(Choice):
+    """Changes Bomberman's left arm model"""
+    option_bomber = 0xFF
+    option_knight = 0x6A
+    option_dragon = 0x67
+    option_iron =   0x69
+    option_cat =    0x66
+    option_girl =   0x68
+    option_cool =   0x65
+    option_chicken =0x6C
+    option_samurai =0x6D
+    option_clown =  0x6B
+    option_gold =   0x64
+    default =       0xFF
+
+class BomberArmRight(Choice):
+    """Changes Bomberman's right arm model"""
+    option_bomber = 0xFF
+    option_knight = 0x7E
+    option_dragon = 0x7B
+    option_iron =   0x7D
+    option_cat =    0x7A
+    option_girl =   0x7C
+    option_cool =   0x79
+    option_chicken =0x80
+    option_samurai =0x81
+    option_clown =  0x7F
+    option_gold =   0x78
+    default =       0xFF
+
+class BomberLegLeft(Choice):
+    """Changes Bomberman's left leg model"""
+    option_bomber = 0xFF
+    option_knight = 0x74
+    option_dragon = 0x71
+    option_iron =   0x73
+    option_cat =    0x70
+    option_girl =   0x72
+    option_cool =   0x6F
+    option_chicken =0x76
+    option_samurai =0x77
+    option_clown =  0x75
+    option_gold =   0x6E
+    default =       0xFF
+
+class BomberLegRight(Choice):
+    """Changes Bomberman's right leg model"""
+    option_bomber = 0xFF
+    option_knight = 0x88
+    option_dragon = 0x85
+    option_iron =   0x87
+    option_cat =    0x84
+    option_girl =   0x86
+    option_cool =   0x83
+    option_chicken =0x8A
+    option_samurai =0x8B
+    option_clown =  0x89
+    option_gold =   0x82
+    default =       0xFF
+
 @dataclass
 class Bomb64Options(PerGameCommonOptions):
     #start_inventory_from_pool: StartInventoryPool
@@ -98,3 +188,9 @@ class Bomb64Options(PerGameCommonOptions):
     palace_on: IncludePalace
     enemy_ai: RandomEnemyAI
     death_link: DeathLink
+    head_part: BomberHead
+    body_part: BomberBody
+    arm_left_part: BomberArmLeft
+    arm_right_part: BomberArmRight
+    leg_left_part: BomberLegLeft
+    leg_right_part: BomberLegRight
