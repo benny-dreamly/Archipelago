@@ -6,7 +6,7 @@ from ..generic.Rules import add_rule
 def set_rules(multiworld, options, player):
 
     #hardlock_modules
-    hardlock_modules = self.options.hardlock_modules(player)
+    hardlock_modules = self.options.hardlock_modules
 
     # sections rules
     menu_region = multiworld.get_region("Menu", player)
