@@ -9,17 +9,29 @@ def has_key_miracles(state, player):
 def has_all_key_items(state, player):
     return state.has("Loaf of Bread", player) and state.has("Wheat", player) and state.has("Herb", player) and state.has("Bridge", player) and state.has("Music", player) and state.has("Magic Skull", player) and state.has("Fleece", player)
 
+def can_reach_region_count(state, player, regcount):
+    return (sum(
+        (state.can_reach_region("Fillmore Forest", player),
+        state.can_reach_region("Bloodpool Bridge", player),
+        state.can_reach_region("Kasandora Desert", player),
+        state.can_reach_region("Aitos Mountain", player),
+        state.can_reach_region("Marahna Swamp", player),
+        state.can_reach_region("Northwall Cave", player),)
+    ) >= regcount)
+
 
 def has_max_civ(state, player):
     return state.has("Fillmore Advancement", player ,2) and state.has("Bloodpool Advancement", player,2) and state.has("Kasandora Advancement", player,2) and state.has("Aitos Advancement", player,2) and state.has("Marahna Advancement", player,2) and state.has("Northwall Advancement", player,2) 
 
-def get_region_rules(player):
+def get_region_rules(player, act_levels):
     return {
+        "Sky -> Fillmore Forest":
+            lambda state: state.has("Level Up", player, act_levels[0]),
         "Fillmore -> Fillmore Chasm":
             lambda state: state.has("Lightning", player),
 
         "Sky -> Bloodpool Bridge":
-            lambda state: state.has("Level Up", player),
+            lambda state: state.has("Level Up", player, act_levels[1]),
         "Bloodpool Bridge -> Bloodpool":
             lambda state: state.has("Loaf of Bread", player),
         "Bloodpool -> Bloodpool Castle":
@@ -27,7 +39,7 @@ def get_region_rules(player):
         
 
         "Sky -> Kasandora Desert":
-            lambda state: state.has("Level Up", player, 3),
+            lambda state: state.has("Level Up", player, act_levels[2]),
         "Kasandora Desert -> Kasandora":
             lambda state: state.has("Rain", player),
         #"Kasandora -> Kasandora Pyramid":
@@ -35,7 +47,7 @@ def get_region_rules(player):
         
 
         "Sky -> Aitos Mountain":
-            lambda state: state.has("Level Up", player, 5),
+            lambda state: state.has("Level Up", player, act_levels[3]),
         "Aitos Mountain -> Aitos":
             lambda state: state.has("Lightning", player) and state.has("Wind", player), 
         # Wind so that you don't softlock from building a windmill too early.
@@ -44,14 +56,14 @@ def get_region_rules(player):
         
 
         "Sky -> Marahna Swamp":
-            lambda state: state.has("Level Up", player, 7),
+            lambda state: state.has("Level Up", player, act_levels[4]),
         "Marahna Swamp -> Marahna":
             lambda state: state.has("Lightning", player),
         "Marahna -> Marahna Temple":
             lambda state: state.has("Earthquake", player) and state.has("Sun", player),
 
         "Sky -> Northwall Cave":
-            lambda state: state.has("Level Up", player, 9),
+            lambda state: state.has("Level Up", player, act_levels[5]),
         "Northwall Cave -> Northwall":
             lambda state: state.has("Sun", player) and state.has("Fleece", player),
         #"Northwall -> Northwall Tree":
@@ -71,31 +83,31 @@ def get_location_rules(player, crystal_needed):
         "SK - Level 4":
             lambda state: state.has("Lightning", player) and state.has("Level Up", player) ,
         "SK - Level 5":
-            lambda state: state.has("Lightning", player) and state.has("Bridge", player) and state.has("Level Up", player),
+            lambda state: state.has("Lightning", player) and state.has("Bridge", player) and can_reach_region_count(state, player, 2),
         "SK - Level 6":
-            lambda state: has_key_miracles(state, player) and state.has("Bridge", player) and state.has("Level Up", player, 3),
+            lambda state: has_key_miracles(state, player) and state.has("Bridge", player) and can_reach_region_count(state, player, 3),
         "SK - Level 7":
-            lambda state: has_key_miracles(state, player) and state.has("Bridge", player) and state.has("Level Up", player, 3),
+            lambda state: has_key_miracles(state, player) and state.has("Bridge", player) and can_reach_region_count(state, player, 3),
         "SK - Level 8":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 5),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 4),
         "SK - Level 9":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 5),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 4),
         "SK - Level 10":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 7),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 5),
         "SK - Level 11":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 7),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 5),
         "SK - Level 12":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 6),
         "SK - Level 13":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 6),
         "SK - Level 14":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9) and has_max_civ(state, player) and state.has("Earthquake",player),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 6) and has_max_civ(state, player) and state.has("Earthquake",player),
         "SK - Level 15":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9) and has_max_civ(state, player) and state.has("Earthquake",player),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 6) and has_max_civ(state, player) and state.has("Earthquake",player),
         "SK - Level 16":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9) and has_max_civ(state, player) and state.has("Earthquake",player),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 6) and has_max_civ(state, player) and state.has("Earthquake",player),
         "SK - Level 17":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9) and has_max_civ(state, player) and state.has("Earthquake",player),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 6) and has_max_civ(state, player) and state.has("Earthquake",player),
             
         #"FM - Act 2 Clear":
         #    lambda state: state.has("Lightning", player),
@@ -217,6 +229,6 @@ def get_location_rules(player, crystal_needed):
         "Crystal Goal":
             lambda state: state.has("Dheim Crystal", player, crystal_needed),
         "Population Goal":
-            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and state.has("Level Up", player, 9) and has_max_civ(state, player),
+            lambda state: has_key_miracles(state, player) and has_all_key_items(state, player) and can_reach_region_count(state, player, 6) and has_max_civ(state, player),
 
     }

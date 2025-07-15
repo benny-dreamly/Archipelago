@@ -363,7 +363,7 @@ class LocalRom:
 
 
 
-def patch_rom(world: World, rom: LocalRom):
+def patch_rom(world: World, rom: LocalRom, act_levels):
     def randomize_music():
         #rom.write_bytes
         music_pointers = [
@@ -409,7 +409,7 @@ def patch_rom(world: World, rom: LocalRom):
             rom.write_bytes(offset, randtrack)
 
     def randomize_lairs():
-
+        
         custom_lair_images = {
             #"image name":[[Top row of bytes],[Bottom Row]]; Replaces the diamond lair image
             "star":[
@@ -534,6 +534,7 @@ def patch_rom(world: World, rom: LocalRom):
             0x5439E:[[0x09, 0x0E, 0x16, 0x19, 0x1A, 0x1B, 0x1C, ],[1,1,1,1,1,1,1]], #Tree 3
         }
         # valid_objects[obj_tbl_offsets.index(table_base)]
+
         for table_base in obj_tbl_offsets:
             entry = 0
             i = 0
@@ -2137,6 +2138,16 @@ def patch_rom(world: World, rom: LocalRom):
 
     # Bridge Food Increase
     rom.write_bytes(0x1C0E5, bytearray([0x30])) # LDY #$30
+
+    # Randomized level entry requirements
+    for x in range(6):
+        rom.write_bytes(0x8773 + (x*2), bytearray([act_levels[x] + 1]))
+        if act_levels[x] >= 9:
+            textlevel = bytearray([0x31, ((act_levels[x]-9) + 0x30)])
+        else:
+            textlevel = bytearray([(act_levels[x] + 0x31)])
+        rom.write_bytes(0xEFF4 + (x*2), textlevel)
+        
 
     #Graphics
     #AP Ofering Icons

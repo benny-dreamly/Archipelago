@@ -214,6 +214,7 @@ class BombTSAWorld(World):
 
         # Noah Access
         noah_entrance = self.multiworld.get_entrance("Menu -> Noah", player)
+        
         match self.options.noah_open.value:
             case 0:
                 noah_entrance.access_rule = lambda state: ((sum(

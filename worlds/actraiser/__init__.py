@@ -59,6 +59,7 @@ class ActraiserWorld(World):
     options: ActraiserOptions
     location_name_to_id = location_table
     item_name_to_id = item_table
+    act_levels = [0,1,3,5,7,9]
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -158,7 +159,7 @@ class ActraiserWorld(World):
     def generate_output(self, output_directory: str):
         try:
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self, rom)
+            patch_rom(self, rom, self.act_levels)
 
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
@@ -201,9 +202,13 @@ class ActraiserWorld(World):
         #if self.options.goal == "death_heim":
         #        dh_entrance = mw.get_entrance("Sky -> Death Heim", player)
         #        dh_entrance.access_rule = lambda state: state.has("Dheim Crystal", player, self.options.crystal_count.value)
-                
-
-        region_rules = get_region_rules(player)
+        if self.options.random_level:
+            upperlevel = self.options.max_level.value - 1
+            #town_index = random.shuffle([0,1,2,3,4,5])
+            for x in range(1,6):
+                self.act_levels[x] = random.randint(1, upperlevel)
+        
+        region_rules = get_region_rules(player, self.act_levels)
         for entrance_name, rule in region_rules.items():
             entrance = mw.get_entrance(entrance_name, player)
             entrance.access_rule = rule

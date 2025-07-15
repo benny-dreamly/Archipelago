@@ -65,6 +65,20 @@ class LevelUps(Range):
     range_end = 16
     default = 16
 
+class RandomLevel(Toggle):
+    """Randomizes the level requirement to enter each first act of an action stage."""
+    display_name = "Random Level Requirement"
+    
+
+class MaxLevel(Range):
+    """Maximum required level to access a non death heim action stage
+    does nothing if you don't have Random Level Requirement enabled
+    This value should not exceed Level Count option"""
+    display_name = "Max Level Requirement"
+    range_start = 10
+    range_end = 16
+    default = 10
+
 class FlameSword(DefaultOnToggle):
     """Adds a flame sword that is normally only in Aitos Act 1 as a permanent upgrade into the item pool
     This does tend to make the game easier."""
@@ -113,6 +127,8 @@ class ActraiserOptions(PerGameCommonOptions):
     pop_goal_count: PopGoalCount
     fast_construct: ConstructSpeed
     level_count: LevelUps
+    random_level: RandomLevel
+    max_level: MaxLevel
     fire_sword: FlameSword
     arrow_count: ArrowUpgrades
     include_traps: IncTraps

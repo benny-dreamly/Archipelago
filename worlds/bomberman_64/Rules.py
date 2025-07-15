@@ -240,8 +240,8 @@ def get_location_rules(player):
             lambda state: can_build_bridge(state, player),
         "Trap Tower Custom Red":
             lambda state: can_build_bridge(state, player),
-        "Beyond the Clouds Custom Blue":
-            lambda state: can_build_bridge(state, player) and state.has("Bombup", player, 3),
+        #"Beyond the Clouds Custom Blue":
+        #    lambda state: can_build_bridge(state, player) and state.has("Bombup", player, 3),
     }
 
 def get_normalmode_rules(player):
