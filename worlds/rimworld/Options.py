@@ -169,6 +169,15 @@ class AnomalyEnabled(Choice):
 	option_enabled = 1
 	default = 1
 
+class OdysseyEnabled(Choice):
+	"""
+	Enable the Odyssey DLC. If you disable any DLC in yaml and enable it in client, all research will be researchable and excluded from the generator.
+	"""
+	display_name = "Odyssey Enabled"
+	option_disabled = 0
+	option_enabled = 1
+	default = 0
+
 class StartingResearchLevel(Choice):
 	"""
 	If "none" is selected, the player will have access to NO research, regardless of starting scenario. Tribal and Crashlanded will give the player those starting research (regardless of starting scenario.)
@@ -272,6 +281,7 @@ class RimworldOptions(PerGameCommonOptions):
     IdeologyEnabled: IdeologyEnabled
     BiotechEnabled: BiotechEnabled
     AnomalyEnabled: AnomalyEnabled
+    OdysseyEnabled: OdysseyEnabled
     StartingResearchLevel: StartingResearchLevel
     ResearchScoutType: ResearchScoutType
     ResearchScoutSecretTraps: ResearchScoutSecretTraps
@@ -289,8 +299,8 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 		for option in {
 			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
 			ResearchBaseCost, ResearchMaxPrerequisites, CraftLocationCount, PlayerNamesAsColonistItems,
-			VictoryCondition, RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled, StartingResearchLevel,
-			ResearchScoutType, ResearchScoutSecretTraps
+			VictoryCondition, RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled, OdysseyEnabled,
+			StartingResearchLevel, ResearchScoutType, ResearchScoutSecretTraps
 		}
 	}
 }
