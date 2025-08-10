@@ -92,7 +92,7 @@ class RimworldWorld(World):
                     craftable_item_id_to_prereqs[itemId].append(prereq.text)
         elif (defType == "BuildingThingDef"):
             defName = item.find("defName").text
-            defName = defName.replace("Building", "")
+            defName = defName.removesuffix("Building")
             item_name_to_expansion[defName] = expansion
             building_name_to_prereqs[defName] = []
             prerequisites = item.find("Prerequisites")
@@ -455,7 +455,7 @@ class RimworldWorld(World):
     def create_filler(self) -> None:
         trapRandomChance = getattr(self.options, "PercentFillerAsTraps")
         if self.item_counts[self.player] < self.location_counts[self.player]:
-            logger.warning("Player " + self.player_name + " had " + str(len(self.multiworld.itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
+            logger.warning("Player " + self.player_name + " had " + str(self.item_counts[self.player]) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding filler.")
             while self.item_counts[self.player] < self.location_counts[self.player]:
                 self.item_counts[self.player] += 1
                 if random.randrange(100) < trapRandomChance:
@@ -463,7 +463,7 @@ class RimworldWorld(World):
                 else:
                     self.multiworld.itempool.append(self.create_item("Ship Chunk Drop", ItemClassification.filler))
         if self.item_counts[self.player] > self.location_counts[self.player]:
-            logger.warning("Player " + self.player_name + " had " + str(len(self.multiworld.itempool)) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding basic research as filler.")
+            logger.warning("Player " + self.player_name + " had " + str(self.item_counts[self.player]) + " items, but " + str(self.location_counts[self.player]) + " locations! Adding basic research as filler.")
             main_region = self.multiworld.get_region("Main", self.player)
             basicResearchLocationCount = getattr(self.options, "BasicResearchLocationCount").value
             i = 1
