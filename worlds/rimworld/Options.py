@@ -188,6 +188,15 @@ class StartingResearchLevel(Choice):
 	option_crashlanded = 2
 	default = 0
 
+class BonusResearchItems(Range):
+	"""
+	How many bonus items will you receive when a research (that unlocks items) is received. For example, if this is set to 2, you may receive a jacket and a flophat when you receive Complex Clothing. If set to -1, you'll receive one of everything, otherwise, you'll receive any number at random (note: This means setting it to higher than 1 may result in getting, say, 5 Harps when you receive Harp.)
+	"""
+	display_name = "Bonus Research Items"
+	range_start = -1
+	range_end = 10
+	default = 0
+
 class ResearchScoutType(Choice):
 	"""
 	How research project scouting works - this will show you what items research projects will send. "None" will show no information for all research. "Summary" options will show the player name and item type (Chris's progressive item). "Fullitem" options will show player name and item name (Chris's progressive item, Master Sword). "Available" options will show only if the research can be started now. "All" options will hint all research.
@@ -283,6 +292,7 @@ class RimworldOptions(PerGameCommonOptions):
     AnomalyEnabled: AnomalyEnabled
     OdysseyEnabled: OdysseyEnabled
     StartingResearchLevel: StartingResearchLevel
+    BonusResearchItems: BonusResearchItems
     ResearchScoutType: ResearchScoutType
     ResearchScoutSecretTraps: ResearchScoutSecretTraps
     NeolithicItemWeight: NeolithicItemWeight
@@ -300,7 +310,7 @@ rimworld_options: typing.Dict[str, type(Option)] = {
 			BasicResearchLocationCount, HiTechResearchLocationCount, MultiAnalyzerResearchLocationCount,
 			ResearchBaseCost, ResearchMaxPrerequisites, CraftLocationCount, PlayerNamesAsColonistItems,
 			VictoryCondition, RoyaltyEnabled, IdeologyEnabled, BiotechEnabled, AnomalyEnabled, OdysseyEnabled,
-			StartingResearchLevel, ResearchScoutType, ResearchScoutSecretTraps
+			StartingResearchLevel, BonusResearchItems, ResearchScoutType, ResearchScoutSecretTraps
 		}
 	}
 }
