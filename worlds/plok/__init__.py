@@ -149,7 +149,7 @@ class PlokWorld(World):
         filler_items = ["Shells","Extra Plife","Fruit","Force Field","Rage",
                         #"Unicycle Rental", "Car Rental", "Jet Rental", "Motorcycle Rental",
                         #"Helicopter Rental", "Tank Rental", "UFO Rental", "Springs Rental",
-                        "Boxing Glove Rental", "Rocket Rental", "Shotgun Rental",
+                        "Boxing Glove Rental", "Rocket Rental", "Musket Rental",
                         "Flamethrower Rental","Sheriff Badge Rental"]
         filler_weights = [0.3,0.2,0.3,0.5,0.3,
                           #0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,

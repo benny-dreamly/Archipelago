@@ -33,7 +33,7 @@ class Bomb64Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the Bomberman 64 US rom"""
         copy_to = "Bomberman64.z64"
-        description = "Bomberman Tournament (US) ROM File"
+        description = "Bomberman 64 (US) ROM File"
         md5s = [MD5Hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)

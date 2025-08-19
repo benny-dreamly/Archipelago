@@ -11,6 +11,7 @@ import threading
 from .Client import ActraiserSNIClient
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
+import Utils
 import Patch
 import settings
 
@@ -19,7 +20,7 @@ from .Locations import ActraiserLocation, location_data_table, location_table, l
 from .Options import ActraiserOptions
 from .Regions import region_data_table, get_exit
 from .Rules import *
-from .Rom import LocalRom, patch_rom, get_base_rom_path, ActraiserDeltaPatch
+from .Rom import LocalRom, patch_rom, get_base_rom_path, ActraiserDeltaPatch, ActraiserProcedurePatch
 
 POOLSIZE = 171
 
@@ -129,7 +130,7 @@ class ActraiserWorld(World):
             region = mw.get_region(region_name, player)
             region.add_locations({
                 location_name: location_data.address for location_name, location_data in location_data_table.items()
-                if location_data.region == region_name and location_data.can_create(self.options, player)
+                if location_data.region == region_name and location_data.can_create(self.options)
             }, ActraiserLocation)
             region.add_exits(region_data.connecting_regions)
 
@@ -142,7 +143,7 @@ class ActraiserWorld(World):
         # Place locked locations.
         for location_name, location_data in locked_locations.items():
             # Ignore locations we never created.
-            if not location_data.can_create(self.options, player):
+            if not location_data.can_create(self.options):
                 continue
 
             locked_item = self.create_item(location_data_table[location_name].locked_item)
@@ -158,23 +159,48 @@ class ActraiserWorld(World):
 
     def generate_output(self, output_directory: str):
         try:
-            rom = LocalRom(get_base_rom_path())
-            patch_rom(self, rom, self.act_levels)
-
-
-            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
-            rom.write_to_file(rompath)
-            self.rom_name = rom.name
-
-            patch = ActraiserDeltaPatch(os.path.splitext(rompath)[0]+ActraiserDeltaPatch.patch_file_ending, player=self.player,
-                                   player_name=self.multiworld.player_name[self.player], patched_path=rompath)
-            patch.write()
-        except:
+            patch = ActraiserProcedurePatch(player=self.player, player_name=self.player_name)
+            patch_rom(self, patch)
+            self.rom_name = patch.name
+            patch.write(os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
+        except Exception:
             raise
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
-            if os.path.exists(rompath):
-                os.unlink(rompath)
+        # try:
+        #     #rom = LocalRom(get_base_rom_path())
+        #     #patch_rom(self, rom, self.act_levels)
+
+
+        #     rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
+        #     #rom.write_to_file(rompath)
+        #     #self.rom_name = rom.name
+
+        #     #patch = ActraiserDeltaPatch(os.path.splitext(rompath)[0]+ActraiserDeltaPatch.patch_file_ending, player=self.player,
+        #                            #player_name=self.multiworld.player_name[self.player], patched_path=rompath)
+        #     #patch.write()
+        #     #outfilepname = f"_P{self.player}"
+        #     #outfilepname += f"_{self.multiworld.get_file_safe_player_name(self.player).replace(' ', '_')}"
+        #     from Main import __version__
+        #     self.rom_name_text = f'AR{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0'
+        #     self.romName = bytearray(self.rom_name_text, "utf8")[:0x20]
+        #     self.romName.extend([0] * (0x20 - len(self.romName)))
+            
+        #     self.playerName = bytearray(self.multiworld.player_name[self.player], "utf8")[:0x20]
+        #     self.playerName.extend([0] * (0x20 - len(self.playerName)))
+        #     patch = ActraiserProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        #     procedure = [("apply_tokens", ["token_data.bin"])]
+        #     patch.procedure = procedure
+        #     patch_rom(self, patch)
+        #     self.rom_name = self.romName
+        #     out_file_name = self.multiworld.get_out_file_name_base(self.player)
+        #     patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
+        # except:
+        #     raise
+        # finally:
+        #     self.rom_name_available_event.set()  # make sure threading continues and errors are collected
+        #     if os.path.exists(rompath):
+        #         os.unlink(rompath)
 
     def get_filler_item_name(self) -> str:
         filler_items = ["Apple","1UP","1000 Points","Magic", "Bomb","Fertility"]
@@ -216,7 +242,7 @@ class ActraiserWorld(World):
         location_rules = get_location_rules(player, self.options.crystal_count.value)
         for location in mw.get_locations(player):
             name = location.name
-            if name in location_rules and location_data_table[name].can_create(mw, player):
+            if name in location_rules and location_data_table[name].can_create(self.options):
                 location.access_rule = location_rules[name]
 
         # Completion condition.
@@ -229,5 +255,11 @@ class ActraiserWorld(World):
 
     def fill_slot_data(self) -> dict:
         return {
+            "lvlfillmore": self.act_levels[0],
+            "lvlbloodpool": self.act_levels[1],
+            "lvlkassandora": self.act_levels[2],
+            "lvlaitos": self.act_levels[3],
+            "lvlmarahna": self.act_levels[4],
+            "lvlnorthwall": self.act_levels[5],
             "DeathLink": self.options.death_link.value
         }

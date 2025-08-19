@@ -84,8 +84,8 @@ class BombermanColor(Choice):
     default = 0
 
 class BomberHead(Choice):
-    """Changes Bomberman's head model"""
-    option_bomber = 0xFF
+    """Changes Bomberman's head model when collecting the remote bomb item"""
+    option_normal = 0xFF
     option_knight = 0x56
     option_dragon = 0x53
     option_iron =   0x55
@@ -96,11 +96,11 @@ class BomberHead(Choice):
     option_samurai =0x59
     option_clown =  0x57
     option_gold =   0x50
-    default =       0xFF
+    default =       0x53
 
 class BomberBody(Choice):
-    """Changes Bomberman's body model"""
-    option_bomber = 0xFF
+    """Changes Bomberman's body model when collecting the power bomb item"""
+    option_normal = 0xFF
     option_knight = 0x60
     option_dragon = 0x5D
     option_iron =   0x5F
@@ -111,11 +111,11 @@ class BomberBody(Choice):
     option_samurai =0x63
     option_clown =  0x61
     option_gold =   0x5A
-    default =       0xFF
+    default =       0x5D
 
 class BomberArmLeft(Choice):
-    """Changes Bomberman's left arm model"""
-    option_bomber = 0xFF
+    """Changes Bomberman's left arm model when collecting the power glove item"""
+    option_normal = 0xFF
     option_knight = 0x6A
     option_dragon = 0x67
     option_iron =   0x69
@@ -126,11 +126,11 @@ class BomberArmLeft(Choice):
     option_samurai =0x6D
     option_clown =  0x6B
     option_gold =   0x64
-    default =       0xFF
+    default =       0x67
 
 class BomberArmRight(Choice):
-    """Changes Bomberman's right arm model"""
-    option_bomber = 0xFF
+    """Changes Bomberman's right arm model when collecting the power glove item"""
+    option_normal = 0xFF
     option_knight = 0x7E
     option_dragon = 0x7B
     option_iron =   0x7D
@@ -141,11 +141,11 @@ class BomberArmRight(Choice):
     option_samurai =0x81
     option_clown =  0x7F
     option_gold =   0x78
-    default =       0xFF
+    default =       0x7B
 
 class BomberLegLeft(Choice):
-    """Changes Bomberman's left leg model"""
-    option_bomber = 0xFF
+    """Changes Bomberman's left leg model when collecting the bomb kick item"""
+    option_normal = 0xFF
     option_knight = 0x74
     option_dragon = 0x71
     option_iron =   0x73
@@ -156,11 +156,11 @@ class BomberLegLeft(Choice):
     option_samurai =0x77
     option_clown =  0x75
     option_gold =   0x6E
-    default =       0xFF
+    default =       0x71
 
 class BomberLegRight(Choice):
-    """Changes Bomberman's right leg model"""
-    option_bomber = 0xFF
+    """Changes Bomberman's right leg model when collecting the bomb kick item"""
+    option_normal = 0xFF
     option_knight = 0x88
     option_dragon = 0x85
     option_iron =   0x87
@@ -171,7 +171,7 @@ class BomberLegRight(Choice):
     option_samurai =0x8B
     option_clown =  0x89
     option_gold =   0x82
-    default =       0xFF
+    default =       0x85
 
 @dataclass
 class Bomb64Options(PerGameCommonOptions):

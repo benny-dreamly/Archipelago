@@ -1,6 +1,8 @@
-from typing import Callable, Dict, NamedTuple, Optional
+from typing import Callable, Dict, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Location, MultiWorld
+if TYPE_CHECKING:
+    from . import ActraiserWorld
 
 
 class ActraiserLocation(Location):
@@ -10,7 +12,7 @@ class ActraiserLocation(Location):
 class ActraiserLocationData(NamedTuple):
     region: str
     address: Optional[int] = None
-    can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True
+    can_create: Callable[["ActraiserWorld"], bool] = lambda options: True
     locked_item: Optional[str] = None
 
 location_data_table: Dict[str, ActraiserLocationData] = {
@@ -753,13 +755,13 @@ location_data_table: Dict[str, ActraiserLocationData] = {
         address=0x1C100C,
         region="Sky",
         locked_item="Savior",
-        can_create=lambda world, player: world.crystal_goal,
+        can_create=lambda options: options.crystal_goal,
     ),
     "Population Goal": ActraiserLocationData(
         address=0x1C100D,
         region="Sky",
         locked_item="Prosperity",
-        can_create=lambda world, player: world.population_goal,
+        can_create=lambda options: options.population_goal,
     ),
 }
 

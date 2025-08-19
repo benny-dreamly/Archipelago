@@ -249,7 +249,7 @@ item_data_table: Dict[str, PlokItemData] = {
         type=ItemClassification.filler,
         num_exist=0
     ),
-    "Shotgun Rental": PlokItemData(
+    "Musket Rental": PlokItemData(
         code=0x1C004A,
         type=ItemClassification.filler,
         num_exist=0

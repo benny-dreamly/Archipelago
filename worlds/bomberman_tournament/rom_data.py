@@ -570,7 +570,7 @@ enemy_rando_types = [
     0x0E, #Lampslime
     0x0F, #Skeleton
     0x10, #Jellyfish
-    0x11, #Drill Squid
+    #0x11, #Drill Squid
     0x12, #Yellow Slime
     0x13, #Yeti
     0x14, #Icicle Monster

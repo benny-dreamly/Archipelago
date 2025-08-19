@@ -151,6 +151,7 @@ class Bomb64Client(BizHawkClient):
     music_rando = False
     sound_rando = False
     goal_clear = False
+    parts_list = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
 
     model_suffle = {}
 
@@ -200,6 +201,9 @@ class Bomb64Client(BizHawkClient):
         self.hardmode = rom_data[1][3]
         self.enemy_model = rom_data[1][4]
         self.enemy_ai = rom_data[1][5]
+
+        for x in range(0x9, 0xE):
+            self.parts_list[x-9] = rom_data[1][x]
 
         if deathlink:
             self.death_link = True
@@ -404,16 +408,29 @@ class Bomb64Client(BizHawkClient):
                         fireups += 1
                     case 0x1CAEE0B: # Remote bombs
                         bomb_state = bomb_state | 0x2
+                        if self.parts_list[0] != 0xFF:
+                            outbound_writes.append((0x2A0BA8, bytearray([0x00, 0x00, 0x00, self.parts_list[0]]), "RDRAM"),)
                     case 0x1CAEE0C: # Power bombs
                         if self.power_command:
                             bomb_state = bomb_state | 0x1
+                        if self.parts_list[1] != 0xFF:
+                            outbound_writes.append((0x2A0BD4, bytearray([0x00, 0x00, 0x00, self.parts_list[1]]), "RDRAM"),)
                     case 0x1CAEE09: # Bomb Kick
                         kick_state = True
                         powers_state[6] = 0x01
                         powers_state[7] = 0x20
+                        if self.parts_list[4] != 0xFF:
+                            outbound_writes.append((0x2A0C2C, bytearray([0x00, 0x00, 0x00, self.parts_list[4]]), "RDRAM"),)
+                        if self.parts_list[5] != 0xFF:
+                            outbound_writes.append((0x2A0C84, bytearray([0x00, 0x00, 0x00, self.parts_list[5]]), "RDRAM"),)
+                        
                     case 0x1CAEE0A: # Power Gloves
                         glove_state = True
                         powers_state[3] = 0xA0
+                        if self.parts_list[2] != 0xFF:
+                            outbound_writes.append((0x2A0C00, bytearray([0x00, 0x00, 0x00, self.parts_list[2]]), "RDRAM"),)
+                        if self.parts_list[3] != 0xFF:
+                            outbound_writes.append((0x2A0C58, bytearray([0x00, 0x00, 0x00, self.parts_list[3]]), "RDRAM"),)
                     case 0x1CAEE0D: # Gold Cards
                         gold_cards_ap += 1
                         if gold_cards_ap > self.needed_cards:

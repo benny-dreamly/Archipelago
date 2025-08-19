@@ -77,7 +77,7 @@ class MaxLevel(Range):
     display_name = "Max Level Requirement"
     range_start = 10
     range_end = 16
-    default = 10
+    default = 14
 
 class FlameSword(DefaultOnToggle):
     """Adds a flame sword that is normally only in Aitos Act 1 as a permanent upgrade into the item pool

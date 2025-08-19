@@ -187,6 +187,13 @@ def write_tokens(world:World, patch:Bomb64ProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0xDFFB5, bytearray([world.options.enemy_ai.value]))
     patch.write_token(APTokenTypes.WRITE, 0xDFFB6, bytearray([world.options.random_music.value]))
     patch.write_token(APTokenTypes.WRITE, 0xDFFB7, bytearray([world.options.random_sound.value]))
+
+    patch.write_token(APTokenTypes.WRITE, 0xDFFB9, bytearray([world.options.head_part.value]))
+    patch.write_token(APTokenTypes.WRITE, 0xDFFBA, bytearray([world.options.body_part.value]))
+    patch.write_token(APTokenTypes.WRITE, 0xDFFBB, bytearray([world.options.arm_left_part.value]))
+    patch.write_token(APTokenTypes.WRITE, 0xDFFBC, bytearray([world.options.arm_right_part.value]))
+    patch.write_token(APTokenTypes.WRITE, 0xDFFBD, bytearray([world.options.leg_left_part.value]))
+    patch.write_token(APTokenTypes.WRITE, 0xDFFBE, bytearray([world.options.leg_right_part.value]))
     #patch.write_token(APTokenTypes.WRITE, 0xDFFB8, bytearray([world.team]))
 
     # Bypass CIC
@@ -278,18 +285,18 @@ def write_tokens(world:World, patch:Bomb64ProcedurePatch):
     patch.write_token(APTokenTypes.WRITE, 0x4150, bytearray(CUSTOM_PART_01))
     patch.write_token(APTokenTypes.WRITE, 0x7B75A4, bytearray(CUSTOM_PART_02))
 
-    if world.options.head_part.value != 0xFF:
-        patch.write_token(APTokenTypes.WRITE, 0xBB3A8, bytearray([0x00, 0x00, 0x00, world.options.head_part.value]))
-    if world.options.body_part.value != 0xFF:
-        patch.write_token(APTokenTypes.WRITE, 0xBB3D4, bytearray([0x00, 0x00, 0x00, world.options.body_part.value]))
-    if world.options.arm_left_part.value != 0xFF:
-        patch.write_token(APTokenTypes.WRITE, 0xBB400, bytearray([0x00, 0x00, 0x00, world.options.arm_left_part.value]))
-    if world.options.arm_right_part.value != 0xFF:
-        patch.write_token(APTokenTypes.WRITE, 0xBB42C, bytearray([0x00, 0x00, 0x00, world.options.arm_right_part.value]))
-    if world.options.leg_left_part.value != 0xFF:
-        patch.write_token(APTokenTypes.WRITE, 0xBB458, bytearray([0x00, 0x00, 0x00, world.options.leg_left_part.value]))
-    if world.options.leg_right_part.value != 0xFF:
-        patch.write_token(APTokenTypes.WRITE, 0xBB484, bytearray([0x00, 0x00, 0x00, world.options.leg_right_part.value]))
+    #if world.options.head_part.value != 0xFF:
+    #    patch.write_token(APTokenTypes.WRITE, 0xBB3A8, bytearray([0x00, 0x00, 0x00, world.options.head_part.value]))
+    #if world.options.body_part.value != 0xFF:
+    #    patch.write_token(APTokenTypes.WRITE, 0xBB3D4, bytearray([0x00, 0x00, 0x00, world.options.body_part.value]))
+    #if world.options.arm_left_part.value != 0xFF:
+    #    patch.write_token(APTokenTypes.WRITE, 0xBB400, bytearray([0x00, 0x00, 0x00, world.options.arm_left_part.value]))
+    #if world.options.arm_right_part.value != 0xFF:
+    #    patch.write_token(APTokenTypes.WRITE, 0xBB42C, bytearray([0x00, 0x00, 0x00, world.options.arm_right_part.value]))
+    #if world.options.leg_left_part.value != 0xFF:
+    #    patch.write_token(APTokenTypes.WRITE, 0xBB458, bytearray([0x00, 0x00, 0x00, world.options.leg_left_part.value]))
+    #if world.options.leg_right_part.value != 0xFF:
+    #    patch.write_token(APTokenTypes.WRITE, 0xBB484, bytearray([0x00, 0x00, 0x00, world.options.leg_right_part.value]))
 
     # Write patch file
     patch.write_file("token_data.bin", patch.get_token_binary())

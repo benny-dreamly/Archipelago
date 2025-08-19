@@ -81,7 +81,7 @@ class ActraiserSNIClient(SNIClient):
 
         rom_name = await snes_read(ctx, ACTR_ROMHASH_START, ROMHASH_SIZE)
         char_name = await snes_read(ctx, ACTR_FILE_NAME_ADDR, 0x1)
-        print(f"{rom_name}")
+        #snes_logger.info(f"{rom_name}")
         if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:2] != b"AR":
             return False
 
@@ -159,7 +159,7 @@ class ActraiserSNIClient(SNIClient):
             ctx.finished_game = True
 
         new_checks = []
-        from .Rom import location_rom_data, item_rom_data, act_clear_rom_data, region_pop_rom_data, orb_location_data, event_flag_rom_data
+        from .rom_data import location_rom_data, item_rom_data, act_clear_rom_data, region_pop_rom_data, orb_location_data, event_flag_rom_data
         new_checks.extend(check_locations(act_clear_rom_data, actscleared, 0x16B18))
         new_checks.extend(check_locations(region_pop_rom_data, regionpopulation, 0x21C))
         new_checks.extend(check_locations(event_flag_rom_data, eventram, 0x19190))

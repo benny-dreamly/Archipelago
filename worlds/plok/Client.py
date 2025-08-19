@@ -65,7 +65,7 @@ class PlokSNIClient(SNIClient):
         self.fleasanity = flea_data[0]
         if death_link:
             #ctx.allow_collect = True
-            await ctx.update_death_link(bool(death_link[0] & 0b1))
+            await ctx.update_death_link(bool(death_link & 0b1))
 
         ctx.rom = rom_name
 
@@ -378,7 +378,7 @@ class PlokSNIClient(SNIClient):
                     snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x2]))
                     snes_buffered_write(ctx, WRAM_START + 0x7F4, bytearray([0x4]))
                     await snes_flush_writes(ctx)
-                case 0x1C004A: # Shotgun
+                case 0x1C004A: # Musket
                     snes_buffered_write(ctx, WRAM_START + 0x822, bytearray([0x3F]))
                     snes_buffered_write(ctx, WRAM_START + 0x7F7, bytearray([0x2]))
                     snes_buffered_write(ctx, WRAM_START + 0x7F4, bytearray([0x5]))
