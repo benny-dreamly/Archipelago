@@ -3,7 +3,7 @@ import logging
 import yaml
 import os
 import io
-from typing import TYPE_CHECKING, Dict, List, Optional, cast
+from typing import TYPE_CHECKING, Optional, cast
 import Utils
 import zipfile
 import json
@@ -18,7 +18,7 @@ class KH1Container(APPlayerContainer, metaclass=AutoPatchRegister):
     game: str = 'Kingdom Hearts'
     patch_file_ending = ".zip"
 
-    def __init__(self, patch_data: Dict[str, str] | io.BytesIO, base_path: str = "", output_directory: str = "",
+    def __init__(self, patch_data: dict[str, str] | io.BytesIO, base_path: str = "", output_directory: str = "",
         player: Optional[int] = None, player_name: str = "", server: str = ""):
         if isinstance(patch_data, io.BytesIO):
             super().__init__(patch_data, player, player_name, server)

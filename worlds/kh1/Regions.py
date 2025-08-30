@@ -1,12 +1,12 @@
-from typing import Dict, List, NamedTuple, Optional
+from typing import NamedTuple, Optional
 
 from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import KH1Location, location_table
 
 
 class KH1RegionData(NamedTuple):
-    locations: List[str]
-    region_exits: Optional[List[str]]
+    locations: list[str]
+    region_exits: Optional[list[str]]
 
 
 def create_regions(kh1world):
@@ -14,7 +14,7 @@ def create_regions(kh1world):
     player     = kh1world.player
     options    = kh1world.options
     
-    regions: Dict[str, KH1RegionData] = {
+    regions: dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData([], ["Awakening", "Levels", "World Map"]),
         "Awakening":        KH1RegionData([],   []),
         "Destiny Islands":  KH1RegionData([],   []),

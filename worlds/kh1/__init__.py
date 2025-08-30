@@ -1,6 +1,5 @@
 import logging
 import re
-from typing import List
 from math import ceil
 
 from BaseClasses import Tutorial
@@ -105,7 +104,7 @@ class KH1World(World):
         for i in range(len(starting_party_member_locations)):
             self.get_location(self.starting_accessory_locations[i]).place_locked_item(self.create_item(self.starting_accessories[i]))
         
-        item_pool: List[KH1Item] = []
+        item_pool: list[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
         

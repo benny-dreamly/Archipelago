@@ -1,5 +1,4 @@
-from typing import Dict, NamedTuple, Optional, Set
-import typing
+from typing import NamedTuple, Optional
 
 
 from BaseClasses import Location
@@ -16,16 +15,16 @@ class KH1LocationData(NamedTuple):
     behind_boss: Optional[bool] = False
 
 
-def get_locations_by_category(category: str) -> Dict[str, KH1LocationData]:
-    location_dict: Dict[str, KH1LocationData] = {}
+def get_locations_by_category(category: str) -> dict[str, KH1LocationData]:
+    location_dict: dict[str, KH1LocationData] = {}
     for name, data in location_table.items():
         if data.category == category:
             location_dict.setdefault(name, data)
 
     return location_dict
 
-def get_locations_by_type(type: str) -> Dict[str, KH1LocationData]:
-    location_dict: Dict[str, KH1LocationData] = {}
+def get_locations_by_type(type: str) -> dict[str, KH1LocationData]:
+    location_dict: dict[str, KH1LocationData] = {}
     for name, data in location_table.items():
         if data.type == type:
             location_dict.setdefault(name, data)
@@ -33,7 +32,7 @@ def get_locations_by_type(type: str) -> Dict[str, KH1LocationData]:
     return location_dict
 
 
-location_table: Dict[str, KH1LocationData] = {
+location_table: dict[str, KH1LocationData] = {
     "Destiny Islands Chest":                                                            KH1LocationData("Destiny Islands",  265_0011, "Chest"),
     "Traverse Town 1st District Candle Puzzle Chest":                                   KH1LocationData("Traverse Town",    265_0211, "Chest"),
     "Traverse Town 1st District Accessory Shop Roof Chest":                             KH1LocationData("Traverse Town",    265_0212, "Chest"),
@@ -774,15 +773,15 @@ location_table: Dict[str, KH1LocationData] = {
     "Hercules Cup Yellow Trinity Event":                                                KH1LocationData("Olympus Coliseum", 265_9019, "Static", True)
 }
 
-event_location_table: Dict[str, KH1LocationData] = {
+event_location_table: dict[str, KH1LocationData] = {
         "Final Ansem": KH1LocationData("Homecoming", 265_9999, "None", True)
 }
 
-lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
+lookup_id_to_name: dict[int, str] = {data.code: item_name for item_name, data in location_table.items() if data.code}
 
 
 #Make location categories
-location_name_groups: Dict[str, Set[str]] = {}
+location_name_groups: dict[str, set[str]] = {}
 for location in location_table.keys():
     category = location_table[location].category
     if category not in location_name_groups.keys():
