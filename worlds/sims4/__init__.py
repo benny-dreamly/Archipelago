@@ -1,12 +1,10 @@
 # standard lib imports
 from typing import Mapping, Any, ClassVar
-from pathlib import Path
 from multiprocessing import Process
 
 # ap imports
-import settings
-from BaseClasses import Tutorial, Item, ItemClassification, Region, Entrance
-from worlds.AutoWorld import World, WebWorld
+from BaseClasses import Item, ItemClassification, Region, Entrance
+from worlds.AutoWorld import World
 from ..LauncherComponents import Component, components, Type, icon_paths
 
 # TS4 specific imports
@@ -18,6 +16,8 @@ from .Regions import sims4_careers, sims4_aspiration_milestones, sims4_skill_dep
 from .Rules import set_rules as ts4_set_rules
 from .Groups import location_name_groups, item_name_groups
 from .UT import UTMixin
+from .Settings import Sims4Settings
+from .Web import Sims4Web
 
 def run_client():
     from .Client import main
@@ -28,26 +28,6 @@ def run_client():
 components.append(Component("The Sims 4 Client", func=run_client, component_type=Type.CLIENT, icon="plumbob"))
 
 icon_paths["plumbob"] = f"ap:{__name__}/icons/plumbob.png"
-
-
-class Sims4Settings(settings.Group):
-    class ModsFolder(settings.UserFolderPath):
-        """Path to the Sims 4 Mods folder"""
-        description = "the folder your Sims 4 mods are installed to"
-
-    mods_folder: ModsFolder = ModsFolder(Path.home() / "Documents" / "Electronic Arts" / "The Sims 4" / "Mods")
-
-
-class Sims4Web(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up The Sims 4 for MultiWorld.",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["mrsummer360"]
-    )]
-
 
 class Sims4World(World, UTMixin):
     """
