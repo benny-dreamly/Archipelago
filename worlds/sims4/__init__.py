@@ -17,6 +17,7 @@ from .Regions import sims4_careers, sims4_aspiration_milestones, sims4_skill_dep
     sims4_regions
 from .Rules import set_rules as ts4_set_rules
 from .Groups import location_name_groups, item_name_groups
+from .UT import UTMixin
 
 def run_client():
     from .Client import main
@@ -48,7 +49,7 @@ class Sims4Web(WebWorld):
     )]
 
 
-class Sims4World(World):
+class Sims4World(World, UTMixin):
     """
     The Sims 4 is the fourth installment in The Sims franchise. Like the previous games in the series,
     The Sims 4 focuses on creating and controlling a neighborhood of virtual people, called "Sims".
@@ -75,21 +76,23 @@ class Sims4World(World):
 
     settings: ClassVar[Sims4Settings]
 
-    ut_can_gen_without_yaml = True
-    passthrough: dict[str, Any]
+    # ut_can_gen_without_yaml = True
+    # passthrough: dict[str, Any]
 
     def generate_early(self) -> None:
 
-        if hasattr(self.multiworld, "re_gen_passthrough"):
-            if "The Sims 4" in self.multiworld.re_gen_passthrough:
-                self.passthrough = self.multiworld.re_gen_passthrough["The Sims 4"]
-                self.options.goal.value = self.passthrough["goal_value"]
-                self.options.career.value = self.passthrough["career_value"]
-                self.options.expansion_packs.value = self.passthrough["expansion_packs"]
-                self.options.game_packs.value = self.passthrough["game_packs"]
-                self.options.stuff_packs.value = self.passthrough["stuff_packs"]
-                self.options.cas_kits.value = self.passthrough["cas_kits"]
-                self.options.build_kits.value = self.passthrough["build_kits"]
+        self.get_options_from_slot_data(self)
+
+        # if hasattr(self.multiworld, "re_gen_passthrough"):
+        #     if "The Sims 4" in self.multiworld.re_gen_passthrough:
+        #         self.passthrough = self.multiworld.re_gen_passthrough["The Sims 4"]
+        #         self.options.goal.value = self.passthrough["goal_value"]
+        #         self.options.career.value = self.passthrough["career_value"]
+        #         self.options.expansion_packs.value = self.passthrough["expansion_packs"]
+        #         self.options.game_packs.value = self.passthrough["game_packs"]
+        #         self.options.stuff_packs.value = self.passthrough["stuff_packs"]
+        #         self.options.cas_kits.value = self.passthrough["cas_kits"]
+        #         self.options.build_kits.value = self.passthrough["build_kits"]
 
     def create_item(self, name: str) -> Item:
         item_id: int = self.item_name_to_id[name]
@@ -170,10 +173,10 @@ class Sims4World(World):
         return slot_data
 
     # for UT, not called in standard generation
-    @staticmethod
-    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
-        # returns slot data to be used in UT regen
-        return slot_data
+    # @staticmethod
+    # def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+    #     # returns slot data to be used in UT regen
+    #     return slot_data
 
     def get_filler_item_name(self) -> str:
         return self.random.choice([entry['name'] for entry in junk_table.values()])
