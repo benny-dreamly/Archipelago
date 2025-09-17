@@ -60,19 +60,9 @@ class Sims4World(World, UTMixin):
     # passthrough: dict[str, Any]
 
     def generate_early(self) -> None:
-
+        # this is specific to UT, it doesn't apply unless UT is being used
         self.get_options_from_slot_data(self)
 
-        # if hasattr(self.multiworld, "re_gen_passthrough"):
-        #     if "The Sims 4" in self.multiworld.re_gen_passthrough:
-        #         self.passthrough = self.multiworld.re_gen_passthrough["The Sims 4"]
-        #         self.options.goal.value = self.passthrough["goal_value"]
-        #         self.options.career.value = self.passthrough["career_value"]
-        #         self.options.expansion_packs.value = self.passthrough["expansion_packs"]
-        #         self.options.game_packs.value = self.passthrough["game_packs"]
-        #         self.options.stuff_packs.value = self.passthrough["stuff_packs"]
-        #         self.options.cas_kits.value = self.passthrough["cas_kits"]
-        #         self.options.build_kits.value = self.passthrough["build_kits"]
 
     def create_item(self, name: str) -> Item:
         item_id: int = self.item_name_to_id[name]
@@ -151,12 +141,6 @@ class Sims4World(World, UTMixin):
             "build_kits": self.options.build_kits.value
         }
         return slot_data
-
-    # for UT, not called in standard generation
-    # @staticmethod
-    # def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
-    #     # returns slot data to be used in UT regen
-    #     return slot_data
 
     def get_filler_item_name(self) -> str:
         return self.random.choice([entry['name'] for entry in junk_table.values()])
