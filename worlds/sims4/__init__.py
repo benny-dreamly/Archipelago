@@ -139,7 +139,7 @@ class Sims4World(World, UTMixin):
             "game_packs": self.options.game_packs.value,
             "stuff_packs": self.options.stuff_packs.value,
             "cas_kits": self.options.cas_kits.value,
-            "build_kits": self.options.build_kits.value
+            "build_kits": self.options.build_kits.value,
             "version": Sims4Version.tuple_to_str(VERSION),
         }
         return slot_data
