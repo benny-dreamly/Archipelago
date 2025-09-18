@@ -24,3 +24,7 @@ class Sims4Version:
     @staticmethod
     def is_rc(version: tuple[int, int, int] | tuple[int, int, int, str]) -> bool:
         return len(version) == 4
+
+    @staticmethod
+    def does_major_version_mismatch(client_version: tuple[int, int, int] | tuple[int, int, int, str], server_version: tuple[int, int, int] | tuple[int, int, int, str]) -> bool:
+        return client_version[0] != server_version[0]
