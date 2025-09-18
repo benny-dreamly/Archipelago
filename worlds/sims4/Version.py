@@ -21,3 +21,6 @@ class Sims4Version:
             major, minor, patch = map(int, version.split("."))
             return major, minor, patch
 
+    @staticmethod
+    def is_rc(version: tuple[int, int, int] | tuple[int, int, int, str]) -> bool:
+        return len(version) == 4
