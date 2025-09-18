@@ -18,7 +18,7 @@ from .Groups import location_name_groups, item_name_groups
 from .UT import UTMixin
 from .Settings import Sims4Settings
 from .Web import Sims4Web
-from .Version import VERSION, version_to_str
+from .Version import VERSION, Sims4Version
 
 def run_client():
     from .Client import main
@@ -140,7 +140,7 @@ class Sims4World(World, UTMixin):
             "stuff_packs": self.options.stuff_packs.value,
             "cas_kits": self.options.cas_kits.value,
             "build_kits": self.options.build_kits.value
-            "version": version_to_str(VERSION),
+            "version": Sims4Version.tuple_to_str(VERSION),
         }
         return slot_data
 
