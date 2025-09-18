@@ -107,6 +107,7 @@ class SimsContext(SuperContext):
         self.syncing = False
         self.goal = None
         self.career = None
+        self.version: str | None = None
 
     def make_gui(self):
         ui = super().make_gui()
@@ -118,6 +119,47 @@ class SimsContext(SuperContext):
         if cmd == "Connected":
             self.goal = args["slot_data"]["goal"]
             self.career = args["slot_data"]["career"]
+            self.version = args["slot_data"]["version"]
+
+            from .Version import VERSION, Sims4Version
+
+            slot_version_tuple = Sims4Version.str_to_tuple(self.version)
+
+            # compare major version mismatch
+            if Sims4Version.does_major_version_mismatch(slot_version_tuple, VERSION):
+                self.gui_error(
+                    title="Version mismatch",
+                    text=f"This server is running Sims 4 AP {self.version}, "
+                         f"but your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
+                         f"Please update your client."
+                )
+                asyncio.create_task(self.disconnect())
+                return
+
+            # disallow RCs when client is not RC
+            client_is_rc = Sims4Version.is_rc(VERSION)
+            slot_is_rc = Sims4Version.is_rc(slot_version_tuple)
+            if client_is_rc != slot_is_rc:
+                self.gui_error(
+                    title="Incompatible version",
+                    text=f"This slot was generated using a release candidate ({self.version}).\n"
+                         f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
+                         f"Please install the same version of the APWorld to connect."
+                )
+                asyncio.create_task(self.disconnect())
+                return
+
+            # if both are RC, check exact suffix match
+            if all([client_is_rc, slot_is_rc]) and slot_version_tuple[3] != VERSION[3]:
+                self.gui_error(
+                    title="Incompatible RC version",
+                    text=f"This slot was generated using {self.version}.\n"
+                         f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
+                         f"Please install the exact same RC build to connect."
+                )
+                asyncio.create_task(self.disconnect())
+                return
+
             url = urllib.parse.urlparse(self.server_address)
             payload = {
                 'cmd': "Connected",
