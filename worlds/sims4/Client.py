@@ -119,46 +119,51 @@ class SimsContext(SuperContext):
         if cmd == "Connected":
             self.goal = args["slot_data"]["goal"]
             self.career = args["slot_data"]["career"]
-            self.version = args["slot_data"]["version"]
+            self.version = args["slot_data"].get("version")
 
-            from .Version import VERSION, Sims4Version
+            if self.version is not None:
+                from .Version import VERSION, Sims4Version
 
-            slot_version_tuple = Sims4Version.str_to_tuple(self.version)
+                slot_version_tuple = Sims4Version.str_to_tuple(self.version)
 
-            # compare major version mismatch
-            if Sims4Version.does_major_version_mismatch(slot_version_tuple, VERSION):
-                self.gui_error(
-                    title="Version mismatch",
-                    text=f"This server is running Sims 4 AP {self.version}, "
-                         f"but your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
-                         f"Please update your client."
-                )
-                asyncio.create_task(self.disconnect(False))
-                return
+                # compare major version mismatch
+                if Sims4Version.does_major_version_mismatch(slot_version_tuple, VERSION):
+                    self.gui_error(
+                        title="Version mismatch",
+                        text=f"This server is running Sims 4 AP {self.version}, "
+                             f"but your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
+                             f"Please update your client."
+                    )
+                    asyncio.create_task(self.disconnect(False))
+                    return
 
-            # disallow RCs when client is not RC
-            client_is_rc = Sims4Version.is_rc(VERSION)
-            slot_is_rc = Sims4Version.is_rc(slot_version_tuple)
-            if client_is_rc != slot_is_rc:
-                self.gui_error(
-                    title="Incompatible version",
-                    text=f"This slot was generated using a release candidate ({self.version}).\n"
-                         f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
-                         f"Please install the same version of the APWorld to connect."
-                )
-                asyncio.create_task(self.disconnect(False))
-                return
+                # disallow RCs when client is not RC
+                client_is_rc = Sims4Version.is_rc(VERSION)
+                slot_is_rc = Sims4Version.is_rc(slot_version_tuple)
+                if client_is_rc != slot_is_rc:
+                    self.gui_error(
+                        title="Incompatible version",
+                        text=f"This slot was generated using a release candidate ({self.version}).\n"
+                             f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
+                             f"Please install the same version of the APWorld to connect."
+                    )
+                    asyncio.create_task(self.disconnect(False))
+                    return
 
-            # if both are RC, check exact suffix match
-            if all([client_is_rc, slot_is_rc]) and slot_version_tuple[3] != VERSION[3]:
-                self.gui_error(
-                    title="Incompatible RC version",
-                    text=f"This slot was generated using {self.version}.\n"
-                         f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
-                         f"Please install the exact same RC build to connect."
-                )
-                asyncio.create_task(self.disconnect(False))
-                return
+                # if both are RC, check exact suffix match
+                if all([client_is_rc, slot_is_rc]) and slot_version_tuple[3] != VERSION[3]:
+                    self.gui_error(
+                        title="Incompatible RC version",
+                        text=f"This slot was generated using {self.version}.\n"
+                             f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
+                             f"Please install the exact same RC build to connect."
+                    )
+                    asyncio.create_task(self.disconnect(False))
+                    return
+            else:
+                # Older APWorlds don't have the version string
+                self.output("Warning: slot data has no version information; compatibility not checked.")
+
 
             url = urllib.parse.urlparse(self.server_address)
             payload = {
