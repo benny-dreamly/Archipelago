@@ -6,6 +6,7 @@ import os
 import urllib.parse
 from pathlib import Path
 
+import Utils
 from CommonClient import ClientCommandProcessor, gui_enabled, get_base_parser, server_loop, logger, ClientStatus
 from MultiServer import mark_raw
 
@@ -136,7 +137,7 @@ class SimsContext(SuperContext):
                              f"but your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
                              f"Please update your client."
                     )
-                    asyncio.create_task(self.disconnect(False))
+                    Utils.async_start(self.disconnect(False))
                     return
 
                 # disallow RCs when client is not RC
@@ -149,7 +150,7 @@ class SimsContext(SuperContext):
                              f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
                              f"Please install the same version of the APWorld to connect."
                     )
-                    asyncio.create_task(self.disconnect(False))
+                    Utils.async_start(self.disconnect(False))
                     return
 
                 # if both are RC, check exact suffix match
@@ -160,7 +161,7 @@ class SimsContext(SuperContext):
                              f"Your client is {Sims4Version.tuple_to_str(VERSION)}.\n"
                              f"Please install the exact same RC build to connect."
                     )
-                    asyncio.create_task(self.disconnect(False))
+                    Utils.async_start(self.disconnect(False))
                     return
             else:
                 # Older APWorlds don't have the version string
