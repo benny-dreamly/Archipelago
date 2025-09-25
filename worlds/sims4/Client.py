@@ -25,7 +25,7 @@ from . import Sims4World
 def unescape_ap_path(path: str) -> str:
     # Replace Archipelago's \_ escape with NBSP,
     # but skip if it's the first character of a segment
-    return re.sub(r'(?<![\\/])\\_', '\u00A0', path)
+    return re.sub(r'(?<!\\)\\_', '\u00A0', path)
 
 mods_folder_path = Path(unescape_ap_path(str(Sims4World.settings.mods_folder)))
 
