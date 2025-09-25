@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import urllib.parse
+import re
 from pathlib import Path
 
 import Utils
@@ -21,9 +22,12 @@ from . import Sims4World
 
 # Gets the sims 4 mods folder
 
-mods_folder_str = str(Sims4World.settings.mods_folder).replace(r"\_", "\u00A0")
+def unescape_ap_path(path: str) -> str:
+    # Replace Archipelago's \_ escape with NBSP,
+    # but skip if it's the first character of a segment
+    return re.sub(r'(?<![\\/])\\_', '\u00A0', path)
 
-mods_folder_path = Path(mods_folder_str)
+mods_folder_path = Path(unescape_ap_path(str(Sims4World.settings.mods_folder)))
 
 if mods_folder_path.exists():
     mod_data_path = mods_folder_path / "mod_data" / "s4ap"
