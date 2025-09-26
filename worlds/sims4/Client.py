@@ -182,7 +182,8 @@ class SimsContext(SuperContext):
                 'name': self.slot_info[self.slot].name,
                 'seed_name': self.seed_name,
                 'goal': self.goal,
-                'career': self.career
+                'career': self.career,
+                'slot': self.slot_info[self.slot]
             }
             print_json(payload, 'connection_status.json', self)
 
