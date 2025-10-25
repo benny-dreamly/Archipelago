@@ -170,8 +170,9 @@ class SimsContext(SuperContext):
                     Utils.async_start(self.disconnect(False))
                     return
             else:
+                from CommonClient import logger
                 # Older APWorlds don't have the version string
-                self.output("Warning: slot data has no version information; compatibility not checked.")
+                logger.info("Warning: slot data has no version information; compatibility not checked.")
 
 
             url = urllib.parse.urlparse(self.server_address)
