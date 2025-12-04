@@ -133,7 +133,7 @@ class StuffPacks(OptionSet):
                   StuffNames.spooky, StuffNames.movie_hangout, StuffNames.romantic_garden,
                   StuffNames.kids_room, StuffNames.backyard, StuffNames.vintage_glamour,
                   StuffNames.bowling_night, StuffNames.fitness, StuffNames.toddler,
-                  StuffNames.laundry_day, StuffNames.my_first_pet, StuffNames.moshino,
+                  StuffNames.laundry_day, StuffNames.my_first_pet, StuffNames.moschino,
                   StuffNames.tiny_living, StuffNames.nifty_knitting, StuffNames.paranormal,
                   StuffNames.home_chef_hustle, StuffNames.crystal_creations}
 class CASKits(OptionSet):
