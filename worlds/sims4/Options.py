@@ -46,6 +46,7 @@ class Career(OptionSet):
     - Writer
     Currently only Base Game Careers are supported. Part-Time Jobs are not yet able to be included in the shuffling."""
     display_name = "career"
+    # figure out how to make an 'All' option to pick all the available careers, maybe an 'All Base Game'?
     valid_keys = {CareerNames.base_career_astronaut, CareerNames.base_career_athlete, CareerNames.base_career_business,
                   CareerNames.base_career_criminal, CareerNames.base_career_culinary, CareerNames.base_career_entertainer,
                   CareerNames.base_career_painter, CareerNames.base_career_secret_agent, CareerNames.base_career_style_influencer,
