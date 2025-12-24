@@ -1,11 +1,10 @@
 # standard lib imports
 from typing import Mapping, Any, ClassVar
-from multiprocessing import Process
 
 # ap imports
 from BaseClasses import Item, ItemClassification, Region, Entrance
 from worlds.AutoWorld import World
-from ..LauncherComponents import Component, components, Type, icon_paths
+from ..LauncherComponents import Component, components, Type, icon_paths, launch
 
 # TS4 specific imports
 from .Locations import location_table, Sims4Location, skill_locations_table
@@ -20,10 +19,9 @@ from .Settings import Sims4Settings
 from .Web import Sims4Web
 from .Version import VERSION, Sims4Version
 
-def run_client():
+def run_client(*args: str):
     from .Client import main
-    p = Process(target=main)
-    p.start()
+    launch(main, name="The Sims 4 Client", args=args)
 
 
 components.append(Component("The Sims 4 Client", func=run_client, component_type=Type.CLIENT, icon="plumbob"))
