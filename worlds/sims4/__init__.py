@@ -19,7 +19,7 @@ from .Settings import Sims4Settings
 from .Web import Sims4Web
 from .Version import VERSION, Sims4Version
 
-def run_client(*args: str):
+def run_client(*args: str) -> None:
     from .Client import main
     launch(main, name="The Sims 4 Client", args=args)
 
