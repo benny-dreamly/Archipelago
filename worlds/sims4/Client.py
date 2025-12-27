@@ -252,7 +252,7 @@ async def game_watcher(ctx: SimsContext):
         await asyncio.sleep(0.5)
 
 
-def main((args):
+def main(*args):
     async def _main():
         parser = get_base_parser(description="The Sims 4 Client, for text interfacing.")
         args, rest = parser.parse_known_args()
