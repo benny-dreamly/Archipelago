@@ -252,12 +252,12 @@ async def game_watcher(ctx: SimsContext):
         await asyncio.sleep(0.5)
 
 
-def main():
+def main(args):
     async def _main():
         parser = get_base_parser(description="The Sims 4 Client, for text interfacing.")
-        args, rest = parser.parse_known_args()
+        _args, _rest = parser.parse_known_args(args)
 
-        ctx = SimsContext(args.connect, args.password)
+        ctx = SimsContext(_args.connect, _args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         watcher_task = asyncio.create_task(game_watcher(ctx), name="GameWatcher")
 
@@ -280,4 +280,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(None)
