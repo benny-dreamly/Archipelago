@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
-from ..mlss.Data import blackHat
 
 if TYPE_CHECKING:
     from .world import SAGEWorld
@@ -69,12 +68,20 @@ def set_all_location_rules(world: SAGEWorld) -> None:
     cheese_complete = world.get_location("Ancient Cheese Complete")
 
     if world.options.Treasures:
-        set_rule(snick_challenge, lambda state: state.has("Toppin", world.player, world.options.ToppinsNeeded)
-        and state.has("Bomb Transformation", world.player) and state.has("Pizzascape Treasure", world.player)
-        and state.has("Ancient Cheese Treasure", world.player) and state.has("Bloodsauce Dungeon Treasure", world.player))
+        set_rule(snick_challenge, 
+                 lambda state: 
+                 state.has("Toppin", world.player, world.options.ToppinsNeeded)
+                 and state.has("Bomb Transformation", world.player) 
+                 and state.has("Pizzascape Treasure", world.player)
+                 and state.has("Ancient Cheese Treasure", world.player) 
+                 and state.has("Bloodsauce Dungeon Treasure", world.player)
+                )
     else:
-        set_rule(snick_challenge, lambda state: state.has("Toppin", world.player, world.options.ToppinsNeeded)
-        and state.has("Bomb Transformation", world.player))
+        set_rule(
+            snick_challenge, lambda state: 
+            state.has("Toppin", world.player, world.options.ToppinsNeeded)
+            and state.has("Bomb Transformation", world.player)
+        )
 
     set_rule(cheese_sausage, lambda state: state.has("Bomb Transformation", world.player))
     set_rule(cheese_secret3, lambda state: state.has("Bomb Transformation", world.player))
