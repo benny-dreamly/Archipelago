@@ -585,67 +585,71 @@ def set_rules(world: MultiWorld, player: int, options: Sims4Options):
         SkillNames.base_skill_rocket_science: (3, 11),
     }
 
-    if ExpansionNames.get_to_work in options.expansion_packs.value:
+    eps = options.expansion_packs.value
+    gps = options.game_packs.value
+    sps = options.stuff_packs.value
+
+    if ExpansionNames.get_to_work in eps:
         skills[SkillNames.gtw_baking_skill] = (3, 11)
-    if ExpansionNames.get_together in options.expansion_packs.value:
+    if ExpansionNames.get_together in eps:
         skills[SkillNames.gt_dancing_skill] = (3, 6)
         skills[SkillNames.gt_djmixing_skill] = (3, 11)
-    if ExpansionNames.city_living in options.expansion_packs.value:
+    if ExpansionNames.city_living in eps:
         skills[SkillNames.cl_singing_skill] = (3, 11)
-    if ExpansionNames.cats_and_dogs in options.expansion_packs.value:
+    if ExpansionNames.cats_and_dogs in eps:
         skills[SkillNames.cnd_pettraining_skill] = (3, 6)
         skills[SkillNames.cnd_veterinarian_skill] = (3,11)
-    if ExpansionNames.seasons in options.expansion_packs.value:
+    if ExpansionNames.seasons in eps:
         skills[SkillNames.se_flowerarranging_skill] = (3, 11)
-    if ExpansionNames.get_famous in options.expansion_packs.value:
+    if ExpansionNames.get_famous in eps:
         skills[SkillNames.gf_acting_skill] = (3, 11)
         skills[SkillNames.gf_mediaproduction_skill] = (3, 6)
-    if ExpansionNames.discover_university in options.expansion_packs.value:
+    if ExpansionNames.discover_university in eps:
         skills[SkillNames.du_robotics_skill] = (3, 11)
         skills[SkillNames.du_researchanddebate_skill] = (3, 11)
-    if ExpansionNames.eco_lifestyle in options.expansion_packs.value:
+    if ExpansionNames.eco_lifestyle in eps:
         skills[SkillNames.el_fabrication_skill] = (3, 11)
         skills[SkillNames.el_juicefizzing_skill] = (3, 6)
-    if ExpansionNames.snowy_escape in options.expansion_packs.value:
+    if ExpansionNames.snowy_escape in eps:
         skills[SkillNames.sy_rock_climbing_skill] = (3, 11)
         skills[SkillNames.sy_skiing_skill] = (3, 11)
         skills[SkillNames.sy_snowboarding_skill] = (3, 11)
-    if ExpansionNames.cottage_living in options.expansion_packs.value:
+    if ExpansionNames.cottage_living in eps:
         skills[SkillNames.cgl_cross_stitch_skill] = (3, 6)
-    if ExpansionNames.high_school_years in options.expansion_packs.value:
+    if ExpansionNames.high_school_years in eps:
         skills[SkillNames.hsy_entrepreneur_skill] = (3, 6)
-    if ExpansionNames.horse_ranch in options.expansion_packs.value:
+    if ExpansionNames.horse_ranch in eps:
         skills[SkillNames.hr_horse_riding_skill] = (3, 11)
         skills[SkillNames.hr_nectar_making_skill] = (3, 6)
-    if ExpansionNames.lovestruck in options.expansion_packs.value:
+    if ExpansionNames.lovestruck in eps:
         skills[SkillNames.lv_romance_skill] = (3, 11)
-    if ExpansionNames.life_and_death in options.expansion_packs.value:
+    if ExpansionNames.life_and_death in eps:
         skills[SkillNames.lnd_thanatology_skill] = (3, 6)
-    if ExpansionNames.business_and_hobbies in options.expansion_packs.value:
+    if ExpansionNames.business_and_hobbies in eps:
         skills[SkillNames.bnh_pottery_skill] = (3, 11)
         skills[SkillNames.bnh_tattooing_skill] = (3, 11)
-    if ExpansionNames.enchanted_by_nature in options.expansion_packs.value:
+    if ExpansionNames.enchanted_by_nature in eps:
         skills[SkillNames.ebn_apothecary_skill] = (3, 11)
         skills[SkillNames.ebn_natural_living_skill] = (3, 11)
-    if GamePackNames.outdoor_retreat in options.game_packs.value:
+    if GamePackNames.outdoor_retreat in gps:
         skills[SkillNames.or_herbalism_skill] = (3, 11)
-    if GamePackNames.spa_day in options.game_packs.value:
+    if GamePackNames.spa_day in gps:
         skills[SkillNames.sd_wellness_skill] = (3, 11)
-    if GamePackNames.vampires in options.game_packs.value:
+    if GamePackNames.vampires in gps:
         skills[SkillNames.vamp_pipeorgan_skill] = (3, 11)
         skills[SkillNames.vamp_vampirelore_skill] = (3, 16)
-    if GamePackNames.parenthood in options.game_packs.value:
+    if GamePackNames.parenthood in gps:
         skills[SkillNames.ph_parenting_skill] = (3, 11)
-    if GamePackNames.jungle_adventure in options.game_packs.value:
+    if GamePackNames.jungle_adventure in gps:
         skills[SkillNames.ja_archaeology_skill] = (3, 11)
         skills[SkillNames.ja_sevadoradianculture_skill] = (3, 6)
-    if StuffNames.bowling_night in options.stuff_packs.value:
+    if StuffNames.bowling_night in sps:
         skills[SkillNames.bns_bowling_skill] = (3, 6)
-    if StuffNames.nifty_knitting in options.stuff_packs.value:
+    if StuffNames.nifty_knitting in sps:
         skills[SkillNames.nk_knitting_skill] = (3, 11)
-    if StuffNames.paranormal in options.stuff_packs.value:
+    if StuffNames.paranormal in sps:
         skills[SkillNames.pa_medium_skill] = (3, 6)
-    if StuffNames.crystal_creations in options.stuff_packs.value:
+    if StuffNames.crystal_creations in sps:
         skills[SkillNames.cc_gemology_skill] = (3, 11)
 
     for skill, (low, high) in skills.items():
