@@ -20,18 +20,11 @@ class Sims4Logic(LogicMixin):
 
 def set_rules(world: MultiWorld, player: int, options: Sims4Options):
 
-    # Career Rules
-
     set_career_rules(world, player, options)
-
-    # Part Time Jobs
-
-    # Aspirations
-
     set_aspiration_rules(world, player, options)
-
-    # Skillchecks
     set_skill_rules(world, player, options)
+
+    # TODO: Part Time Jobs?
 
 
 def count_skills_over(threshold: int, state, player) -> int:
