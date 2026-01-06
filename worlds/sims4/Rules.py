@@ -711,58 +711,59 @@ def has_multiple_skills(state: CollectionState, skills_and_levels: dict[str, int
 
 def set_completion_condition(world: MultiWorld, player: int, options: Sims4Options):
     goal = options.goal
+    goal_value = goal.value
 
-    if goal.value == goal.option_bodybuilder:
+    if goal_value == goal.option_bodybuilder:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_bodybuilder, player), player=player)
-    elif goal.value == goal.option_painter_extraordinaire:
+    elif goal_value == goal.option_painter_extraordinaire:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_painter_extraordinaire, player), player=player)
-    elif goal.value == goal.option_bestselling_author:
+    elif goal_value == goal.option_bestselling_author:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_bestselling_author, player), player=player)
-    elif goal.value == goal.option_musical_genius:
+    elif goal_value == goal.option_musical_genius:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_musical_genius, player), player=player)
-    elif goal.value == goal.option_public_enemy:
+    elif goal_value == goal.option_public_enemy:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_public_enemy, player), player=player)
-    elif goal.value == goal.option_chief_of_mischief:
+    elif goal_value == goal.option_chief_of_mischief:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_chief_of_mischief, player), player=player)
-    elif goal.value ==goal.option_master_chef:
+    elif goal_value == goal.option_master_chef:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_master_chef, player), player=player)
-    elif goal.value == goal.option_master_mixologist:
+    elif goal_value == goal.option_master_mixologist:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_master_mixologist, player), player=player)
-    elif goal.value == goal.option_renaissance_sim:
+    elif goal_value == goal.option_renaissance_sim:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_renaissance_sim, player), player=player)
-    elif goal.value == goal.option_nerd_brain:
+    elif goal_value == goal.option_nerd_brain:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_nerd_brain, player), player=player)
-    elif goal.value == goal.option_computer_whiz:
+    elif goal_value == goal.option_computer_whiz:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_computer_whiz, player), player=player)
-    elif goal.value == goal.option_serial_romantic:
+    elif goal_value == goal.option_serial_romantic:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_serial_romantic, player), player=player)
-    elif goal.value == goal.option_freelance_botanist:
+    elif goal_value == goal.option_freelance_botanist:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_freelance_botanist, player), player=player)
-    elif goal.value == goal.option_the_curator:
+    elif goal_value == goal.option_the_curator:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_the_curator, player), player=player)
-    elif goal.value == goal.option_angling_ace:
+    elif goal_value == goal.option_angling_ace:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_angling_ace, player), player=player)
-    elif goal.value == goal.option_joke_star:
+    elif goal_value == goal.option_joke_star:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_joke_star, player), player=player)
-    elif goal.value == goal.option_friend_of_the_world:
+    elif goal_value == goal.option_friend_of_the_world:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_friend_of_the_world, player), player=player)
-    elif goal.value == goal.option_neighborly_advisor:
+    elif goal_value == goal.option_neighborly_advisor:
         world.completion_condition[player] = lambda state: state.can_reach(
             world.get_location(AspirationNames.base_aspiration_neighborly_advisor, player), player=player)
