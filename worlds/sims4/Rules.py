@@ -23,7 +23,7 @@ def set_rules(world: MultiWorld, player: int, options: Sims4Options):
     set_career_rules(world, player, options)
     set_aspiration_rules(world, player, options)
     set_skill_rules(world, player, options)
-
+    set_completion_condition(world, player, options)
 
 def count_skills_over(threshold: int, state, player) -> int:
     total_count = 0
