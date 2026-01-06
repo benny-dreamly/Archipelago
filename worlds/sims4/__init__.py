@@ -126,7 +126,7 @@ class Sims4World(World, UTMixin):
         self.multiworld.regions.append(menu)
 
     def set_rules(self) -> None:
-        ts4_set_rules(self)
+        ts4_set_rules(self.multiworld, self.player, self.options)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # slot_data = self.options.as_dict("goal", "career", "expansion_packs", "game_packs", "stuff_packs", "cas_kits", "build_kits")

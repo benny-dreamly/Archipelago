@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, MultiWorld
 from worlds.AutoWorld import LogicMixin
 from .Names.DLC import ExpansionNames, GamePackNames, StuffNames
 from ..generic.Rules import set_rule
@@ -19,10 +19,7 @@ class Sims4Logic(LogicMixin):
         return True
 
 
-def set_rules(sims4_world: Sims4World):
-    world = sims4_world.multiworld
-    player = sims4_world.player
-    options: Sims4Options = sims4_world.options
+def set_rules(world: MultiWorld, player: int, options: Sims4Options):
 
     # Career Rules
     # TODO relearn how the career locations send, and then refactor this to use has_skill
