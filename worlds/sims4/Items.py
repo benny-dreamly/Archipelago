@@ -21,6 +21,9 @@ class ItemData(NamedTuple):
 class Sims4Item(Item):
     game: str = "The Sims 4"
 
+def create_event(self, event: str):
+    return Sims4Item(event, ItemClassification.progression, None, self.player)
+
 
 skills_table: dict[int, ItemDict] = {}
 

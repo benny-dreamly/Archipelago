@@ -70,9 +70,6 @@ class Sims4World(World, UTMixin):
                          item_table[item_id]["classification"],
                          item_id, player=self.player)
 
-    def create_event(self, event: str):
-        return Sims4Item(event, ItemClassification.progression, None, self.player)
-
     def create_items(self) -> None:
         used_dlc = set(self.options.expansion_packs.value | self.options.game_packs.value | self.options.stuff_packs.value)
         pool = []
