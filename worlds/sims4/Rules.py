@@ -21,10 +21,8 @@ class Sims4Logic(LogicMixin):
 def set_rules(world: MultiWorld, player: int, options: Sims4Options):
 
     # Career Rules
-    # TODO relearn how the career locations send, and then refactor this to use has_skill
 
-    career = options.career
-
+    set_career_rules(world, player, options)
 
     # Part Time Jobs
 
@@ -828,6 +826,7 @@ CAREER_RULES = {
 }
 
 def set_career_rules(world: MultiWorld, player: int, options: Sims4Options):
+    # TODO relearn how the career locations send, and then refactor this to use has_skill
     career = options.career
 
     for career_name, handler in CAREER_RULES.items():
