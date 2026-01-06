@@ -482,6 +482,7 @@ def has_multiple_skills(state: CollectionState, skills_and_levels: dict[str, int
     skills = list(skills_and_levels.keys())
     return has_skill(state, skills[0], player, skills_and_levels[skills[0]]) and has_skill(state, skills[1], player, skills_and_levels[skills[1]])
 
+# TODO: use events for the completion condition in order to facilitate easier goal stuff, and presence in spoiler (also permits future goals to be more dynamic)
 def set_completion_condition(world: MultiWorld, player: int, options: Sims4Options):
     goal = options.goal
     goal_value = goal.value
