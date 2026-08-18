@@ -1,3 +1,6 @@
+from collections.abc import Mapping
+from typing import Any
+
 from worlds.AutoWorld import World
 from Utils import visualize_regions
 from . import Items as taylor_swift_items
@@ -41,3 +44,25 @@ class TaylorSwiftWorld(World):
 
     def get_filler_item_name(self) -> str:
         return taylor_swift_items.get_random_filler_item_name(self)
+
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        return {
+            "include_debut": self.options.include_debut.value,
+            "include_fearless": self.options.include_fearless.value,
+            "include_fearless_tv": self.options.include_fearless_tv.value,
+            "include_speak_now": self.options.include_speak_now.value,
+            "include_speak_now_tv": self.options.include_speak_now_tv.value,
+            "include_red": self.options.include_red.value,
+            "include_red_tv": self.options.include_red_tv.value,
+            "include_1989": self.options.include_1989.value,
+            "include_1989_tv": self.options.include_1989_tv.value,
+            "include_reputation": self.options.include_reputation.value,
+            "include_lover": self.options.include_lover.value,
+            "include_folklore": self.options.include_folklore.value,
+            "include_evermore": self.options.include_evermore.value,
+            "include_midnights": self.options.include_midnights.value,
+            "include_ttpd": self.options.include_ttpd.value,
+            "include_tloas": self.options.include_tloas.value,
+            "include_vault_tracks": self.options.include_vault_tracks.value,
+            "include_re_recordings": self.options.include_re_recordings.value,
+        }
