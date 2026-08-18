@@ -395,7 +395,10 @@ for name, data in LOCATION_TABLE.items():
 
 def create_all_locations(world: TaylorSwiftWorld) -> None:
     for region_name, location_names in REGIONS.items():
-        region = world.get_region(region_name)
+        try:
+            region = world.get_region(region_name)
+        except KeyError:
+            continue
         for loc_name in location_names:
             loc = TaylorSwiftLocation(
                 world.player,
