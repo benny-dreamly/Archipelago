@@ -8,11 +8,13 @@ from . import Locations as taylor_swift_locations
 from . import Regions as taylor_swift_regions
 from . import Rules as taylor_swift_rules
 from .Options import TaylorSwiftOptions
+from .Web import TaylorSwiftWeb
 
 class TaylorSwiftWorld(World):
     """Taylor Swift's discography as an archipelago integration where you get checks by listening to music"""
 
     game = "Taylor Swift Discography"
+    web = TaylorSwiftWeb()
 
     base_id = 1989
 
