@@ -2,18 +2,27 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .locations import LOCATION_TABLE
-from .regions import ALBUM_REGIONS
+from rule_builder.rules import Has, HasAll
+
+from .Locations import LOCATION_TABLE
+from .Regions import ALBUM_REGIONS
 
 if TYPE_CHECKING:
     from . import TaylorSwiftWorld
 
+VAULT_TRACKS_REQUIRED = Has("Vault Tracks")
+
 
 def set_all_rules(world: TaylorSwiftWorld) -> None:
+    set_all_location_rules(world)
+    set_completion_condition(world)
+
+
+def set_all_location_rules(world: TaylorSwiftWorld) -> None:
     for loc in world.multiworld.get_locations(world.player):
         data = LOCATION_TABLE[loc.name]
         if data.vault:
-            loc.access_rule = lambda state, r=data.region: state.has("Vault Tracks", world.player)
+            world.set_rule(loc, VAULT_TRACKS_REQUIRED)
 
 
 def set_completion_condition(world: TaylorSwiftWorld) -> None:
@@ -27,7 +36,4 @@ def set_completion_condition(world: TaylorSwiftWorld) -> None:
     if world.options.include_re_recordings.value:
         required_items.append("Re-recordings")
 
-    def victory_condition(state):
-        return all(state.has(item, world.player) for item in required_items)
-
-    world.multiworld.completion_condition[world.player] = victory_condition
+    world.set_completion_rule(HasAll(*required_items))
