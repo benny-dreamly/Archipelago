@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import Region
+from rule_builder.rules import Has
 
 if TYPE_CHECKING:
     from . import TaylorSwiftWorld
@@ -36,4 +37,4 @@ def create_and_connect_regions(world: TaylorSwiftWorld) -> None:
         if getattr(world.options, option_name).value:
             album_region = Region(region_name, world.player, world.multiworld)
             world.multiworld.regions.append(album_region)
-            menu.connect(album_region)
+            menu.connect(album_region, rule=Has(region_name))
