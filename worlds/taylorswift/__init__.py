@@ -1,5 +1,8 @@
 from worlds.AutoWorld import World
 from . import Items as taylor_swift_items
+from . import Locations as taylor_swift_locations
+from . import Regions as taylor_swift_regions
+from . import Rules as taylor_swift_rules
 from .Options import TaylorSwiftOptions
 
 class TaylorSwiftWorld(World):
@@ -13,6 +16,15 @@ class TaylorSwiftWorld(World):
     options: TaylorSwiftOptions
 
     item_name_to_id = taylor_swift_items.ITEM_NAME_TO_ID
+    location_name_to_id = taylor_swift_locations.LOCATION_NAME_TO_ID
+
+    def create_regions(self) -> None:
+        taylor_swift_regions.create_and_connect_regions(self)
+        taylor_swift_locations.create_all_locations(self)
+
+    def set_rules(self) -> None:
+        taylor_swift_rules.set_all_rules(self)
+        taylor_swift_rules.set_completion_condition(self)
 
     def create_item(self, name: str) -> taylor_swift_items.TaylorSwiftItem:
         return taylor_swift_items.create_item_with_correct_classification(self, name)
