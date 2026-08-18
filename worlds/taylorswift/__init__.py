@@ -1,4 +1,5 @@
 from worlds.AutoWorld import World
+from Utils import visualize_regions
 from . import Items as taylor_swift_items
 from . import Locations as taylor_swift_locations
 from . import Regions as taylor_swift_regions
@@ -21,6 +22,12 @@ class TaylorSwiftWorld(World):
     def create_regions(self) -> None:
         taylor_swift_regions.create_and_connect_regions(self)
         taylor_swift_locations.create_all_locations(self)
+        # visualize_regions(
+        #     self.get_region("Menu"),
+        #     "taylorswift.puml",
+        #     show_entrance_names=True,
+        #     show_entrance_rules=True,
+        # )
 
     def set_rules(self) -> None:
         taylor_swift_rules.set_all_rules(self)
