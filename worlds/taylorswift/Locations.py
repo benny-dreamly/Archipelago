@@ -19,6 +19,10 @@ class LocationData(NamedTuple):
 
 
 LOCATION_TABLE: dict[str, LocationData] = {
+    # Freebie locations (accessible from start, no item required)
+    "First Listen":                    LocationData("Menu"),
+    "Encore":                          LocationData("Menu"),
+
     # Taylor Swift (Debut)
     "Tim McGraw":                          LocationData("Taylor Swift"),
     "Picture to Burn":                     LocationData("Taylor Swift"),
