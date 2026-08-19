@@ -141,7 +141,7 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "Treacherous":                        LocationData("Red"),
     "I Knew You Were Trouble.":           LocationData("Red"),
     "All Too Well":                       LocationData("Red"),
-    "22":                                 LocationData("Red"),
+    "Red - 22":                                 LocationData("Red"),
     "I Almost Do":                        LocationData("Red"),
     "We Are Never Ever Getting Back Together": LocationData("Red"),
     "Stay Stay Stay":                     LocationData("Red"),
