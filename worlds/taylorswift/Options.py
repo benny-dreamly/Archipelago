@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from Options import OptionGroup, PerGameCommonOptions, Toggle
+from Options import DefaultOnToggle, OptionGroup, PerGameCommonOptions, Toggle
 
 
-class IncludeDebut(Toggle):
+class IncludeDebut(DefaultOnToggle):
     """Include her Debut Album (Taylor Swift) in the shuffling."""
     display_name = "Include Debut"
 
