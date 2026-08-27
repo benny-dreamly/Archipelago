@@ -98,7 +98,7 @@ class TestBounceTargetOr(unittest.TestCase):
 
     Uses the "or" operator, which is defined as: "any(team, game, tags, slot)".
 
-    A missing condition (None) is interpreted as always True, where an empty set is treated as always False.
+    A missing condition (None) or an empty set is treated as always False.
     """
 
     def test_or_bounce_target_default(self):
