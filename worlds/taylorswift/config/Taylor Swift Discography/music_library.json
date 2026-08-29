@@ -160,32 +160,32 @@
         {
           "title": "Jump Then Fall",
           "location": "Jump Then Fall",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Untouchable",
           "location": "Untouchable",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Forever & Always (Piano Version)",
           "location": "Forever & Always (Piano Version)",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Come In With The Rain",
           "location": "Come In With The Rain",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Superstar",
           "location": "Superstar",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "The Other Side of the Door",
           "location": "The Other Side of the Door",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },
@@ -404,32 +404,32 @@
         {
           "title": "Ours",
           "location": "Ours",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "If This Was A Movie",
           "location": "If This Was A Movie",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Superman",
           "location": "Superman",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Back To December - Acoustic",
           "location": "Back To December - Acoustic",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Haunted - Acoustic Version",
           "location": "Haunted - Acoustic Version",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Mine - POP Mix",
           "location": "Mine - POP Mix",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },
@@ -638,32 +638,32 @@
         {
           "title": "The Moment I Knew",
           "location": "The Moment I Knew",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Come Back... Be Here",
           "location": "Come Back... Be Here",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Girl at Home",
           "location": "Girl at Home",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Treacherous (original demo recording)",
           "location": "Treacherous (original demo recording)",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Red (original demo recording)",
           "location": "Red (original demo recording)",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "State of Grace (acoustic version)",
           "location": "State of Grace (acoustic version)",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },
@@ -897,32 +897,32 @@
         {
           "title": "Wonderland",
           "location": "Wonderland",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "You Are in Love",
           "location": "You Are in Love",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "New Romantics",
           "location": "New Romantics",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "I Know Places - Voice Memo",
           "location": "I Know Places - Voice Memo",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "I Wish You Would - Voice Memo",
           "location": "I Wish You Would - Voice Memo",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Blank Space - Voice Memo",
           "location": "Blank Space - Voice Memo",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },
@@ -1310,7 +1310,7 @@
         {
           "title": "the lakes (bonus track)",
           "location": "the lakes (bonus track)",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },
@@ -1397,12 +1397,12 @@
         {
           "title": "right where you left me (bonus track)",
           "location": "right where you left me (bonus track)",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "it's time to go (bonus track)",
           "location": "it's time to go (bonus track)",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },
@@ -1479,52 +1479,52 @@
         {
           "title": "The Great War",
           "location": "The Great War",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Bigger Than The Whole Sky",
           "location": "Bigger Than The Whole Sky",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Paris",
           "location": "Paris",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "High Infidelity",
           "location": "High Infidelity",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Glitch",
           "location": "Glitch",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Would've, Could've, Should've",
           "location": "Would've, Could've, Should've",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Dear Reader",
           "location": "Dear Reader",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Hits Different",
           "location": "Hits Different",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Snow On The Beach (feat. More Lana Del Rey)",
           "location": "Snow On The Beach (feat. More Lana Del Rey)",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Karma (feat. Ice Spice)",
           "location": "Karma (feat. Ice Spice)",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },
@@ -1616,77 +1616,77 @@
         {
           "title": "The Black Dog",
           "location": "The Black Dog",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "imgonnagetyouback",
           "location": "imgonnagetyouback",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "The Albatross",
           "location": "The Albatross",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Chloe or Sam or Sophia or Marcus",
           "location": "Chloe or Sam or Sophia or Marcus",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "How Did It End?",
           "location": "How Did It End?",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "So High School",
           "location": "So High School",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "I Hate It Here",
           "location": "I Hate It Here",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "thanK you aIMee",
           "location": "thanK you aIMee",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "I Look in People's Windows",
           "location": "I Look in People's Windows",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "The Prophecy",
           "location": "The Prophecy",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Cassandra",
           "location": "Cassandra",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Peter",
           "location": "Peter",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "The Bolter",
           "location": "The Bolter",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "Robin",
           "location": "Robin",
-          "type": "normal"
+          "type": "deluxe"
         },
         {
           "title": "The Manuscript",
           "location": "The Manuscript",
-          "type": "normal"
+          "type": "deluxe"
         }
       ]
     },

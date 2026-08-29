@@ -55,6 +55,10 @@
     "include_re_recordings": {
       "type": "album",
       "display_name": "Re-recordings"
+    },
+    "include_deluxe": {
+      "type": "song_option",
+      "display_name": "Include Deluxe"
     }
   }
 }
