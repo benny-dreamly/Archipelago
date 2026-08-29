@@ -93,6 +93,11 @@ class IncludeReRecordings(Toggle):
     display_name = "Include Re-recordings"
 
 
+class IncludeDeluxe(Toggle):
+    """Include deluxe edition songs in the shuffling."""
+    display_name = "Include Deluxe Songs"
+
+
 @dataclass
 class TaylorSwiftOptions(PerGameCommonOptions):
     include_debut: IncludeDebut
@@ -113,6 +118,7 @@ class TaylorSwiftOptions(PerGameCommonOptions):
     include_tloas: IncludeTLOAS
     include_vault_tracks: IncludeVaultTracks
     include_re_recordings: IncludeReRecordings
+    include_deluxe: IncludeDeluxe
 
 
 option_groups = [
@@ -137,5 +143,6 @@ option_groups = [
     OptionGroup("Song Options", [
         IncludeVaultTracks,
         IncludeReRecordings,
+        IncludeDeluxe,
     ]),
 ]

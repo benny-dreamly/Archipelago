@@ -67,4 +67,5 @@ class TaylorSwiftWorld(World):
             "include_tloas": self.options.include_tloas.value,
             "include_vault_tracks": self.options.include_vault_tracks.value,
             "include_re_recordings": self.options.include_re_recordings.value,
+            "include_deluxe": self.options.include_deluxe.value,
         }

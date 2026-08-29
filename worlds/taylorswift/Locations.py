@@ -16,6 +16,7 @@ class TaylorSwiftLocation(Location):
 class LocationData(NamedTuple):
     region: str
     vault: bool = False
+    deluxe: bool = False
 
 
 LOCATION_TABLE: dict[str, LocationData] = {
@@ -54,12 +55,12 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "Forever & Always":                    LocationData("Fearless"),
     "The Best Day":                        LocationData("Fearless"),
     "Change":                              LocationData("Fearless"),
-    "Jump Then Fall":                      LocationData("Fearless"),
-    "Untouchable":                         LocationData("Fearless"),
-    "Forever & Always (Piano Version)":    LocationData("Fearless"),
-    "Come In With The Rain":               LocationData("Fearless"),
-    "Superstar":                           LocationData("Fearless"),
-    "The Other Side of the Door":          LocationData("Fearless"),
+    "Jump Then Fall":                      LocationData("Fearless", False, True),
+    "Untouchable":                         LocationData("Fearless", False, True),
+    "Forever & Always (Piano Version)":    LocationData("Fearless", False, True),
+    "Come In With The Rain":               LocationData("Fearless", False, True),
+    "Superstar":                           LocationData("Fearless", False, True),
+    "The Other Side of the Door":          LocationData("Fearless", False, True),
 
     # Fearless (Taylor's Version)
     "Fearless (Taylor's Version)":                          LocationData("Fearless (Taylor's Version)"),
@@ -104,12 +105,12 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "Haunted":                            LocationData("Speak Now"),
     "Last Kiss":                          LocationData("Speak Now"),
     "Long Live":                          LocationData("Speak Now"),
-    "Ours":                               LocationData("Speak Now"),
-    "If This Was A Movie":                LocationData("Speak Now"),
-    "Superman":                           LocationData("Speak Now"),
-    "Back To December - Acoustic":        LocationData("Speak Now"),
-    "Haunted - Acoustic Version":         LocationData("Speak Now"),
-    "Mine - POP Mix":                     LocationData("Speak Now"),
+    "Ours":                               LocationData("Speak Now", False, True),
+    "If This Was A Movie":                LocationData("Speak Now", False, True),
+    "Superman":                           LocationData("Speak Now", False, True),
+    "Back To December - Acoustic":        LocationData("Speak Now", False, True),
+    "Haunted - Acoustic Version":         LocationData("Speak Now", False, True),
+    "Mine - POP Mix":                     LocationData("Speak Now", False, True),
 
     # Speak Now (Taylor's Version)
     "Mine (Taylor's Version)":                                              LocationData("Speak Now (Taylor's Version)"),
@@ -152,12 +153,12 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "Everything Has Changed (feat. Ed Sheeran)": LocationData("Red"),
     "Starlight":                          LocationData("Red"),
     "Begin Again":                        LocationData("Red"),
-    "The Moment I Knew":                  LocationData("Red"),
-    "Come Back... Be Here":               LocationData("Red"),
-    "Girl at Home":                       LocationData("Red"),
-    "Treacherous (original demo recording)": LocationData("Red"),
-    "Red (original demo recording)":      LocationData("Red"),
-    "State of Grace (acoustic version)":  LocationData("Red"),
+    "The Moment I Knew":                  LocationData("Red", False, True),
+    "Come Back... Be Here":               LocationData("Red", False, True),
+    "Girl at Home":                       LocationData("Red", False, True),
+    "Treacherous (original demo recording)": LocationData("Red", False, True),
+    "Red (original demo recording)":      LocationData("Red", False, True),
+    "State of Grace (acoustic version)":  LocationData("Red", False, True),
 
     # Red (Taylor's Version)
     "State of Grace (Taylor's Version)":                                         LocationData("Red (Taylor's Version)"),
@@ -205,12 +206,12 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "This Love":                        LocationData("1989"),
     "I Know Places":                    LocationData("1989"),
     "Clean":                            LocationData("1989"),
-    "Wonderland":                       LocationData("1989"),
-    "You Are in Love":                  LocationData("1989"),
-    "New Romantics":                    LocationData("1989"),
-    "I Know Places - Voice Memo":       LocationData("1989"),
-    "I Wish You Would - Voice Memo":    LocationData("1989"),
-    "Blank Space - Voice Memo":         LocationData("1989"),
+    "Wonderland":                       LocationData("1989", False, True),
+    "You Are in Love":                  LocationData("1989", False, True),
+    "New Romantics":                    LocationData("1989", False, True),
+    "I Know Places - Voice Memo":       LocationData("1989", False, True),
+    "I Wish You Would - Voice Memo":    LocationData("1989", False, True),
+    "Blank Space - Voice Memo":         LocationData("1989", False, True),
 
     # 1989 (Taylor's Version)
     "Welcome to New York (Taylor's Version)":                                   LocationData("1989 (Taylor's Version)"),
@@ -234,7 +235,7 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "Now That We Don't Talk (Taylor's Version) (From The Vault)":               LocationData("1989 (Taylor's Version)", True),
     "Suburban Legends (Taylor's Version) (From The Vault)":                     LocationData("1989 (Taylor's Version)", True),
     "Is It Over Now? (Taylor's Version) (From The Vault)":                      LocationData("1989 (Taylor's Version)", True),
-    "Bad Blood (feat. Kendrick Lamar) (Taylor's Version)":                      LocationData("1989 (Taylor's Version)"),
+    "Bad Blood (feat. Kendrick Lamar) (Taylor's Version)":                      LocationData("1989 (Taylor's Version)", False, True),
 
     # Reputation
     "...Ready for It?":                LocationData("Reputation"),
@@ -290,7 +291,7 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "betty":                           LocationData("Folklore"),
     "peace":                           LocationData("Folklore"),
     "hoax":                            LocationData("Folklore"),
-    "the lakes (bonus track)":         LocationData("Folklore"),
+    "the lakes (bonus track)":         LocationData("Folklore", False, True),
 
     # Evermore
     "willow":                          LocationData("Evermore"),
@@ -308,8 +309,8 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "marjorie":                        LocationData("Evermore"),
     "closure":                         LocationData("Evermore"),
     "evermore (feat. Bon Iver)":       LocationData("Evermore"),
-    "right where you left me (bonus track)": LocationData("Evermore"),
-    "it's time to go (bonus track)":   LocationData("Evermore"),
+    "right where you left me (bonus track)": LocationData("Evermore", False, True),
+    "it's time to go (bonus track)":   LocationData("Evermore", False, True),
 
     # Midnights
     "Lavender Haze":                   LocationData("Midnights"),
@@ -325,16 +326,16 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "Karma":                           LocationData("Midnights"),
     "Sweet Nothing":                   LocationData("Midnights"),
     "Mastermind":                      LocationData("Midnights"),
-    "The Great War":                   LocationData("Midnights"),
-    "Bigger Than The Whole Sky":       LocationData("Midnights"),
-    "Paris":                           LocationData("Midnights"),
-    "High Infidelity":                 LocationData("Midnights"),
-    "Glitch":                          LocationData("Midnights"),
-    "Would've, Could've, Should've":   LocationData("Midnights"),
-    "Dear Reader":                     LocationData("Midnights"),
-    "Hits Different":                  LocationData("Midnights"),
-    "Snow On The Beach (feat. More Lana Del Rey)": LocationData("Midnights"),
-    "Karma (feat. Ice Spice)":         LocationData("Midnights"),
+    "The Great War":                   LocationData("Midnights", False, True),
+    "Bigger Than The Whole Sky":       LocationData("Midnights", False, True),
+    "Paris":                           LocationData("Midnights", False, True),
+    "High Infidelity":                 LocationData("Midnights", False, True),
+    "Glitch":                          LocationData("Midnights", False, True),
+    "Would've, Could've, Should've":   LocationData("Midnights", False, True),
+    "Dear Reader":                     LocationData("Midnights", False, True),
+    "Hits Different":                  LocationData("Midnights", False, True),
+    "Snow On The Beach (feat. More Lana Del Rey)": LocationData("Midnights", False, True),
+    "Karma (feat. Ice Spice)":         LocationData("Midnights", False, True),
 
     # The Tortured Poets Department
     "Fortnight (feat. Post Malone)":   LocationData("The Tortured Poets Department"),
@@ -353,21 +354,21 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "The Smallest Man Who Ever Lived": LocationData("The Tortured Poets Department"),
     "The Alchemy":                     LocationData("The Tortured Poets Department"),
     "Clara Bow":                       LocationData("The Tortured Poets Department"),
-    "The Black Dog":                   LocationData("The Tortured Poets Department"),
-    "imgonnagetyouback":               LocationData("The Tortured Poets Department"),
-    "The Albatross":                   LocationData("The Tortured Poets Department"),
-    "Chloe or Sam or Sophia or Marcus": LocationData("The Tortured Poets Department"),
-    "How Did It End?":                 LocationData("The Tortured Poets Department"),
-    "So High School":                  LocationData("The Tortured Poets Department"),
-    "I Hate It Here":                  LocationData("The Tortured Poets Department"),
-    "thanK you aIMee":                 LocationData("The Tortured Poets Department"),
-    "I Look in People's Windows":      LocationData("The Tortured Poets Department"),
-    "The Prophecy":                    LocationData("The Tortured Poets Department"),
-    "Cassandra":                       LocationData("The Tortured Poets Department"),
-    "Peter":                           LocationData("The Tortured Poets Department"),
-    "The Bolter":                      LocationData("The Tortured Poets Department"),
-    "Robin":                           LocationData("The Tortured Poets Department"),
-    "The Manuscript":                  LocationData("The Tortured Poets Department"),
+    "The Black Dog":                   LocationData("The Tortured Poets Department", False, True),
+    "imgonnagetyouback":               LocationData("The Tortured Poets Department", False, True),
+    "The Albatross":                   LocationData("The Tortured Poets Department", False, True),
+    "Chloe or Sam or Sophia or Marcus": LocationData("The Tortured Poets Department", False, True),
+    "How Did It End?":                 LocationData("The Tortured Poets Department", False, True),
+    "So High School":                  LocationData("The Tortured Poets Department", False, True),
+    "I Hate It Here":                  LocationData("The Tortured Poets Department", False, True),
+    "thanK you aIMee":                 LocationData("The Tortured Poets Department", False, True),
+    "I Look in People's Windows":      LocationData("The Tortured Poets Department", False, True),
+    "The Prophecy":                    LocationData("The Tortured Poets Department", False, True),
+    "Cassandra":                       LocationData("The Tortured Poets Department", False, True),
+    "Peter":                           LocationData("The Tortured Poets Department", False, True),
+    "The Bolter":                      LocationData("The Tortured Poets Department", False, True),
+    "Robin":                           LocationData("The Tortured Poets Department", False, True),
+    "The Manuscript":                  LocationData("The Tortured Poets Department", False, True),
 
     # The Life of a Showgirl
     "The Fate of Ophelia":             LocationData("The Life of a Showgirl"),
@@ -400,6 +401,8 @@ def create_all_locations(world: TaylorSwiftWorld) -> None:
         except KeyError:
             continue
         for loc_name in location_names:
+            if LOCATION_TABLE[loc_name].deluxe and not world.options.include_deluxe.value:
+                continue
             loc = TaylorSwiftLocation(
                 world.player,
                 loc_name,
