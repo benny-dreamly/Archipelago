@@ -9,8 +9,9 @@ from . import Regions as taylor_swift_regions
 from . import Rules as taylor_swift_rules
 from .Options import TaylorSwiftOptions
 from .Web import TaylorSwiftWeb
+from .UT import UTMixin
 
-class TaylorSwiftWorld(World):
+class TaylorSwiftWorld(World, UTMixin):
     """Taylor Swift's discography as an archipelago integration where you get checks by listening to music"""
 
     game = "Taylor Swift Discography"
