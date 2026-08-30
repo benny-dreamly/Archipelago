@@ -310,6 +310,8 @@ class Context:
     all_item_and_group_names: typing.Dict[str, typing.Set[str]]
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.AbstractSet[str]]
+    def_allow_collecting_from: dict[int, bool]  # per slot, the starting collect_from value
+    allow_collecting_from: dict[int, dict[int, bool]]  # per team, the current collect_from value
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
@@ -333,6 +335,8 @@ class Context:
         self.player_name_lookup: typing.Dict[str, team_slot] = {}
         self.connect_names = {}  # names of slots clients can connect to
         self.allow_releases = {}
+        self.def_allow_collecting_from = {}
+        self.allow_collecting_from = {}
         self.host = host
         self.port = port
         self.server_password = server_password
@@ -584,6 +588,8 @@ class Context:
         slot_info: NetworkSlot
         slot_id: int
 
+        self.def_allow_collecting_from = decoded_obj.get("allow_collecting_from", {})
+
         team_0 = self.clients[0]
         for slot_id, slot_info in self.slot_info.items():
             team_0[slot_id] = []
@@ -738,7 +744,8 @@ class Context:
                              "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
                              "countdown_mode": self.countdown_mode,
-                             "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+                             "item_cheat": self.item_cheat, "compatibility": self.compatibility},
+            "allow_collecting_from": self.allow_collecting_from
 
         }
 
@@ -781,6 +788,9 @@ class Context:
 
         if "stored_data" in savedata:
             self.stored_data = savedata["stored_data"]
+
+        if "allow_collecting_from" in savedata:
+            self.allow_collecting_from = savedata["allow_collecting_from"]
         # count items and slots from lists for items_handling = remote
         self.logger.info(
             f'Loaded save file with {sum([len(v) for k, v in self.received_items.items() if k[2]])} received items '
@@ -945,6 +955,10 @@ class Context:
         targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.client_game_state[team, slot]}])
+
+    def can_collect_from(self, team: int, slot: int) -> bool:
+        return (self.allow_collecting_from.get(team, {})
+                .get(slot, self.def_allow_collecting_from.get(slot, True)))
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1165,8 +1179,41 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
     """register any locations that are in the multidata, pointing towards this player"""
     all_locations = ctx.locations.get_for_player(slot)
 
-    ctx.broadcast_text_all("%s (Team #%d) has collected their items from other worlds."
-                           % (ctx.player_names[(team, slot)], team + 1),
+    failed_collects = set()  # track what worlds have collecting turned off
+    empty_worlds = set()  # track empty worlds to not bother with them / calculate more accurate message
+    for source_player, location_ids in all_locations.items():
+        if not (location_ids - ctx.location_checks[team, source_player]):
+            empty_worlds.add(source_player)
+        elif not ctx.can_collect_from(team, source_player):
+            failed_collects.add(source_player)
+
+    for empty in empty_worlds:  # trim empty worlds as there's nothing to collect from them
+        all_locations.pop(empty)
+
+    collect_str = "has collected their items from all other worlds."
+    if failed_collects:
+        # Trim failed worlds from the list so they aren't collected
+        for failed in failed_collects:
+            all_locations.pop(failed)
+        failed_names = [ctx.player_names[(team, failed)] for failed in sorted(failed_collects)]
+        fail_count = len(failed_names)
+        max_fail_count = 5
+        if fail_count > max_fail_count:
+            failed_worlds = ", ".join(failed_names[:max_fail_count])
+            failed_worlds += f", +{fail_count - max_fail_count} more"
+        else:
+            failed_worlds = ", ".join(failed_names)
+
+        failed_worlds = f"[{failed_worlds}] which {'have' if fail_count > 1 else 'has'} collecting disabled"
+        if not all_locations:  # all collection failed
+            collect_str = f"failed to collect their items from {failed_worlds}."
+        else:  # some collection succeeded
+            collect_str = f"has collected their items from worlds except {failed_worlds}."
+    elif not all_locations:  # no collection left to be done
+        collect_str = "has no items left to collect."
+
+    ctx.broadcast_text_all("%s (Team #%d) %s"
+                           % (ctx.player_names[(team, slot)], team + 1, collect_str),
                            {"type": "Collect", "team": team, "slot": slot})
     for source_player, location_ids in all_locations.items():
         register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
@@ -1894,6 +1941,28 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Use !hint_location {location_name},
         for example !hint_location atomic-bomb to get a spoiler peek for that location."""
         return self.get_hints(location, True)
+
+    def _cmd_collect_from(self, should_allow: str = ""):
+        """Check or change the permission of other worlds to collect items from your world."""
+        if should_allow == "":
+            can_collect = self.ctx.can_collect_from(self.client.team, self.client.slot)
+            self.output(f"You currently {'can' if can_collect else 'cannot'} be collected from."
+                        f" Use '!collect_from {'deny' if can_collect else 'allow'}' to change this.")
+            return
+        should_allow = should_allow.lower()
+        allow_collect: bool
+        if should_allow in ("allow", "true", "on", "yes"):
+            allow_collect = True
+            self.output("You can now be collected from.")
+        elif should_allow in ("deny", "false", "off", "no"):
+            allow_collect = False
+            self.output("You can no longer be collected from.")
+        else:
+            self.output(f"Invalid argument '{should_allow}', valid args are 'allow', 'deny', or no argument.")
+            return
+        if self.client.team not in self.ctx.allow_collecting_from:
+            self.ctx.allow_collecting_from[self.client.team] = {}
+        self.ctx.allow_collecting_from[self.client.team][self.client.slot] = allow_collect
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
