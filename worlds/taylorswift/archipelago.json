@@ -1,6 +1,8 @@
 {
   "game": "Taylor Swift Discography",
-  "world_version": "1.2.0",
-  "world_version_full": "1.2.0",
-  "contributors": ["benny-dreamly"]
+  "world_version": "1.2.1",
+  "world_version_full": "1.2.1",
+  "contributors": ["benny-dreamly"],
+  "license": "MPL",
+  "ai_disclosure": "assist"
 }
