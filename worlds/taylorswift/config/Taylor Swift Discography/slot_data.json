@@ -59,6 +59,10 @@
     "include_deluxe": {
       "type": "song_option",
       "display_name": "Include Deluxe"
+    },
+    "include_extra": {
+      "type": "song_option",
+      "display_name": "Include Extra"
     }
   }
 }

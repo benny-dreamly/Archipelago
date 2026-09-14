@@ -653,12 +653,12 @@
         {
           "title": "Treacherous (original demo recording)",
           "location": "Treacherous (original demo recording)",
-          "type": "deluxe"
+          "type": "extra"
         },
         {
           "title": "Red (original demo recording)",
           "location": "Red (original demo recording)",
-          "type": "deluxe"
+          "type": "extra"
         },
         {
           "title": "State of Grace (acoustic version)",
@@ -912,17 +912,17 @@
         {
           "title": "I Know Places - Voice Memo",
           "location": "I Know Places - Voice Memo",
-          "type": "deluxe"
+          "type": "extra"
         },
         {
           "title": "I Wish You Would - Voice Memo",
           "location": "I Wish You Would - Voice Memo",
-          "type": "deluxe"
+          "type": "extra"
         },
         {
           "title": "Blank Space - Voice Memo",
           "location": "Blank Space - Voice Memo",
-          "type": "deluxe"
+          "type": "extra"
         }
       ]
     },

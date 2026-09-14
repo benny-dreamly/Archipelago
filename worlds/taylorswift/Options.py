@@ -103,6 +103,10 @@ class IncludeDeluxe(Toggle):
     """Include deluxe edition songs in the shuffling."""
     display_name = "Include Deluxe Songs"
 
+class IncludeExtra(Toggle):
+    """Include extra songs (songs that were never released on CD, or not part of the normal "deluxe" album) in the shuffling."""
+    display_name = "Include Extra Songs"
+
 
 @dataclass
 class TaylorSwiftOptions(PerGameCommonOptions):
@@ -125,6 +129,7 @@ class TaylorSwiftOptions(PerGameCommonOptions):
     include_vault_tracks: IncludeVaultTracks
     include_re_recordings: IncludeReRecordings
     include_deluxe: IncludeDeluxe
+    include_extra: IncludeExtra
 
 
 option_groups = [

@@ -23,6 +23,7 @@ class LocationData(NamedTuple):
     region: str
     vault: bool = False
     deluxe: bool = False
+    extra: bool = False
 
 
 LOCATION_TABLE: dict[str, LocationData] = {
@@ -162,9 +163,9 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "The Moment I Knew":                  LocationData("Red", False, True),
     "Come Back... Be Here":               LocationData("Red", False, True),
     "Girl at Home":                       LocationData("Red", False, True),
-    "Treacherous (original demo recording)": LocationData("Red", False, True),
-    "Red (original demo recording)":      LocationData("Red", False, True),
-    "State of Grace (acoustic version)":  LocationData("Red", False, True),
+    "Treacherous (original demo recording)": LocationData("Red", False, True, True),
+    "Red (original demo recording)":      LocationData("Red", False, True, True),
+    "State of Grace (acoustic version)":  LocationData("Red", False, True, False),
 
     # Red (Taylor's Version)
     "State of Grace (Taylor's Version)":                                         LocationData("Red (Taylor's Version)"),
@@ -215,9 +216,9 @@ LOCATION_TABLE: dict[str, LocationData] = {
     "Wonderland":                       LocationData("1989", False, True),
     "You Are in Love":                  LocationData("1989", False, True),
     "New Romantics":                    LocationData("1989", False, True),
-    "I Know Places - Voice Memo":       LocationData("1989", False, True),
-    "I Wish You Would - Voice Memo":    LocationData("1989", False, True),
-    "Blank Space - Voice Memo":         LocationData("1989", False, True),
+    "I Know Places - Voice Memo":       LocationData("1989", False, True, True),
+    "I Wish You Would - Voice Memo":    LocationData("1989", False, True, True),
+    "Blank Space - Voice Memo":         LocationData("1989", False, True, True),
 
     # 1989 (Taylor's Version)
     "Welcome to New York (Taylor's Version)":                                   LocationData("1989 (Taylor's Version)"),
@@ -408,6 +409,8 @@ def create_all_locations(world: TaylorSwiftWorld) -> None:
             continue
         for loc_name in location_names:
             if LOCATION_TABLE[loc_name].deluxe and not world.options.include_deluxe.value:
+                continue
+            if LOCATION_TABLE[loc_name].extra and not world.options.include_extra.value:
                 continue
             loc = TaylorSwiftLocation(
                 world.player,

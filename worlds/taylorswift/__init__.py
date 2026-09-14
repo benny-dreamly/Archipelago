@@ -75,4 +75,5 @@ class TaylorSwiftWorld(World, UTMixin):
             "include_vault_tracks": self.options.include_vault_tracks.value,
             "include_re_recordings": self.options.include_re_recordings.value,
             "include_deluxe": self.options.include_deluxe.value,
+            "include_extra": self.options.include_extra.value,
         }
