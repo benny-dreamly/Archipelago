@@ -155,5 +155,6 @@ option_groups = [
         IncludeVaultTracks,
         IncludeReRecordings,
         IncludeDeluxe,
+        IncludeExtra
     ]),
 ]
