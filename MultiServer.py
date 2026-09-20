@@ -71,7 +71,7 @@ class BounceTarget(typing.NamedTuple):
         return target.team in self.teams
 
     def _games_match(self, target: Client) -> bool:
-        return target.ctx.games[target.slot] in self.games
+        return target.ctx().games[target.slot] in self.games
 
     def _tags_match(self, target: Client) -> bool:
         return bool(set(target.tags) & self.tags)
@@ -2278,28 +2278,30 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            teams = args.get("teams", {client.team})
-            games = args.get("games", None)
-            tags = args.get("tags", None)
-            slots = args.get("slots", None)
-
-            for value, name, expected_type in (
-                (teams, str, "Teams"), (games, str, "Games"), (tags, str, "Tags"), (slots, int, "Slots")
+            for name, expected_type in (
+                ("teams", int), ("games", str), ("tags", str), ("slots", int)
             ):
-                if value is None:
+                if name not in args:
                     continue
 
-                if not isinstance(value, (list, set)) or not all(isinstance(entry, expected_type) for entry in games):
+                value = args[name]
+
+                if (
+                    value is None
+                    or not isinstance(value, (list, set))
+                    or not all(isinstance(entry, expected_type) for entry in value)
+                ):
                     await ctx.send_msgs(client, [{
                         "cmd": "InvalidPacket", "type": "arguments",
-                        "text": f"Bounce: {expected_type} list provided did not have the correct format.",
+                        "text": f'Bounce: "{name}" list provided did not have the correct format.',
                         "original_cmd": cmd}])
                     return
 
-            teams = None if teams is None else set(teams)
-            games = None if games is None else set(games)
-            tags = None if tags is None else set(tags)
-            slots = None if slots is None else set(slots)
+            # We now know that if a key is present, it is not None, so this should be the best way to get "set or None"
+            teams = set(args["teams"]) if "teams" in args else {client.team}  # Team default is only same team
+            games = set(args["games"]) if "games" in args else None
+            tags = set(args["tags"]) if "tags" in args else None
+            slots = set(args["slots"]) if "slots" in args else None
 
             bounce_target = BounceTarget(teams, games, tags, slots)
 
@@ -2315,8 +2317,11 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             elif boolean_operator == "and":
                 match_function = bounce_target.match_clients_and
             else:
-                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
-                                              "text": "Bounce", "original_cmd": cmd}])
+                await ctx.send_msgs(client, [{
+                    'cmd': 'InvalidPacket', "type": "arguments",
+                    'text': f'Bounce: Unknown operator. Supported: legacy, or, and. Found: {operator}',
+                    'original_cmd': cmd
+                }])
                 return
 
             for matching_client in match_function(ctx.endpoints):
