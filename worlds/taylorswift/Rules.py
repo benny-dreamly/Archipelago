@@ -12,6 +12,7 @@ from rule_builder.rules import Has, HasAll
 
 from .Locations import LOCATION_TABLE
 from .Regions import ALBUM_REGIONS
+from .Items import ALBUM_OPTION_TO_NAME
 
 if TYPE_CHECKING:
     from . import TaylorSwiftWorld
@@ -35,7 +36,7 @@ def set_completion_condition(world: TaylorSwiftWorld) -> None:
     required_items = []
     for album_name, option_name in ALBUM_REGIONS.items():
         if getattr(world.options, option_name).value:
-            required_items.append(album_name)
+            required_items.append(ALBUM_OPTION_TO_NAME[option_name])
 
     if world.options.include_vault_tracks.value:
         required_items.append("Vault Tracks")

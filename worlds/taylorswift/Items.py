@@ -86,6 +86,10 @@ ALBUM_OPTIONS = {
     "The Life of a Showgirl": "include_tloas",
 }
 
+ALBUM_OPTION_TO_NAME = {
+    option: name for name, option in ALBUM_OPTIONS.items()
+}
+
 FILLER_NAMES = [
     "Easter Egg",
     "Behind the Lyrics",
