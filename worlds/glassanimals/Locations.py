@@ -58,7 +58,7 @@ DREAMLAND_SONGS = [
     "((Home Movie: Rockets))",
     "Domestic Bliss",
     "Heat Waves",
-    "((Home Movie： Shoes On))",
+    "((Home Movie: Shoes On))",
     "Helium",
 ]
 
@@ -92,10 +92,10 @@ ZABA_SONGS = [
 
 # Short songs are only included when the include_short_songs option is enabled
 SHORT_SONGS = {
-    "((Home Movie： 1994))",
-    "((Home Movie： BTX))",
-    "((Home Movie： Rockets))",
-    "((Home Movie： Shoes On))",
+    "((Home Movie: 1994))",
+    "((Home Movie: BTX))",
+    "((Home Movie: Rockets))",
+    "((Home Movie: Shoes On))",
 }
 
 SONG_ORDER = [

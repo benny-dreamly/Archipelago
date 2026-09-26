@@ -48,7 +48,7 @@
         { "title": "((Home Movie: Rockets))", "location": "((Home Movie: Rockets))", "type": "short", "requires": "|((Home Movie: Rockets))|" },
         { "title": "Domestic Bliss", "location": "Domestic Bliss", "type": "normal", "requires": "|Domestic Bliss|" },
         { "title": "Heat Waves", "location": "Heat Waves", "type": "normal", "requires": "|Heat Waves|" },
-        { "title": "((Home Movie： Shoes On))", "location": "((Home Movie： Shoes On))", "type": "short", "requires": "|((Home Movie： Shoes On))|" },
+        { "title": "((Home Movie: Shoes On))", "location": "((Home Movie: Shoes On))", "type": "short", "requires": "|((Home Movie: Shoes On))|" },
         { "title": "Helium", "location": "Helium", "type": "normal", "requires": "|Helium|" }
       ]
     },
