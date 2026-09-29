@@ -31,6 +31,10 @@ class TaylorSwiftWorld(World, UTMixin):
     item_name_to_id = ITEM_NAME_TO_ID
     location_name_to_id = LOCATION_NAME_TO_ID
 
+    def generate_early(self) -> None:
+        # this is specific to UT, doesn't apply in normal generation
+        self.get_options_from_slot_data(self)
+
     def create_regions(self) -> None:
         create_and_connect_regions(self)
         create_all_locations(self)
