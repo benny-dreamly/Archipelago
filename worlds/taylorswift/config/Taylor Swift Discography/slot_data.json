@@ -8,17 +8,33 @@
       "type": "album",
       "display_name": "Fearless"
     },
+    "include_fearless_tv": {
+      "type": "album",
+      "display_name": "Fearless (Taylor's Version)"
+    },
     "include_speak_now": {
       "type": "album",
       "display_name": "Speak Now"
+    },
+    "include_speak_now_tv": {
+      "type": "album",
+      "display_name": "Speak Now (Taylor's Version)"
     },
     "include_red": {
       "type": "album",
       "display_name": "Red"
     },
+    "include_red_tv": {
+      "type": "album",
+      "display_name": "Red (Taylor's Version)"
+    },
     "include_1989": {
       "type": "album",
       "display_name": "1989"
+    },
+    "include_1989_tv": {
+      "type": "album",
+      "display_name": "1989 (Taylor's Version)"
     },
     "include_reputation": {
       "type": "album",
