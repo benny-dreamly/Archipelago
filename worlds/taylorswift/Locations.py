@@ -408,6 +408,8 @@ def create_all_locations(world: TaylorSwiftWorld) -> None:
         except KeyError:
             continue
         for loc_name in location_names:
+            if LOCATION_TABLE[loc_name].vault and not world.options.include_vault_tracks.value:
+                continue
             if LOCATION_TABLE[loc_name].deluxe and not world.options.include_deluxe.value:
                 continue
             if LOCATION_TABLE[loc_name].extra and not world.options.include_extra.value:
