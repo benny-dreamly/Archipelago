@@ -15,8 +15,9 @@ from . import Regions as glass_animals_regions
 from . import Rules as glass_animals_rules
 from .Options import GlassAnimalsOptions
 from .Web import GlassAnimalsWeb
+from .UT import UTMixin
 
-class GlassAnimalsWorld(World):
+class GlassAnimalsWorld(World, UTMixin):
     """Glass Animals' discography as an archipelago integration where you get checks by listening to music"""
 
     game = "Glass Animals Discography"
@@ -29,6 +30,10 @@ class GlassAnimalsWorld(World):
 
     item_name_to_id = glass_animals_items.ITEM_NAME_TO_ID
     location_name_to_id = glass_animals_locations.LOCATION_NAME_TO_ID
+
+    def generate_early(self) -> None:
+        # this is specific to UT, doesn't apply in normal generation
+        self.get_options_from_slot_data(self)
 
     def create_regions(self) -> None:
         glass_animals_regions.create_and_connect_regions(self)
